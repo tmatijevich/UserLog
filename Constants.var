@@ -1,0 +1,4 @@
+VAR CONSTANT
+	USER_LOG_BUFFER_SIZE : USINT := 250; (*Number of buffered entries for writing to the user logbook*)
+	USER_LOG_MESSAGE_SIZE : USINT := 125; (*String length of the formatted messages written to the logger*)
+END_VAR

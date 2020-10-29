@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?AutomationStudio Version=4.7.4.67 SP?>
+<Library SubType="ANSIC" xmlns="http://br-automation.co.at/AS/Library">
+  <Files>
+    <File Description="Exported data types">Types.typ</File>
+    <File Description="Exported constants">Constants.var</File>
+    <File Description="Exported functions and function blocks">UserLog.fun</File>
+    <File>UserLogMain.h</File>
+    <File Description="User logbook buffer source code">UserLog.c</File>
+    <File>CyclicLogBufferedEntries.c</File>
+  </Files>
+  <Dependencies>
+    <Dependency ObjectName="ArEventLog" />
+  </Dependencies>
+</Library>
