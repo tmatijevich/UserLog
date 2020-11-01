@@ -8,8 +8,11 @@
     <File>UserLogMain.h</File>
     <File Description="User logbook buffer source code">UserLog.c</File>
     <File>CyclicLogBufferedEntries.c</File>
+    <File Description="Function to add event to the FIFO buffer">LogEvent.c</File>
   </Files>
   <Dependencies>
     <Dependency ObjectName="ArEventLog" />
+    <Dependency ObjectName="AsBrStr" />
+    <Dependency ObjectName="sys_lib" />
   </Dependencies>
 </Library>
