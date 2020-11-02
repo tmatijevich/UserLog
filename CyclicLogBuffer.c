@@ -9,10 +9,12 @@
 #include <UserLog.h>
 #include "UserLogMain.h"
 
+/* Global variables */
 UserLogBufferEntryType Buffer[USER_LOG_BUFFER_SIZE];
 UserLogBufferInfoType Info;
+BOOL ErrorResetPrevious = false; // Use this to detect a rising edge on the ErrorReset inputs
 
-/*  */
+/* Write buffered event entries to the user logbook */
 void CyclicLogBuffer(struct CyclicLogBuffer* inst) {
 
 	// Declare and initialize static function blocks for logging
@@ -24,7 +26,7 @@ void CyclicLogBuffer(struct CyclicLogBuffer* inst) {
 		// INIT
 		case USER_LOG_STATE_INIT:
 			// Prepare the get logbook ident function block
-			brsstrcpy((UDINT)&fbGetIdent.Name, (UDINT)&"$arlogusr");
+			brsstrcpy((UDINT)fbGetIdent.Name, (UDINT)&"$arlogusr");
 			fbGetIdent.Execute = true;
 			
 			// Go to the IDENT state
@@ -47,7 +49,7 @@ void CyclicLogBuffer(struct CyclicLogBuffer* inst) {
 			}
 			else if(fbGetIdent.Error) {
 				// Report the error
-				//*inst->ReturnValue = (UDINT)USERLOG_ERROR_LOGBOOK_IDENT;
+				inst->ReturnValue = USERLOG_ERROR_LOGBOOK_IDENT;
 			
 				// Go to the ERROR state
 				Info.State = USER_LOG_STATE_ERROR;
@@ -63,9 +65,9 @@ void CyclicLogBuffer(struct CyclicLogBuffer* inst) {
 				fbWrite.EventID 		= ArEventLogMakeEventID(Buffer[Info.ReadIndex].Severity, 0, Buffer[Info.ReadIndex].Code);
 				fbWrite.OriginRecordID	= 0; // Default 0 if no origin event
 				fbWrite.AddDataFormat 	= arEVENTLOG_ADDFORMAT_TEXT;
-				fbWrite.AddDataSize 	= brsstrlen((UDINT)&Buffer[Info.ReadIndex].sMessage) + 1;
-				fbWrite.AddData 		= (UDINT)&Buffer[Info.ReadIndex].sMessage;
-				brsstrcpy((UDINT)&fbWrite.ObjectID, (UDINT)&Buffer[Info.ReadIndex].sTaskName);
+				fbWrite.AddDataSize 	= brsstrlen((UDINT)Buffer[Info.ReadIndex].sMessage) + 1;
+				fbWrite.AddData 		= (UDINT)Buffer[Info.ReadIndex].sMessage;
+				brsstrcpy((UDINT)fbWrite.ObjectID, (UDINT)Buffer[Info.ReadIndex].sTaskName);
 				fbWrite.Execute 		= true;
 				
 				// Increment the read index
@@ -97,7 +99,7 @@ void CyclicLogBuffer(struct CyclicLogBuffer* inst) {
 			}
 			else if(fbWrite.Error) {
 				// Report the error
-				//*inst->ReturnValue = (UDINT)USERLOG_ERROR_WRITE;
+				inst->ReturnValue = USERLOG_ERROR_WRITE;
 			
 				// Go to the ERROR state
 				Info.State = USER_LOG_STATE_ERROR;
@@ -105,9 +107,36 @@ void CyclicLogBuffer(struct CyclicLogBuffer* inst) {
 		
 			break;
 		case USER_LOG_STATE_ERROR:
+			if(inst->ErrorReset && !ErrorResetPrevious) {
+				// Reset the buffer
+				Info.WriteIndex = 0;
+				Info.ReadIndex	= 0;
+				Info.Full		= 0;
+				
+				// Reset the function blocks
+				fbGetIdent.Execute	= false;
+				fbWrite.Execute		= false;
+				
+				// Return to the INIT state
+				Info.State = USER_LOG_STATE_INIT;
+			}
+		
 			break;
 			
 	}
+	
+	/* Update all status information */
+	ErrorResetPrevious = inst->ErrorReset; // Used in the ERROR state
+	
+	// Determine the number of entries in the buffer
+	if(Info.WriteIndex > Info.ReadIndex) 
+		Info.NumEntriesInBuffer = Info.WriteIndex - Info.ReadIndex;
+		
+	else if(Info.WriteIndex < Info.ReadIndex) 
+		Info.NumEntriesInBuffer = (USER_LOG_BUFFER_SIZE - Info.ReadIndex) + Info.WriteIndex;
+	
+	else
+		Info.NumEntriesInBuffer = 0;
 	
 	/* Call all function blocks */
 	ArEventLogGetIdent(&fbGetIdent);

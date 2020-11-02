@@ -1,5 +1,5 @@
 
-FUNCTION LogEvent : UDINT (*Add an event to the FIFO buffer which writes entries to the user logbook*)
+FUNCTION LogEvent : DINT (*Add an event to the FIFO buffer which writes entries to the user logbook*)
 	VAR_INPUT
 		Severity : UserLogSeverityEnum; (*Set the severity level of the logbook entry*)
 		Code : UINT; (*Set the unique code for this logbook entry*)
@@ -8,8 +8,11 @@ FUNCTION LogEvent : UDINT (*Add an event to the FIFO buffer which writes entries
 END_FUNCTION
 
 FUNCTION_BLOCK CyclicLogBuffer (*Write buffered entries to the user logbook*)
+	VAR_INPUT
+		ErrorReset : BOOL;
+	END_VAR
 	VAR_OUTPUT
-		ReturnValue : UDINT; (*Return status value for the user*)
+		ReturnValue : UserLogErrorEnum; (*Return status value for the user*)
 	END_VAR
 END_FUNCTION_BLOCK
 
