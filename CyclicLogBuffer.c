@@ -9,11 +9,11 @@
 #include <UserLog.h>
 #include "UserLogMain.h"
 
-struct UserLogBufferEntryType Buffer[USER_LOG_BUFFER_SIZE];
-struct UserLogBufferInfoType Info;
+UserLogBufferEntryType Buffer[USER_LOG_BUFFER_SIZE];
+UserLogBufferInfoType Info;
 
 /*  */
-void CyclicUserLogBuffer(struct CyclicUserLogBuffer* inst) {
+void CyclicLogBuffer(struct CyclicLogBuffer* inst) {
 
 	// Declare and initialize static function blocks for logging
 	static struct ArEventLogGetIdent fbGetIdent;
@@ -46,6 +46,9 @@ void CyclicUserLogBuffer(struct CyclicUserLogBuffer* inst) {
 				Info.State = 20;
 			}
 			else if(fbGetIdent.Error) {
+				// Report the error
+				//*inst->ReturnValue = (UDINT)USERLOG_ERROR_LOGBOOK_IDENT;
+			
 				// Go to the ERROR state
 				Info.State = 255;
 			}
@@ -80,6 +83,9 @@ void CyclicUserLogBuffer(struct CyclicUserLogBuffer* inst) {
 				// Reset the function block execution
 				fbWrite.Execute = false;
 				
+				// Increment the number of entries logged
+				Info.NumEntriesLogged++;
+				
 				// Check if the indices match
 				if(Info.ReadIndex == Info.WriteIndex && Info.Full) {
 					// Reset the buffer full status
@@ -90,6 +96,9 @@ void CyclicUserLogBuffer(struct CyclicUserLogBuffer* inst) {
 				Info.State = 20;
 			}
 			else if(fbWrite.Error) {
+				// Report the error
+				//*inst->ReturnValue = (UDINT)USERLOG_ERROR_WRITE;
+			
 				// Go to the ERROR state
 				Info.State = 255;
 			}
@@ -101,7 +110,7 @@ void CyclicUserLogBuffer(struct CyclicUserLogBuffer* inst) {
 	}
 	
 	/* Call all function blocks */
-	ArEventLogGetIdent((UDINT)&fbGetIdent);
-	ArEventLogWrite((UDINT)&fbWrite);
+	ArEventLogGetIdent(&fbGetIdent);
+	ArEventLogWrite(&fbWrite);
 
 }

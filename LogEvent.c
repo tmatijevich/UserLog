@@ -7,8 +7,8 @@
 #include <UserLog.h> // Include the automatically generated header file from the library
 #include "UserLogMain.h" // Include local header file for internal declarations
 
-extern struct UserLogBufferEntryType Buffer[USER_LOG_BUFFER_SIZE];
-extern struct UserLogBufferInfoType Info;
+extern UserLogBufferEntryType Buffer[USER_LOG_BUFFER_SIZE];
+extern UserLogBufferInfoType Info;
 
 /* Add an event to the logging FIFO buffer. Then the buffer will write entries to the user logbook */
 UDINT LogEvent(enum UserLogSeverityEnum Severity, UINT Code, plcstring* sMessage){
@@ -21,7 +21,7 @@ UDINT LogEvent(enum UserLogSeverityEnum Severity, UINT Code, plcstring* sMessage
 	}
 	
 	// Copy over the task name, return if error
-	if(ST_name(0, (UDINT)&Buffer[Info.WriteIndex].sTaskName, 0) != 0) {
+	if(ST_name(0, &Buffer[Info.WriteIndex].sTaskName, 0) != 0) {
 		return USERLOG_ERROR_TASK_NAME;
 	}
 	
@@ -37,13 +37,13 @@ UDINT LogEvent(enum UserLogSeverityEnum Severity, UINT Code, plcstring* sMessage
 	Buffer[Info.WriteIndex].Code = Code;
 	
 	// Copy the message string into the buffer
-	brsstrcpy((UDINT)&Buffer[Info.WriteIndex].sMessage, (UDINT)&sMessage);
+	brsstrcpy((UDINT)&Buffer[Info.WriteIndex].sMessage, (UDINT)sMessage);
 	
 	// Increment the write index
 	Info.WriteIndex = ++Info.WriteIndex % USER_LOG_BUFFER_SIZE;
 	
 	// Check if the buffer is now full
-	if(Info.WriteIndex = Info.ReadIndex) {
+	if(Info.WriteIndex == Info.ReadIndex) {
 		// Mark the buffer as full, no new entries until it is empty again
 		Info.Full = true;
 	}

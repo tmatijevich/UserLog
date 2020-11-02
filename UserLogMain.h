@@ -13,22 +13,11 @@
 // Defined in the ArEventLogWrite() function
 #define OBJECT_ID_STR_LEN 36
 
-struct UserLogBufferEntryType {
+typedef struct UserLogBufferEntryType {
 	enum UserLogSeverityEnum Severity;
 	UINT Code;
 	char sMessage[USER_LOG_MESSAGE_LENGTH];
 	char sTaskName[OBJECT_ID_STR_LEN];
 } UserLogBufferEntryType;
-
-struct UserLogBufferInfoType {
-	USINT WriteIndex;
-	USINT ReadIndex;
-	BOOL Full;
-	USINT State;
-	ArEventLogIdentType UserLogbookIdent;
-	USINT NumEntriesInBuffer;
-	USINT NumEntriesLogged;
-	USINT NumEntriesLost;
-} UserLogBufferInfoType;
 
 #endif

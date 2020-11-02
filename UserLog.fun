@@ -7,8 +7,14 @@ FUNCTION LogEvent : UDINT (*Add an event to the FIFO buffer which writes entries
 	END_VAR
 END_FUNCTION
 
-FUNCTION_BLOCK CyclicUserLogBuffer (*Write buffered entries to the user logbook*)
+FUNCTION_BLOCK CyclicLogBuffer (*Write buffered entries to the user logbook*)
 	VAR_OUTPUT
 		ReturnValue : UDINT; (*Return status value for the user*)
 	END_VAR
 END_FUNCTION_BLOCK
+
+FUNCTION GetBufferInfo : UDINT
+	VAR_IN_OUT
+		LogBufferInfo : UserLogBufferInfoType;
+	END_VAR
+END_FUNCTION
