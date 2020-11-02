@@ -16,11 +16,19 @@ TYPE
 		USER_LOG_SEVERITY_WARNING := 2, (*An issue has occured during operation but is not critical*)
 		USER_LOG_SEVERITY_ERROR := 3 (*An error has occured during operation*)
 		);
+	UserLogCyclicStateEnum : 
+		(
+		USER_LOG_STATE_INIT,
+		USER_LOG_STATE_IDENT,
+		USER_LOG_STATE_IDLE,
+		USER_LOG_STATE_WRITE,
+		USER_LOG_STATE_ERROR := 255
+		);
 	UserLogBufferInfoType : 	STRUCT 
 		WriteIndex : USINT;
 		ReadIndex : USINT;
 		Full : BOOL;
-		State : USINT;
+		State : UserLogCyclicStateEnum;
 		UserLogbookIdent : ArEventLogIdentType;
 		NumEntriesInBuffer : USINT;
 		NumEntriesLogged : USINT;

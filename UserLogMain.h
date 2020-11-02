@@ -16,8 +16,10 @@
 typedef struct UserLogBufferEntryType {
 	enum UserLogSeverityEnum Severity;
 	UINT Code;
-	char sMessage[USER_LOG_MESSAGE_LENGTH];
-	char sTaskName[OBJECT_ID_STR_LEN];
+	STRING sMessage[USER_LOG_MESSAGE_LENGTH];
+	STRING sTaskName[OBJECT_ID_STR_LEN];
 } UserLogBufferEntryType;
 
 #endif
+
+

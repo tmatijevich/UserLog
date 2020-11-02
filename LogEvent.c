@@ -11,7 +11,7 @@ extern UserLogBufferEntryType Buffer[USER_LOG_BUFFER_SIZE];
 extern UserLogBufferInfoType Info;
 
 /* Add an event to the logging FIFO buffer. Then the buffer will write entries to the user logbook */
-UDINT LogEvent(enum UserLogSeverityEnum Severity, UINT Code, plcstring* sMessage){
+UDINT LogEvent(enum UserLogSeverityEnum Severity, UINT Code, STRING* sMessage){
 
 	// Check that the buffer is not already full
 	if(Info.Full) {
@@ -21,7 +21,8 @@ UDINT LogEvent(enum UserLogSeverityEnum Severity, UINT Code, plcstring* sMessage
 	}
 	
 	// Copy over the task name, return if error
-	if(ST_name(0, &Buffer[Info.WriteIndex].sTaskName, 0) != 0) {
+	if(ST_name(0, Buffer[Info.WriteIndex].sTaskName, 0) != 0) {
+		Info.NumEntriesLost++;
 		return USERLOG_ERROR_TASK_NAME;
 	}
 	
@@ -30,6 +31,7 @@ UDINT LogEvent(enum UserLogSeverityEnum Severity, UINT Code, plcstring* sMessage
 		// Set the severity of the buffer entry
 		Buffer[Info.WriteIndex].Severity = Severity;
 	} else {
+		Info.NumEntriesLost++;
 		return USERLOG_ERROR_INVALID_SEVERITY;
 	}
 	

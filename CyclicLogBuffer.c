@@ -22,18 +22,18 @@ void CyclicLogBuffer(struct CyclicLogBuffer* inst) {
 	/* Begin the main switch statement */
 	switch(Info.State) {
 		// INIT
-		case 0:
+		case USER_LOG_STATE_INIT:
 			// Prepare the get logbook ident function block
 			brsstrcpy((UDINT)&fbGetIdent.Name, (UDINT)&"$arlogusr");
 			fbGetIdent.Execute = true;
 			
 			// Go to the IDENT state
-			Info.State = 10;
+			Info.State = USER_LOG_STATE_IDENT;
 		
 			break;
 			
 		// IDENT
-		case 10:
+		case USER_LOG_STATE_IDENT:
 			// Wait for the function block to complete and record the output
 			if(fbGetIdent.Done) {
 				// Reset the function block execution
@@ -43,20 +43,20 @@ void CyclicLogBuffer(struct CyclicLogBuffer* inst) {
 				Info.UserLogbookIdent = fbGetIdent.Ident;
 				
 				// Go to the IDLE state
-				Info.State = 20;
+				Info.State = USER_LOG_STATE_IDLE;
 			}
 			else if(fbGetIdent.Error) {
 				// Report the error
 				//*inst->ReturnValue = (UDINT)USERLOG_ERROR_LOGBOOK_IDENT;
 			
 				// Go to the ERROR state
-				Info.State = 255;
+				Info.State = USER_LOG_STATE_ERROR;
 			}
 		
 			break;
 			
 		// IDLE
-		case 20:
+		case USER_LOG_STATE_IDLE:
 			if(Info.ReadIndex != Info.WriteIndex || Info.Full) {
 				// Prepare the write logbook event function block
 				fbWrite.Ident 			= Info.UserLogbookIdent;
@@ -72,13 +72,13 @@ void CyclicLogBuffer(struct CyclicLogBuffer* inst) {
 				Info.ReadIndex = ++Info.ReadIndex % USER_LOG_BUFFER_SIZE;
 				
 				// Go to the WRITE state
-				Info.State = 30;
+				Info.State = USER_LOG_STATE_WRITE;
 			}
 		
 			break;
 			
 		// WRITE
-		case 30:
+		case USER_LOG_STATE_WRITE:
 			if(fbWrite.Done) {
 				// Reset the function block execution
 				fbWrite.Execute = false;
@@ -93,18 +93,18 @@ void CyclicLogBuffer(struct CyclicLogBuffer* inst) {
 				}
 				
 				// Return to the IDLE state
-				Info.State = 20;
+				Info.State = USER_LOG_STATE_IDLE;
 			}
 			else if(fbWrite.Error) {
 				// Report the error
 				//*inst->ReturnValue = (UDINT)USERLOG_ERROR_WRITE;
 			
 				// Go to the ERROR state
-				Info.State = 255;
+				Info.State = USER_LOG_STATE_ERROR;
 			}
 		
 			break;
-		case 255:
+		case USER_LOG_STATE_ERROR:
 			break;
 			
 	}
