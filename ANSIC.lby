@@ -6,8 +6,8 @@
     <File Description="Exported constants">Constants.var</File>
     <File Description="Exported functions and function blocks">UserLog.fun</File>
     <File Description="Internal declarations">UserLogMain.h</File>
-    <File Description="Write buffered entries to the user logbook">CyclicLogBuffer.c</File>
     <File Description="Function to add event to the FIFO buffer">LogEvent.c</File>
+    <File Description="Write buffered entries to the user logbook">CyclicLogBuffer.c</File>
     <File Description="Get the event log buffer information structure">GetBufferInfo.c</File>
   </Files>
   <Dependencies>
