@@ -10,7 +10,7 @@
 extern UserLogBufferInfoType Info;
 
 /*  */
-UDINT GetBufferInfo(struct UserLogBufferInfoType* LogBufferInfo) {
+DINT GetBufferInfo(struct UserLogBufferInfoType* LogBufferInfo) {
 	brsmemcpy((UDINT)LogBufferInfo, (UDINT)&Info, sizeof(Info));
 	return 0;
 }

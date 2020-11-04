@@ -9,15 +9,15 @@ END_FUNCTION
 
 FUNCTION_BLOCK CyclicLogBuffer (*Write buffered entries to the user logbook*)
 	VAR_INPUT
-		ErrorReset : BOOL;
+		ErrorReset : BOOL; (*Reset the function block in case of an error during operation*)
 	END_VAR
 	VAR_OUTPUT
 		ReturnValue : UserLogErrorEnum; (*Return status value for the user*)
 	END_VAR
 END_FUNCTION_BLOCK
 
-FUNCTION GetBufferInfo : UDINT
+FUNCTION GetBufferInfo : DINT (*Function to obtain the information structure describing the log event buffer. Always returns 0*)
 	VAR_IN_OUT
-		LogBufferInfo : UserLogBufferInfoType;
+		LogBufferInfo : UserLogBufferInfoType; (*Reference pointer to a local structure to copy the information to*)
 	END_VAR
 END_FUNCTION

@@ -1,8 +1,8 @@
 
 TYPE
 	UserLogErrorEnum : 
-		(
-		USERLOG_ERROR_NONE := 0,
+		( (*Errors that may occur during UserLog library function and function block operations*)
+		USERLOG_ERROR_NONE := 0, (*No error has occured since the last system restart or error reset command*)
 		USERLOG_ERROR_INVALID_SEVERITY := 101, (*The severity is not an option when generating the EventID (<= 3)*)
 		USERLOG_ERROR_TASK_NAME, (*The task name function from sys_lib has returned an error*)
 		USERLOG_ERROR_LOGBOOK_IDENT, (*The function block to retrieve the user logbook ident address has returned an error*)
@@ -17,21 +17,21 @@ TYPE
 		USER_LOG_SEVERITY_ERROR := 3 (*An error has occured during operation*)
 		);
 	UserLogCyclicStateEnum : 
-		(
-		USER_LOG_STATE_INIT,
-		USER_LOG_STATE_IDENT,
-		USER_LOG_STATE_IDLE,
-		USER_LOG_STATE_WRITE,
-		USER_LOG_STATE_ERROR := 255
+		( (*States for the cyclic log buffer function block*)
+		USER_LOG_STATE_INIT, (*Initialize the user logbook get identity function block*)
+		USER_LOG_STATE_IDENT, (*Handle the completion of the get logbook identity function block*)
+		USER_LOG_STATE_IDLE, (*Wait for the write index to exceed the read index, or pop all entries from the buffer if flagged as full*)
+		USER_LOG_STATE_WRITE, (*Handle the completion of the logbook write function block*)
+		USER_LOG_STATE_ERROR := 255 (*An error has occured during the cyclic log buffer operation and requires and error reset*)
 		);
-	UserLogBufferInfoType : 	STRUCT 
-		WriteIndex : USINT;
-		ReadIndex : USINT;
-		Full : BOOL;
-		State : UserLogCyclicStateEnum;
-		UserLogbookIdent : ArEventLogIdentType;
-		NumEntriesInBuffer : USINT;
-		NumEntriesLogged : USINT;
-		NumEntriesLost : USINT;
+	UserLogBufferInfoType : 	STRUCT  (*Information structure declaration for the UserLog library's FIFO event entry buffer*)
+		WriteIndex : USINT; (*Next index the LogEvent function will add to*)
+		ReadIndex : USINT; (*Next index the CyclicLogBuffer will read from*)
+		Full : BOOL; (*The FIFO event entry buffer has been fulled. This status will stay true until it is emptied. All calls to LogEvent will result in a lost event.*)
+		State : UserLogCyclicStateEnum; (*State of the CyclicLogBuffer function block state machine*)
+		UserLogbookIdent : ArEventLogIdentType; (*Store the Ident address of the user logbook from ArEventLogGetIdent function block*)
+		NumEntriesInBuffer : USINT; (*This value counts the number of entries currently in the buffer*)
+		NumEntriesLogged : USINT; (*This value increments every time a buffered event entry is written to the user logbook*)
+		NumEntriesLost : USINT; (*This value increments every time LogEvent function is called but results in an error (Buffer full, Task name error, Invalid severity)*)
 	END_STRUCT;
 END_TYPE
