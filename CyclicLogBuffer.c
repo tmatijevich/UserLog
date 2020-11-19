@@ -13,6 +13,7 @@
 UserLogBufferEntryType Buffer[USER_LOG_BUFFER_SIZE];
 UserLogBufferInfoType Info;
 BOOL ErrorResetPrevious = false; // Use this to detect a rising edge on the ErrorReset inputs
+BOOL WriteAdminMessage = false; // When the buffer is full, write an admin message. Once emptied, write another admin message.
 
 /* Write buffered event entries to the user logbook */
 void CyclicLogBuffer(struct CyclicLogBuffer* inst) {
@@ -20,6 +21,9 @@ void CyclicLogBuffer(struct CyclicLogBuffer* inst) {
 	// Declare and initialize static function blocks for logging
 	static struct ArEventLogGetIdent fbGetIdent;
 	static struct ArEventLogWrite fbWrite;
+	
+	// Store admin message in a local variable
+	STRING sAdminMessage[50];
 
 	/* Begin the main switch statement */
 	switch(Info.State) {
@@ -59,7 +63,12 @@ void CyclicLogBuffer(struct CyclicLogBuffer* inst) {
 			
 		// IDLE
 		case USER_LOG_STATE_IDLE:
-			if(Info.ReadIndex != Info.WriteIndex || Info.Full) {
+			// Write an admin message when the buffer is filled
+			if(WriteAdminMessage)
+				Info.State = USER_LOG_STATE_ADMIN;
+			
+			// Wait for new event message (write index incremented in LogEvent)
+			else if(Info.ReadIndex != Info.WriteIndex || Info.Full) {
 				// Prepare the write logbook event function block
 				fbWrite.Ident 			= Info.UserLogbookIdent;
 				fbWrite.EventID 		= ArEventLogMakeEventID(Buffer[Info.ReadIndex].Severity, 0, Buffer[Info.ReadIndex].Code);
@@ -79,6 +88,30 @@ void CyclicLogBuffer(struct CyclicLogBuffer* inst) {
 		
 			break;
 			
+		// ADMIN
+		case USER_LOG_STATE_ADMIN:
+			// Prepare the write logbook event function block for an administrative message
+			fbWrite.Ident			= Info.UserLogbookIdent;
+			fbWrite.OriginRecordID	= 0; // Default 0 if no origin event
+			if(WriteAdminMessage) {
+				fbWrite.EventID = ArEventLogMakeEventID(USER_LOG_SEVERITY_WARNING, 1, 0); // Use a different facility
+				brsstrcpy((UDINT)sAdminMessage, (UDINT)&"Log buffer full. No new events until emptied.");
+			}
+			else {
+				fbWrite.EventID = ArEventLogMakeEventID(USER_LOG_SEVERITY_INFORMATION, 1, 0); // Use a different facility
+				brsstrcpy((UDINT)sAdminMessage, (UDINT)&"Log buffer emptied. Accepting new events.");
+			}
+			fbWrite.AddDataFormat 	= arEVENTLOG_ADDFORMAT_TEXT;
+			fbWrite.AddDataSize 	= brsstrlen((UDINT)sAdminMessage) + 1;
+			fbWrite.AddData 		= (UDINT)sAdminMessage;
+			brsstrcpy((UDINT)fbWrite.ObjectID, (UDINT)&"Admin");
+			fbWrite.Execute 		= true;
+			
+			// Go to WRITE
+			Info.State = USER_LOG_STATE_WRITE;
+			
+			break;
+			
 		// WRITE
 		case USER_LOG_STATE_WRITE:
 			if(fbWrite.Done) {
@@ -88,14 +121,23 @@ void CyclicLogBuffer(struct CyclicLogBuffer* inst) {
 				// Increment the number of entries logged
 				Info.NumEntriesLogged++;
 				
+				// Check for the admin flag
+				if(Info.Full && WriteAdminMessage){
+					// Reset the flag and go to IDLE
+					WriteAdminMessage 	= false;
+					Info.State			= USER_LOG_STATE_IDLE;
+				}
 				// Check if the indices match
-				if(Info.ReadIndex == Info.WriteIndex && Info.Full) {
-					// Reset the buffer full status
-					Info.Full = false;
+				else if(Info.ReadIndex == Info.WriteIndex && Info.Full) {
+					// Reset the buffer full status and go to ADMIN
+					Info.Full 	= false;
+					Info.State 	= USER_LOG_STATE_ADMIN;
+				}
+				else {
+					// Return to the IDLE state
+					Info.State = USER_LOG_STATE_IDLE;
 				}
 				
-				// Return to the IDLE state
-				Info.State = USER_LOG_STATE_IDLE;
 			}
 			else if(fbWrite.Error) {
 				// Report the error
@@ -106,6 +148,7 @@ void CyclicLogBuffer(struct CyclicLogBuffer* inst) {
 			}
 		
 			break;
+			
 		case USER_LOG_STATE_ERROR:
 			if(inst->ErrorReset && !ErrorResetPrevious) {
 				// Reset the buffer
@@ -122,7 +165,6 @@ void CyclicLogBuffer(struct CyclicLogBuffer* inst) {
 			}
 		
 			break;
-			
 	}
 	
 	/* Update all status information */

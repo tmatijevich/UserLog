@@ -9,6 +9,7 @@
 
 extern UserLogBufferEntryType Buffer[USER_LOG_BUFFER_SIZE];
 extern UserLogBufferInfoType Info;
+extern BOOL WriteAdminMessage;
 
 /* Add an event to the logging FIFO buffer. Then the buffer will write entries to the user logbook */
 DINT LogEvent(enum UserLogSeverityEnum Severity, UINT Code, STRING* sMessage){
@@ -50,7 +51,8 @@ DINT LogEvent(enum UserLogSeverityEnum Severity, UINT Code, STRING* sMessage){
 	// Check if the buffer is now full
 	if(Info.WriteIndex == Info.ReadIndex) {
 		// Mark the buffer as full, no new entries until it is empty again
-		Info.Full = true;
+		Info.Full 			= true;
+		WriteAdminMessage	= true;
 	}
 	
 	return USERLOG_ERROR_NONE;

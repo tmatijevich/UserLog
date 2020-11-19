@@ -21,6 +21,7 @@ TYPE
 		USER_LOG_STATE_INIT, (*Initialize the user logbook get identity function block*)
 		USER_LOG_STATE_IDENT, (*Handle the completion of the get logbook identity function block*)
 		USER_LOG_STATE_IDLE, (*Wait for the write index to exceed the read index, or pop all entries from the buffer if flagged as full*)
+		USER_LOG_STATE_ADMIN, (*Write administrative messages when the buffer is full, then subsequently emptied.*)
 		USER_LOG_STATE_WRITE, (*Handle the completion of the logbook write function block*)
 		USER_LOG_STATE_ERROR := 255 (*An error has occured during the cyclic log buffer operation and requires and error reset*)
 		);
