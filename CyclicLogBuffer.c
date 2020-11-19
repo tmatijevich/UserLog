@@ -177,8 +177,13 @@ void CyclicLogBuffer(struct CyclicLogBuffer* inst) {
 	else if(Info.WriteIndex < Info.ReadIndex) 
 		Info.NumEntriesInBuffer = (USER_LOG_BUFFER_SIZE - Info.ReadIndex) + Info.WriteIndex;
 	
-	else
-		Info.NumEntriesInBuffer = 0;
+	else { // Indicies are equal
+		// The buffer is full and we are not executing except when writing the first admin message
+		if(Info.Full && (!fbWrite.Execute ^ WriteAdminMessage))
+			Info.NumEntriesInBuffer = USER_LOG_BUFFER_SIZE;
+		else
+			Info.NumEntriesInBuffer = 0;
+	}
 	
 	/* Call all function blocks */
 	ArEventLogGetIdent(&fbGetIdent);
