@@ -9,6 +9,7 @@
     <File Description="Function to add event to the FIFO buffer">LogEvent.c</File>
     <File Description="Write buffered entries to the user logbook">CyclicLogBuffer.c</File>
     <File Description="Get the event log buffer information structure">GetBufferInfo.c</File>
+    <File Description="Version history">Changelog.md</File>
   </Files>
   <Dependencies>
     <Dependency ObjectName="ArEventLog" />
