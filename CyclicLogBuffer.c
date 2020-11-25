@@ -23,7 +23,8 @@ void CyclicLogBuffer(struct CyclicLogBuffer* inst) {
 	static struct ArEventLogWrite fbWrite;
 	
 	// Store admin message in a local variable
-	STRING sAdminMessage[50];
+	STRING sAdminMessage[80];
+	STRING sMaxEntries[12];
 
 	/* Begin the main switch statement */
 	switch(Info.State) {
@@ -95,7 +96,9 @@ void CyclicLogBuffer(struct CyclicLogBuffer* inst) {
 			fbWrite.OriginRecordID	= 0; // Default 0 if no origin event
 			if(WriteAdminMessage) {
 				fbWrite.EventID = ArEventLogMakeEventID(USER_LOG_SEVERITY_WARNING, 1, 0); // Use a different facility
-				brsstrcpy((UDINT)sAdminMessage, (UDINT)&"Log buffer full. No new events until emptied.");
+				brsstrcpy((UDINT)sAdminMessage, (UDINT)&"Log buffer full. No new events until emptied. Max entries: "); // 59
+				brsitoa(USER_LOG_BUFFER_SIZE, (UDINT)sMaxEntries); // Max 12
+				brsstrcat((UDINT)sAdminMessage, (UDINT)sMaxEntries); // Concatinate to record the user's buffer size
 			}
 			else {
 				fbWrite.EventID = ArEventLogMakeEventID(USER_LOG_SEVERITY_INFORMATION, 1, 0); // Use a different facility
