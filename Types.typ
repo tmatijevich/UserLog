@@ -32,7 +32,8 @@ TYPE
 		State : UserLogCyclicStateEnum; (*State of the CyclicLogBuffer function block state machine*)
 		UserLogbookIdent : ArEventLogIdentType; (*Store the Ident address of the user logbook from ArEventLogGetIdent function block*)
 		NumEntriesInBuffer : USINT; (*This value counts the number of entries currently in the buffer*)
-		NumEntriesLogged : USINT; (*This value increments every time a buffered event entry is written to the user logbook*)
-		NumEntriesLost : USINT; (*This value increments every time LogEvent function is called but results in an error (Buffer full, Task name error, Invalid severity)*)
+		NumEntriesLogged : UDINT; (*This value increments every time a buffered event entry is written to the user logbook*)
+		NumEntriesLost : UDINT; (*This value increments every time LogEvent function is called but results in an error (Buffer full, Task name error, Invalid severity)*)
+		NumEntriesIgnored : UDINT; (*Number of calls to LogEvent() ignored because the severity was below the SeverityThreshold of CyclicLogBuffer()*)
 	END_STRUCT;
 END_TYPE

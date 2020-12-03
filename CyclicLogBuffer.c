@@ -14,6 +14,7 @@ UserLogBufferEntryType Buffer[USER_LOG_BUFFER_SIZE];
 UserLogBufferInfoType Info;
 BOOL ErrorResetPrevious = false; // Use this to detect a rising edge on the ErrorReset inputs
 BOOL WriteAdminMessage = false; // When the buffer is full, write an admin message. Once emptied, write another admin message.
+enum UserLogSeverityEnum SeverityThreshold = USER_LOG_SEVERITY_INFORMATION; // Default to 0
 
 /* Write buffered event entries to the user logbook */
 void CyclicLogBuffer(struct CyclicLogBuffer* inst) {
@@ -21,6 +22,9 @@ void CyclicLogBuffer(struct CyclicLogBuffer* inst) {
 	// Declare and initialize static function blocks for logging
 	static struct ArEventLogGetIdent fbGetIdent;
 	static struct ArEventLogWrite fbWrite;
+	
+	// Assign the global severity threshold
+	SeverityThreshold = inst->SeverityThreshold;
 	
 	// Store admin message in a local variable
 	STRING sAdminMessage[80];

@@ -10,6 +10,7 @@
 extern UserLogBufferEntryType Buffer[USER_LOG_BUFFER_SIZE];
 extern UserLogBufferInfoType Info;
 extern BOOL WriteAdminMessage;
+extern enum UserLogSeverityEnum SeverityThreshold;
 
 /* Add an event to the logging FIFO buffer. Then the buffer will write entries to the user logbook */
 DINT LogEvent(enum UserLogSeverityEnum Severity, UINT Code, STRING* sMessage){
@@ -31,8 +32,14 @@ DINT LogEvent(enum UserLogSeverityEnum Severity, UINT Code, STRING* sMessage){
 	
 	// Check that the severity level is within ArEventLog options
 	if(Severity <= 3) {
-		// Set the severity of the buffer entry
-		Buffer[Info.WriteIndex].Severity = Severity;
+		if(Severity >= SeverityThreshold) {
+			// Set the severity of the buffer entry
+			Buffer[Info.WriteIndex].Severity = Severity;
+		} else {
+			// Entry is ignored
+			Info.NumEntriesIgnored++;
+			return USERLOG_ERROR_NONE;
+		}
 	} else {
 		Info.NumEntriesLost++;
 		return USERLOG_ERROR_INVALID_SEVERITY;

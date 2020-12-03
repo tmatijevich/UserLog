@@ -10,6 +10,7 @@ END_FUNCTION
 FUNCTION_BLOCK CyclicLogBuffer (*Write buffered entries to the user logbook*)
 	VAR_INPUT
 		ErrorReset : BOOL; (*Reset the function block in case of an error during operation*)
+		SeverityThreshold : UserLogSeverityEnum; (*Only LogEvent() calls with a severity level equal to or greater than this threshold will be written to the User logbook*)
 	END_VAR
 	VAR_OUTPUT
 		ReturnValue : UserLogErrorEnum; (*Return status value for the user*)
