@@ -60,7 +60,7 @@ void CyclicLogBuffer(struct CyclicLogBuffer* inst) {
 			}
 			else if(fbGetIdent.Error) {
 				// Report the error
-				inst->ReturnValue = USERLOG_ERROR_LOGBOOK_IDENT;
+				inst->ReturnValue = USER_LOG_ERROR_LOGBOOK_IDENT;
 			
 				// Go to the ERROR state
 				Info.State = USER_LOG_STATE_ERROR;
@@ -150,7 +150,7 @@ void CyclicLogBuffer(struct CyclicLogBuffer* inst) {
 			}
 			else if(fbWrite.Error) {
 				// Report the error
-				inst->ReturnValue = USERLOG_ERROR_WRITE;
+				inst->ReturnValue = USER_LOG_ERROR_WRITE;
 			
 				// Go to the ERROR state
 				Info.State = USER_LOG_STATE_ERROR;
@@ -170,7 +170,7 @@ void CyclicLogBuffer(struct CyclicLogBuffer* inst) {
 				fbWrite.Execute		= false;
 				
 				// Reset the return value
-				inst->ReturnValue = USERLOG_ERROR_NONE;
+				inst->ReturnValue = USER_LOG_ERROR_NONE;
 				
 				// Return to the INIT state
 				Info.State = USER_LOG_STATE_INIT;

@@ -20,14 +20,14 @@ DINT LogEvent(enum UserLogSeverityEnum Severity, UINT Code, STRING* sMessage){
 	if(Info.Full) {
 		Info.NumEntriesLost++;
 		// The event entry cannot be added to the buffer
-		return USERLOG_ERROR_BUFFER_FULL;
+		return USER_LOG_ERROR_BUFFER_FULL;
 	}
 	
 	// Copy over the task name, return if error
 	// _BUR_PUBLIC UINT ST_name(UDINT st_ident, char *st_name_p, USINT *st_grp);
 	if(ST_name(0, Buffer[Info.WriteIndex].sTaskName, 0) != 0) {
 		Info.NumEntriesLost++;
-		return USERLOG_ERROR_TASK_NAME;
+		return USER_LOG_ERROR_TASK_NAME;
 	}
 	
 	// Check that the severity level is within ArEventLog options
@@ -38,11 +38,11 @@ DINT LogEvent(enum UserLogSeverityEnum Severity, UINT Code, STRING* sMessage){
 		} else {
 			// Entry is ignored
 			Info.NumEntriesIgnored++;
-			return USERLOG_ERROR_NONE;
+			return USER_LOG_ERROR_NONE;
 		}
 	} else {
 		Info.NumEntriesLost++;
-		return USERLOG_ERROR_INVALID_SEVERITY;
+		return USER_LOG_ERROR_INVALID_SEVERITY;
 	}
 	
 	// Set the code of the buffer entry
@@ -62,5 +62,5 @@ DINT LogEvent(enum UserLogSeverityEnum Severity, UINT Code, STRING* sMessage){
 		WriteAdminMessage	= true;
 	}
 	
-	return USERLOG_ERROR_NONE;
+	return USER_LOG_ERROR_NONE;
 }

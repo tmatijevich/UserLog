@@ -2,12 +2,12 @@
 TYPE
 	UserLogErrorEnum : 
 		( (*Errors that may occur during UserLog library function and function block operations*)
-		USERLOG_ERROR_NONE := 0, (*No error has occured since the last system restart or error reset command*)
-		USERLOG_ERROR_INVALID_SEVERITY := 101, (*The severity is not an option when generating the EventID (<= 3)*)
-		USERLOG_ERROR_TASK_NAME, (*The task name function from sys_lib has returned an error*)
-		USERLOG_ERROR_LOGBOOK_IDENT, (*The function block to retrieve the user logbook ident address has returned an error*)
-		USERLOG_ERROR_WRITE, (*The function block to write an entry to the user logbook has returned an error*)
-		USERLOG_ERROR_BUFFER_FULL (*The log buffer is full and no further events can be written until the buffer is emptied*)
+		USER_LOG_ERROR_NONE := 0, (*No error has occured since the last system restart or error reset command*)
+		USER_LOG_ERROR_INVALID_SEVERITY := 101, (*The severity is not an option when generating the EventID (<= 3)*)
+		USER_LOG_ERROR_TASK_NAME, (*The task name function from sys_lib has returned an error*)
+		USER_LOG_ERROR_LOGBOOK_IDENT, (*The function block to retrieve the user logbook ident address has returned an error*)
+		USER_LOG_ERROR_WRITE, (*The function block to write an entry to the user logbook has returned an error*)
+		USER_LOG_ERROR_BUFFER_FULL (*The log buffer is full and no further events can be written until the buffer is emptied*)
 		);
 	UserLogSeverityEnum : 
 		( (*Levels of severity, see AS Help 32-bit event ID*)
