@@ -1,5 +1,10 @@
 # UserLog Changes
 
+## V0.1.3 (*2020-12-02*)
+- Implement severity threshold to filter what's written to logbook
+- Fix ReturnValue of CyclicLogBuffer
+- Update error enumeration naming
+
 ## V0.1.2 (*2020-11-25*)
 - Display max number of entries in buffer (`USER_LOG_BUFFER_SIZE`) in the adminstrative logging
 - Add changelog
