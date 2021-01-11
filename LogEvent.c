@@ -37,7 +37,7 @@ DINT LogEvent(enum UserLogSeverityEnum Severity, UINT Code, STRING* sMessage){
 			Buffer[Info.WriteIndex].Severity = Severity;
 		} else {
 			// Entry is ignored
-			Info.NumEntriesIgnored++;
+			Info.NumEntriesSuppressed++;
 			return USER_LOG_ERROR_NONE;
 		}
 	} else {

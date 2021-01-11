@@ -34,6 +34,6 @@ TYPE
 		NumEntriesInBuffer : USINT; (*This value counts the number of entries currently in the buffer*)
 		NumEntriesLogged : UDINT; (*This value increments every time a buffered event entry is written to the user logbook*)
 		NumEntriesLost : UDINT; (*This value increments every time LogEvent function is called but results in an error (Buffer full, Task name error, Invalid severity)*)
-		NumEntriesIgnored : UDINT; (*Number of calls to LogEvent() ignored because the severity was below the SeverityThreshold of CyclicLogBuffer()*)
+		NumEntriesSuppressed : UDINT; (*Number of calls to LogEvent() suppressed because the severity was below the SeverityThreshold of CyclicLogBuffer()*)
 	END_STRUCT;
 END_TYPE
