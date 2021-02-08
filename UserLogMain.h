@@ -1,5 +1,5 @@
 /*********************************************************************************
- * Copyright: B&R Industrial Automation GmbH 
+ * File:      UserLogMain.h
  * Author:    Tyler Matijevich
  * Created:   October 21, 2020/21:31 
  *********************************************************************************/ 
@@ -21,5 +21,3 @@ typedef struct UserLogBufferEntryType {
 } UserLogBufferEntryType;
 
 #endif
-
-

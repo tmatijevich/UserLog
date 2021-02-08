@@ -1,5 +1,5 @@
 /*********************************************************************************
- * Copyright: B&R Industrial Automation GmbH 
+ * File:      CyclicLogBuffer.c
  * Author:    Tyler Matijevich 
  * Created:   October 21, 2020/21:03 
  *********************************************************************************/ 

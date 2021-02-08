@@ -1,5 +1,5 @@
 /*********************************************************************************
- * Copyright: B&R Industrial Automation GmbH 
+ * File:      GetBufferInfo.c
  * Author:    Tyler Matijevich 
  * Created:   November 1, 2020/18:03 
  *********************************************************************************/ 
