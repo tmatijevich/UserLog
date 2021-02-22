@@ -74,7 +74,7 @@ void CyclicLogBuffer(struct CyclicLogBuffer* inst) {
 			if(WriteAdminMessage)
 				Info.State = USER_LOG_STATE_ADMIN;
 			
-			// Wait for new event message (write index incremented in LogEvent)
+			// Wait for new event message (write index incremented in LogMessage)
 			else if(Info.ReadIndex != Info.WriteIndex || Info.Full) {
 				// Prepare the write logbook event function block
 				fbWrite.Ident 			= Info.UserLogbookIdent;

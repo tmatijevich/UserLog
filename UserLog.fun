@@ -1,5 +1,5 @@
 
-FUNCTION LogEvent : DINT (*Add an event to the FIFO buffer which writes entries to the user logbook*)
+FUNCTION LogMessage : DINT (*Add an event to the FIFO buffer which writes entries to the user logbook*)
 	VAR_INPUT
 		Severity : UserLogSeverityEnum; (*Set the severity level of the logbook entry*)
 		Code : UINT; (*Set the unique code for this logbook entry*)
@@ -10,7 +10,7 @@ END_FUNCTION
 FUNCTION_BLOCK CyclicLogBuffer (*Write buffered entries to the user logbook*)
 	VAR_INPUT
 		ErrorReset : BOOL; (*Reset the function block in case of an error during operation*)
-		SeverityThreshold : UserLogSeverityEnum; (*Only LogEvent() calls with a severity level equal to or greater than this threshold will be written to the User logbook*)
+		SeverityThreshold : UserLogSeverityEnum; (*Only LogMessage() calls with a severity level equal to or greater than this threshold will be written to the User logbook*)
 	END_VAR
 	VAR_OUTPUT
 		ReturnValue : UserLogErrorEnum; (*Return status value for the user*)

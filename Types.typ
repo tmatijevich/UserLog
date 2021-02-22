@@ -26,14 +26,14 @@ TYPE
 		USER_LOG_STATE_ERROR := 255 (*An error has occured during the cyclic log buffer operation and requires and error reset*)
 		);
 	UserLogBufferInfoType : 	STRUCT  (*Information structure declaration for the UserLog library's FIFO event entry buffer*)
-		WriteIndex : USINT; (*Next index the LogEvent function will add to*)
+		WriteIndex : USINT; (*Next index the LogMessage function will add to*)
 		ReadIndex : USINT; (*Next index the CyclicLogBuffer will read from*)
-		Full : BOOL; (*The FIFO event entry buffer has been fulled. This status will stay true until it is emptied. All calls to LogEvent will result in a lost event.*)
+		Full : BOOL; (*The FIFO event entry buffer has been fulled. This status will stay true until it is emptied. All calls to LogMessage will result in a lost event.*)
 		State : UserLogCyclicStateEnum; (*State of the CyclicLogBuffer function block state machine*)
 		UserLogbookIdent : ArEventLogIdentType; (*Store the Ident address of the user logbook from ArEventLogGetIdent function block*)
 		NumEntriesInBuffer : USINT; (*This value counts the number of entries currently in the buffer*)
 		NumEntriesLogged : UDINT; (*This value increments every time a buffered event entry is written to the user logbook*)
-		NumEntriesLost : UDINT; (*This value increments every time LogEvent function is called but results in an error (Buffer full, Task name error, Invalid severity)*)
-		NumEntriesSuppressed : UDINT; (*Number of calls to LogEvent() suppressed because the severity was below the SeverityThreshold of CyclicLogBuffer()*)
+		NumEntriesLost : UDINT; (*This value increments every time LogMessage function is called but results in an error (Buffer full, Task name error, Invalid severity)*)
+		NumEntriesSuppressed : UDINT; (*Number of calls to LogMessage() suppressed because the severity was below the SeverityThreshold of CyclicLogBuffer()*)
 	END_STRUCT;
 END_TYPE

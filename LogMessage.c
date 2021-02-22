@@ -1,5 +1,5 @@
 /*********************************************************************************
- * File:      LogEvent.c
+ * File:      LogMessage.c
  * Author:    Tyler Matijevich
  * Created:   October 31, 2020/14:42 
  *********************************************************************************/ 
@@ -13,7 +13,7 @@ extern BOOL WriteAdminMessage;
 extern enum UserLogSeverityEnum SeverityThreshold;
 
 /* Add an event to the logging FIFO buffer. Then the buffer will write entries to the user logbook */
-DINT LogEvent(enum UserLogSeverityEnum Severity, UINT Code, STRING* sMessage){
+DINT LogMessage(enum UserLogSeverityEnum Severity, UINT Code, STRING* sMessage){
 	// A STRING is a plcstring is a char, see <bur/plctypes.h>
 
 	// Check that the buffer is not already full
