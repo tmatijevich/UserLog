@@ -1,5 +1,9 @@
 # UserLog Changes
 
+## V0.2.0 (*2021-02-22*)
+- Rename `LogEvent` to `LogMessage` to avoid conflict is AsArProf
+- Add comments, update readme & license
+
 ## V0.1.3 (*2020-12-02*)
 - Implement severity threshold to filter what's written to logbook
 - Fix ReturnValue of CyclicLogBuffer
