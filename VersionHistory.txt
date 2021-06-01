@@ -1,5 +1,7 @@
 # UserLog Changes
 
+See [releases on GitHub](https://github.com/tmatijevich/LibUserLog/releases).
+
 ## V0.2.0 (*2021-02-22*)
 - Rename `LogEvent` to `LogMessage` to avoid conflict is AsArProf
 - Add comments, update readme & license
