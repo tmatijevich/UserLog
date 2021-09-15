@@ -1,9 +1,9 @@
 
-FUNCTION LogMessage : DINT (*Add an event to the FIFO buffer which writes entries to the user logbook*)
+FUNCTION LogMessage : DINT (*Add entry to FIFO log buffer*)
 	VAR_INPUT
-		Severity : UserLogSeverityEnum; (*Set the severity level of the logbook entry*)
-		Code : UINT; (*Set the unique code for this logbook entry*)
-		sMessage : STRING[USER_LOG_MESSAGE_LENGTH]; (*Message written to the ASCII data of the logbook entry*)
+		severity : UserLogSeverityEnum; (*Entry severity, see AS Help for 32-bit event ID*)
+		code : UINT; (*Entry code, see AS Help for 32-bit event ID*)
+		message : STRING[0]; (*Message to populate ASC II data of logbook entry*)
 	END_VAR
 END_FUNCTION
 

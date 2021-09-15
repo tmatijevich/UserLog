@@ -3,64 +3,58 @@
  * Author:    Tyler Matijevich
  * Created:   October 31, 2020/14:42 
  *********************************************************************************/ 
- 
-#include <UserLog.h> // Include the automatically generated header file from the library
-#include "UserLogMain.h" // Include local header file for internal declarations
 
-extern UserLogBufferEntryType Buffer[USER_LOG_BUFFER_SIZE];
-extern UserLogBufferInfoType Info;
-extern BOOL WriteAdminMessage;
-extern enum UserLogSeverityEnum SeverityThreshold;
+#include "UserLogMain.h"
 
-/* Add an event to the logging FIFO buffer. Then the buffer will write entries to the user logbook */
-DINT LogMessage(enum UserLogSeverityEnum Severity, UINT Code, STRING* sMessage){
-	// A STRING is a plcstring is a char, see <bur/plctypes.h>
+/* Add an event to the logging FIFO buffer to be written to the User logbook. */
+signed long LogMessage(enum UserLogSeverityEnum severity, unsigned short code, char *message){
 
-	// Check that the buffer is not already full
-	if(Info.Full) {
-		Info.NumEntriesLost++;
-		// The event entry cannot be added to the buffer
-		return USER_LOG_ERROR_BUFFER_FULL;
+	/* Local variable declaration */
+	unsigned short status; 
+	
+	if(info.full) { /* The entry cannot be added to the buffer */
+		info.lostCount++;
+		return USERLOG_ERROR_BUFFERFULL;
 	}
 	
-	// Copy over the task name, return if error
-	// _BUR_PUBLIC UINT ST_name(UDINT st_ident, char *st_name_p, USINT *st_grp);
-	if(ST_name(0, Buffer[Info.WriteIndex].sTaskName, 0) != 0) {
-		Info.NumEntriesLost++;
-		return USER_LOG_ERROR_TASK_NAME;
-	}
-	
-	// Check that the severity level is within ArEventLog options
-	if(Severity <= 3) {
-		if(Severity >= SeverityThreshold) {
-			// Set the severity of the buffer entry
-			Buffer[Info.WriteIndex].Severity = Severity;
-		} else {
-			// Entry is ignored
-			Info.NumEntriesSuppressed++;
-			return USER_LOG_ERROR_NONE;
+	/* Check for severity in range and within threshold */
+	if(severity <= 3) {
+		if(severity >= severityThreshold)
+			buffer[info.writeIndex].severity = severity;
+		else {
+			info.suppressedCount++; /* Subceeds threshold, entry suppressed */
+			return USERLOG_ERROR_NONE;
 		}
-	} else {
-		Info.NumEntriesLost++;
-		return USER_LOG_ERROR_INVALID_SEVERITY;
+	} 
+	else { /* Invalid severity */
+		info.lostCount++;
+		return USERLOG_ERROR_SEVERITY;
 	}
 	
-	// Set the code of the buffer entry
-	Buffer[Info.WriteIndex].Code = Code;
-	
-	// Copy the message string into the buffer
-	// _BUR_PUBLIC unsigned long brsstrcpy(unsigned long pDest, unsigned long pSrc);
-	brsstrcpy((UDINT)Buffer[Info.WriteIndex].sMessage, (UDINT)sMessage);
-	
-	// Increment the write index
-	Info.WriteIndex = ++Info.WriteIndex % USER_LOG_BUFFER_SIZE; // ++x instead of x++ to ensure you increment before the modulus operation
-	
-	// Check if the buffer is now full
-	if(Info.WriteIndex == Info.ReadIndex) {
-		// Mark the buffer as full, no new entries until it is empty again
-		Info.Full 			= true;
-		WriteAdminMessage	= true;
+	/* Copy task name to buffer, return if error */
+	status = ST_name(0, buffer[info.writeIndex].task, 0);
+	if(status != ERR_OK) {
+		info.sysLibStatus = status;
+		info.lostCount++;
+		return USERLOG_ERROR_TASKNAME;
 	}
 	
-	return USER_LOG_ERROR_NONE;
+	/* Set the code of the buffer entry */
+	buffer[info.writeIndex].code = code;
+	
+	/* Copy the message to the buffer entry */
+	strncpy(buffer[info.writeIndex].message, message, USERLOG_MESSAGE_LENGTH); /* Copy up to MESSAGE_LENGTH characters */
+	memset(buffer[info.writeIndex].message + USERLOG_MESSAGE_LENGTH, 0, 1); /* Ensure null terminator if the incoming message exceeds MESSAGE_LENGTH */
+	
+	/* Increment the write index */
+	info.writeIndex = ++info.writeIndex % USERLOG_BUFFER_SIZE;
+	
+	/* Check if the buffer is now full */
+	if(info.writeIndex == info.readIndex) {
+		/* Mark the buffer as full, no new entries until it is empty again */
+		info.full 	= true;
+		promptFull	= true;
+	}
+	
+	return USERLOG_ERROR_NONE;
 }

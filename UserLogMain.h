@@ -12,15 +12,16 @@
 #include <stdbool.h>
 
 typedef struct UserLogBufferEntryType {
-	unsigned char severity;
+	enum UserLogSeverityEnum severity;
 	unsigned short code;
-	char message[USERLOG_MESSAGE_LENGTH];
+	char message[USERLOG_MESSAGE_LENGTH + 1];
 	char task[36]; /* Defined by ArEventLogWrite() */
 } UserLogBufferEntryType;
 
 /* Reference with a promise these variables will be declared in a source file */
 extern UserLogBufferEntryType buffer[USERLOG_BUFFER_SIZE];
 extern UserLogBufferInfoType info;
+extern UserLogSeverityEnum severityThreshold;
 extern unsigned char promptFull;
 extern unsigned char promptEmpty;
 
