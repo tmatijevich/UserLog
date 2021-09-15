@@ -2,9 +2,9 @@
 <?AutomationStudio FileVersion="4.9"?>
 <Library Version="0.02.0" SubType="ANSIC" xmlns="http://br-automation.co.at/AS/Library">
   <Files>
+    <File Description="Exported functions and function blocks">UserLog.fun</File>
     <File Description="Exported data types">UserLog.typ</File>
     <File Description="Exported constants">UserLog.var</File>
-    <File Description="Exported functions and function blocks">UserLog.fun</File>
     <File Description="Internal declarations">UserLogMain.h</File>
     <File Description="Function to add event to the FIFO buffer">LogMessage.c</File>
     <File Description="Write buffered entries to the user logbook">CyclicLogBuffer.c</File>

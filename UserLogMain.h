@@ -7,17 +7,21 @@
 #ifndef __USER_LOG_MAIN_H__
 #define __USER_LOG_MAIN_H__
 
-// Include true false keywords
+#include <UserLog.h>
+#include <string.h>
 #include <stdbool.h>
 
-// Defined in the ArEventLogWrite() function
-#define OBJECT_ID_STR_LEN 36
-
 typedef struct UserLogBufferEntryType {
-	enum UserLogSeverityEnum Severity;
-	UINT Code;
-	STRING sMessage[USER_LOG_MESSAGE_LENGTH];
-	STRING sTaskName[OBJECT_ID_STR_LEN];
+	unsigned char severity;
+	unsigned short code;
+	char message[USERLOG_MESSAGE_LENGTH];
+	char task[36]; /* Defined by ArEventLogWrite() */
 } UserLogBufferEntryType;
 
-#endif
+/* Reference with a promise these variables will be declared in a source file */
+extern UserLogBufferEntryType buffer[USERLOG_BUFFER_SIZE];
+extern UserLogBufferInfoType info;
+extern unsigned char promptFull;
+extern unsigned char promptEmpty;
+
+#endif /* __USER_LOG_MAIN_H__ */
