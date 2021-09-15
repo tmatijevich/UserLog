@@ -6,7 +6,7 @@
 
 #include "UserLogMain.h"
 
-/* Add an event to the logging FIFO buffer to be written to the User logbook. */
+/* Add entry to user logbook event buffer */
 signed long LogMessage(enum UserLogSeverityEnum severity, unsigned short code, char *message){
 
 	/* Local variable declaration */
@@ -32,7 +32,7 @@ signed long LogMessage(enum UserLogSeverityEnum severity, unsigned short code, c
 	}
 	
 	/* Copy task name to buffer, return if error */
-	status = ST_name(0, buffer[info.writeIndex].task, 0);
+	status = ST_name(0, buffer[info.writeIndex].task, 0); /* Assume this is no more than 36 characters (software objects typically 10 characters max) */
 	if(status != ERR_OK) {
 		info.sysLibStatus = status;
 		info.lostCount++;

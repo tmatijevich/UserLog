@@ -13,7 +13,7 @@ UserLogSeverityEnum severityThreshold;
 unsigned char promptFull;
 unsigned char promptEmpty;
 
-/* Write buffered event entries to the User logbook */
+/* Write buffered event entries to user logbook */
 void CyclicLogBuffer(struct CyclicLogBuffer *inst) {
 
 	/* Local variables */
@@ -34,15 +34,15 @@ void CyclicLogBuffer(struct CyclicLogBuffer *inst) {
 	switch(info.state) {
 		/* IDENT */
 		case USERLOG_STATE_IDENT:
-			/* Execute ArEventLogGetIdent() for the User logbook */
+			/* Execute ArEventLogGetIdent() for the user logbook */
 			strcpy(fbGetIdent.Name, "$arlogusr"); /* Up to 256 characters */
 			fbGetIdent.Execute = true;
 			
 			/* Handle get ident response */
 			if(fbGetIdent.Done) {
 				fbGetIdent.Execute 	= false; 
-				info.ident 			= fbGetIdent.Ident; /* Record User logbook ident */
-				info.state 			= USERLOG_STATE_IDLE; /* Get ready to accept messages */
+				info.ident 			= fbGetIdent.Ident; /* Record user logbook ident */
+				info.state 			= USERLOG_STATE_IDLE; /* Get ready to accept entries */
 			}
 			else if(fbGetIdent.Error) {
 				fbGetIdent.Execute 		= false;
@@ -67,7 +67,7 @@ void CyclicLogBuffer(struct CyclicLogBuffer *inst) {
 				fbWrite.Ident 			= info.ident;
 				fbWrite.EventID 		= ArEventLogMakeEventID(buffer[info.readIndex].severity, 0, buffer[info.readIndex].code); /* Force facility 0 for simplicity */
 				fbWrite.OriginRecordID	= 0; /* Force no origin event for simplicity */
-				fbWrite.AddDataFormat 	= arEVENTLOG_ADDFORMAT_TEXT; /* ASC II data */
+				fbWrite.AddDataFormat 	= arEVENTLOG_ADDFORMAT_TEXT; /* ASCII data */
 				fbWrite.AddDataSize 	= USERLOG_MESSAGE_LENGTH + 1;
 				fbWrite.AddData 		= (unsigned long)buffer[info.readIndex].message;
 				strcpy(fbWrite.ObjectID, buffer[info.readIndex].task);
@@ -120,7 +120,7 @@ void CyclicLogBuffer(struct CyclicLogBuffer *inst) {
 				/* Check for empty prompt */
 				else if(info.full && promptEmpty) {
 					promptEmpty = false;
-					info.full 	= false; /* Reset buffer full status for new messages */
+					info.full 	= false; /* Reset buffer full status for new entries */
 					info.state 	= USERLOG_STATE_IDLE;
 				}
 				/* Check if buffer has emptied */

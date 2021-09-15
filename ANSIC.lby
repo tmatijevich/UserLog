@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <?AutomationStudio FileVersion="4.9"?>
-<Library Version="0.02.0" SubType="ANSIC" xmlns="http://br-automation.co.at/AS/Library">
+<Library Version="0.02.0" SubType="ANSIC" Description="Buffer user logbook event function calls" xmlns="http://br-automation.co.at/AS/Library">
   <Files>
     <File Description="Exported functions and function blocks">UserLog.fun</File>
     <File Description="Exported data types">UserLog.typ</File>
     <File Description="Exported constants">UserLog.var</File>
     <File Description="Internal declarations">UserLogMain.h</File>
-    <File Description="Add event entry to logging FIFO buffer">LogMessage.c</File>
-    <File Description="Write buffered entries to User logbook">CyclicLogBuffer.c</File>
-    <File Description="Get log buffer information">GetBufferInfo.c</File>
+    <File Description="Add entry to user logbook event buffer">LogMessage.c</File>
+    <File Description="Write buffered event entries to user logbook">CyclicLogBuffer.c</File>
+    <File Description="Get logging buffer information">GetBufferInfo.c</File>
     <File Description="Version description history">VersionHistory.txt</File>
   </Files>
   <Dependencies>

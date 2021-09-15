@@ -6,7 +6,7 @@
 
 #include "UserLogMain.h"
 
-/* Get information on the logging buffer. Returns 0. */
+/* Get logging buffer information */
 signed long GetBufferInfo(struct UserLogBufferInfoType *bufferInfo) {
 	memcpy(bufferInfo, &info, sizeof(info));
 	return 0;
