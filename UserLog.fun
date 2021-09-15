@@ -9,11 +9,11 @@ END_FUNCTION
 
 FUNCTION_BLOCK CyclicLogBuffer (*Write buffered event entries to the User logbook*)
 	VAR_INPUT
-		severityThreshold : UserLogSeverityEnum; (*Calls to LogMessage() will be suppressed if below the threshold*)
-		reset : BOOL; (*Reset the function block if error occurs during operation*)
+		SeverityThreshold : UserLogSeverityEnum; (*Calls to LogMessage() will be suppressed if below the threshold*)
+		ErrorReset : BOOL; (*Reset the function block if error occurs during operation*)
 	END_VAR
 	VAR_OUTPUT
-		status : UserLogErrorEnum; (*Return operation status*)
+		ErrorID : UserLogErrorEnum; (*Return operation status*)
 	END_VAR
 END_FUNCTION_BLOCK
 

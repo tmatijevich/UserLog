@@ -8,6 +8,6 @@
 
 /* Get information on the logging buffer. Returns 0. */
 signed long GetBufferInfo(struct UserLogBufferInfoType *bufferInfo) {
-	memcpy(&bufferInfo, &info, sizeof(info));
+	memcpy(bufferInfo, &info, sizeof(info));
 	return 0;
 }

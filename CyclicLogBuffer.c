@@ -26,7 +26,7 @@ void CyclicLogBuffer(struct CyclicLogBuffer *inst) {
 	static char bufferSizeText[12]; /* Store buffer size text in admin message */
 	
 	/* Assign global threshold, read by LogMessage() */
-	severityThreshold = inst->severityThreshold;
+	severityThreshold = inst->SeverityThreshold;
 
 	/*********************
 	 Operation
@@ -46,7 +46,7 @@ void CyclicLogBuffer(struct CyclicLogBuffer *inst) {
 			}
 			else if(fbGetIdent.Error) {
 				fbGetIdent.Execute 		= false;
-				inst->status 			= USERLOG_ERROR_IDENT; /* Return error code */
+				inst->ErrorID 			= USERLOG_ERROR_IDENT; /* Return error code */
 				info.arEventLogStatusID = fbGetIdent.StatusID; /* Record status id */
 				info.full 				= true; /* Prevent more entries to buffer */
 				info.state 				= USERLOG_STATE_ERROR; /* Send to error state */
@@ -135,7 +135,7 @@ void CyclicLogBuffer(struct CyclicLogBuffer *inst) {
 			}
 			else if(fbWrite.Error) {
 				fbWrite.Execute 		= false;
-				inst->status 			= USERLOG_ERROR_WRITE;
+				inst->ErrorID 			= USERLOG_ERROR_WRITE;
 				info.arEventLogStatusID = fbWrite.StatusID;
 				info.full 				= true; /* Prevent more entries to buffer */
 				info.state 				= USERLOG_STATE_ERROR;
@@ -145,27 +145,27 @@ void CyclicLogBuffer(struct CyclicLogBuffer *inst) {
 			
 		/* ERROR */
 		case USERLOG_STATE_ERROR:
-			if(inst->reset && !previousReset) {
+			if(inst->ErrorReset && !previousReset) {
 				/* Reset the buffer */
 				info.writeIndex = 0;
 				info.readIndex 	= 0;
 				info.full 		= 0;
 				
 				/* Reset and go to INIT */
-				inst->status 	= USERLOG_ERROR_NONE;
+				inst->ErrorID 	= USERLOG_ERROR_NONE;
 				info.state 		= USERLOG_STATE_IDENT;
 			}
 		
 			break;
 	}
 	
-	previousReset = inst->reset; /* Update for next scan */
+	previousReset = inst->ErrorReset; /* Update for next scan */
 	
 	/* Count the entries in the buffer */
 	if(info.writeIndex > info.readIndex) info.bufferCount = info.writeIndex - info.readIndex;
-	else if(info.writeIndex < info.readIndex) info.bufferCount = (USERLOG_BUFFER_SIZE - info.readIndex) - info.writeIndex;
+	else if(info.writeIndex < info.readIndex) info.bufferCount = (USERLOG_BUFFER_SIZE - info.readIndex) + info.writeIndex;
 	else {
-		if(info.full && !promptEmpty) info.bufferCount = USERLOG_BUFFER_SIZE;
+		if(info.full && (!fbWrite.Execute ^ promptFull) && !promptEmpty) info.bufferCount = USERLOG_BUFFER_SIZE;
 		else info.bufferCount = 0;
 	}
 	
