@@ -4,13 +4,10 @@
  * Created:   November 1, 2020/18:03 
  *********************************************************************************/ 
 
-#include <UserLog.h> // Include the automatically generated header file from the library
-#include "UserLogMain.h" // Include local header file for internal declarations
+#include "UserLogMain.h"
 
-extern UserLogBufferInfoType Info;
-
-/*  */
-DINT GetBufferInfo(struct UserLogBufferInfoType* LogBufferInfo) {
-	brsmemcpy((UDINT)LogBufferInfo, (UDINT)&Info, sizeof(Info));
+/* Get information on the logging buffer. Returns 0. */
+signed long GetBufferInfo(struct UserLogBufferInfoType *bufferInfo) {
+	memcpy(&bufferInfo, &info, sizeof(info));
 	return 0;
 }

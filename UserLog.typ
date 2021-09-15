@@ -35,6 +35,6 @@ TYPE
 		lostCount : UDINT; (*Entries lost due to log buffer full, or error from task name or severity.*)
 		suppressedCount : UDINT; (*Entries suppressed due to severity subceeding the threshold*)
 		sysLibStatus : UINT; (*Status from ST_name() call*)
-		arEventLogErrorID : DINT; (*ErrorID from ArEventLogGetIdent() or ArEventLogWrite()*)
+		arEventLogStatusID : DINT; (*ErrorID from ArEventLogGetIdent() or ArEventLogWrite()*)
 	END_STRUCT;
 END_TYPE

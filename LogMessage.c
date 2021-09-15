@@ -44,7 +44,7 @@ signed long LogMessage(enum UserLogSeverityEnum severity, unsigned short code, c
 	
 	/* Copy the message to the buffer entry */
 	strncpy(buffer[info.writeIndex].message, message, USERLOG_MESSAGE_LENGTH); /* Copy up to MESSAGE_LENGTH characters */
-	memset(buffer[info.writeIndex].message + USERLOG_MESSAGE_LENGTH, 0, 1); /* Ensure null terminator if the incoming message exceeds MESSAGE_LENGTH */
+	buffer[info.writeIndex].message[USERLOG_MESSAGE_LENGTH] = '\0'; /* Ensure null terminator if the incoming message exceeds MESSAGE_LENGTH */
 	
 	/* Increment the write index */
 	info.writeIndex = ++info.writeIndex % USERLOG_BUFFER_SIZE;
@@ -57,4 +57,4 @@ signed long LogMessage(enum UserLogSeverityEnum severity, unsigned short code, c
 	}
 	
 	return USERLOG_ERROR_NONE;
-}
+} /* End function */

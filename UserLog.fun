@@ -7,18 +7,18 @@ FUNCTION LogMessage : DINT (*Add entry to FIFO log buffer*)
 	END_VAR
 END_FUNCTION
 
-FUNCTION_BLOCK CyclicLogBuffer (*Write buffered entries to the user logbook*)
+FUNCTION_BLOCK CyclicLogBuffer (*Write buffered event entries to the User logbook*)
 	VAR_INPUT
-		ErrorReset : BOOL; (*Reset the function block in case of an error during operation*)
-		SeverityThreshold : UserLogSeverityEnum; (*Only LogMessage() calls with a severity level equal to or greater than this threshold will be written to the User logbook*)
+		severityThreshold : UserLogSeverityEnum; (*Calls to LogMessage() will be suppressed if below the threshold*)
+		reset : BOOL; (*Reset the function block if error occurs during operation*)
 	END_VAR
 	VAR_OUTPUT
-		ReturnValue : UserLogErrorEnum; (*Return status value for the user*)
+		status : UserLogErrorEnum; (*Return operation status*)
 	END_VAR
 END_FUNCTION_BLOCK
 
-FUNCTION GetBufferInfo : DINT (*Function to obtain the information structure describing the log event buffer. Always returns 0*)
-	VAR_IN_OUT
-		LogBufferInfo : UserLogBufferInfoType; (*Reference pointer to a local structure to copy the information to*)
+FUNCTION GetBufferInfo : DINT (*Get information on the logging buffer. Returns 0.*)
+	VAR_INPUT
+		bufferInfo : UserLogBufferInfoType; (*Local logging buffer information structure*)
 	END_VAR
 END_FUNCTION

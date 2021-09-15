@@ -15,7 +15,7 @@ typedef struct UserLogBufferEntryType {
 	enum UserLogSeverityEnum severity;
 	unsigned short code;
 	char message[USERLOG_MESSAGE_LENGTH + 1];
-	char task[36]; /* Defined by ArEventLogWrite() */
+	char task[37]; /* Defined by ArEventLogWrite() */
 } UserLogBufferEntryType;
 
 /* Reference with a promise these variables will be declared in a source file */

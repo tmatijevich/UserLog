@@ -4,201 +4,173 @@
  * Created:   October 21, 2020/21:03 
  *********************************************************************************/ 
 
-// <file> - System header files
-// "file" - Program header files
-#include <UserLog.h>
 #include "UserLogMain.h"
 
-/* Global variables */
-UserLogBufferEntryType Buffer[USER_LOG_BUFFER_SIZE];
-UserLogBufferInfoType Info;
-BOOL WriteAdminMessage = false; // When the buffer is full, write an admin message. Once emptied, write another admin message.
-enum UserLogSeverityEnum SeverityThreshold = USER_LOG_SEVERITY_INFORMATION; // Default to 0
+/* Declare global variables */
+UserLogBufferEntryType buffer[USERLOG_BUFFER_SIZE];
+UserLogBufferInfoType info;
+UserLogSeverityEnum severityThreshold;
+unsigned char promptFull;
+unsigned char promptEmpty;
 
-/* Write buffered event entries to the user logbook */
-void CyclicLogBuffer(struct CyclicLogBuffer* inst) {
+/* Write buffered event entries to the User logbook */
+void CyclicLogBuffer(struct CyclicLogBuffer *inst) {
 
-	// Declare and initialize static function blocks for logging
+	/* Local variables */
+	/* Declare and initialize static function blocks for logging */
 	static struct ArEventLogGetIdent fbGetIdent;
 	static struct ArEventLogWrite fbWrite;
 	
-	// Declare a static variable to detect a rising edge on the ErrorReset input
-	static BOOL ErrorResetPrevious = false;
+	static unsigned char previousReset = false; /* Detect rising edge on error reset */
+	static char adminMessage[81]; /* Store admin message */
+	static char bufferSizeText[12]; /* Store buffer size text in admin message */
 	
-	// Assign the global severity threshold
-	SeverityThreshold = inst->SeverityThreshold;
-	
-	// Store admin message in a local variable
-	STRING sAdminMessage[80];
-	STRING sMaxEntries[12];
+	/* Assign global threshold, read by LogMessage() */
+	severityThreshold = inst->severityThreshold;
 
-	/* Begin the main switch statement */
-	switch(Info.State) {
-		// INIT
-		case USER_LOG_STATE_INIT:
-			// Prepare the get logbook ident function block
-			brsstrcpy((UDINT)fbGetIdent.Name, (UDINT)&"$arlogusr");
+	/*********************
+	 Operation
+	*********************/
+	switch(info.state) {
+		/* IDENT */
+		case USERLOG_STATE_IDENT:
+			/* Execute ArEventLogGetIdent() for the User logbook */
+			strcpy(fbGetIdent.Name, "$arlogusr"); /* Up to 256 characters */
 			fbGetIdent.Execute = true;
 			
-			// Go to the IDENT state
-			Info.State = USER_LOG_STATE_IDENT;
-		
-			break;
-			
-		// IDENT
-		case USER_LOG_STATE_IDENT:
-			// Wait for the function block to complete and record the output
+			/* Handle get ident response */
 			if(fbGetIdent.Done) {
-				// Reset the function block execution
-				fbGetIdent.Execute = false;
-				
-				// Record the user logbook ident
-				Info.UserLogbookIdent = fbGetIdent.Ident;
-				
-				// Go to the IDLE state
-				Info.State = USER_LOG_STATE_IDLE;
+				fbGetIdent.Execute 	= false; 
+				info.ident 			= fbGetIdent.Ident; /* Record User logbook ident */
+				info.state 			= USERLOG_STATE_IDLE; /* Get ready to accept messages */
 			}
 			else if(fbGetIdent.Error) {
-				// Report the error
-				inst->ReturnValue = USER_LOG_ERROR_LOGBOOK_IDENT;
-			
-				// Go to the ERROR state
-				Info.State = USER_LOG_STATE_ERROR;
+				fbGetIdent.Execute 		= false;
+				inst->status 			= USERLOG_ERROR_IDENT; /* Return error code */
+				info.arEventLogStatusID = fbGetIdent.StatusID; /* Record status id */
+				info.full 				= true; /* Prevent more entries to buffer */
+				info.state 				= USERLOG_STATE_ERROR; /* Send to error state */
 			}
 		
 			break;
 			
-		// IDLE
-		case USER_LOG_STATE_IDLE:
-			// Write an admin message when the buffer is filled
-			if(WriteAdminMessage)
-				Info.State = USER_LOG_STATE_ADMIN;
+		/* IDLE */
+		case USERLOG_STATE_IDLE:
+			/* Write an admin message as soon as the buffer is filled */
+			if(promptFull)
+				info.state = USERLOG_STATE_ADMIN;
 			
-			// Wait for new event message (write index incremented in LogMessage)
-			else if(Info.ReadIndex != Info.WriteIndex || Info.Full) {
-				// Prepare the write logbook event function block
-				fbWrite.Ident 			= Info.UserLogbookIdent;
-				fbWrite.EventID 		= ArEventLogMakeEventID(Buffer[Info.ReadIndex].Severity, 0, Buffer[Info.ReadIndex].Code);
-				fbWrite.OriginRecordID	= 0; // Default 0 if no origin event
-				fbWrite.AddDataFormat 	= arEVENTLOG_ADDFORMAT_TEXT;
-				fbWrite.AddDataSize 	= brsstrlen((UDINT)Buffer[Info.ReadIndex].sMessage) + 1;
-				fbWrite.AddData 		= (UDINT)Buffer[Info.ReadIndex].sMessage;
-				brsstrcpy((UDINT)fbWrite.ObjectID, (UDINT)Buffer[Info.ReadIndex].sTaskName);
+			/* Wait for new message, writeIndex incremented in LogMessage()
+			   If the buffer has just been filled, readIndex == writeIndex */
+			else if(info.readIndex != info.writeIndex || info.full) {
+				/* Prepare and execute ArEventLogWrite() */
+				fbWrite.Ident 			= info.ident;
+				fbWrite.EventID 		= ArEventLogMakeEventID(buffer[info.readIndex].severity, 0, buffer[info.readIndex].code); /* Force facility 0 for simplicity */
+				fbWrite.OriginRecordID	= 0; /* Force no origin event for simplicity */
+				fbWrite.AddDataFormat 	= arEVENTLOG_ADDFORMAT_TEXT; /* ASC II data */
+				fbWrite.AddDataSize 	= USERLOG_MESSAGE_LENGTH + 1;
+				fbWrite.AddData 		= (unsigned long)buffer[info.readIndex].message;
+				strcpy(fbWrite.ObjectID, buffer[info.readIndex].task);
 				fbWrite.Execute 		= true;
 				
-				// Increment the read index
-				Info.ReadIndex = ++Info.ReadIndex % USER_LOG_BUFFER_SIZE;
+				/* Update read index */
+				info.readIndex = ++info.readIndex % USERLOG_BUFFER_SIZE;
 				
-				// Go to the WRITE state
-				Info.State = USER_LOG_STATE_WRITE;
+				info.state = USERLOG_STATE_WRITE;
 			}
 		
 			break;
 			
-		// ADMIN
-		case USER_LOG_STATE_ADMIN:
-			// Prepare the write logbook event function block for an administrative message
-			fbWrite.Ident			= Info.UserLogbookIdent;
-			fbWrite.OriginRecordID	= 0; // Default 0 if no origin event
-			if(WriteAdminMessage) {
-				fbWrite.EventID = ArEventLogMakeEventID(USER_LOG_SEVERITY_WARNING, 1, 0); // Use a different facility
-				brsstrcpy((UDINT)sAdminMessage, (UDINT)&"Log buffer full. No new events until emptied. Max entries: "); // 59
-				brsitoa(USER_LOG_BUFFER_SIZE, (UDINT)sMaxEntries); // Max 12
-				brsstrcat((UDINT)sAdminMessage, (UDINT)sMaxEntries); // Concatinate to record the user's buffer size
+		/* ADMIN */
+		case USERLOG_STATE_ADMIN:
+			/* Prepare and execute ArEventLogWrite() for an administrative message */
+			fbWrite.Ident			= info.ident;
+			fbWrite.OriginRecordID	= 0; /* Force no origin event for simplicity */
+			if(promptFull) {
+				fbWrite.EventID = ArEventLogMakeEventID(USERLOG_SEVERITY_WARNING, 1, 0); /* Use facility 1 */
+				strcpy(adminMessage, "Log buffer full. No new events until emptied. Max entries: "); /* 59 characters */
+				brsitoa(USERLOG_BUFFER_SIZE, (unsigned long)bufferSizeText); /* Max 11 characters */
+				strcat(adminMessage, bufferSizeText);
 			}
-			else {
-				fbWrite.EventID = ArEventLogMakeEventID(USER_LOG_SEVERITY_INFORMATION, 1, 0); // Use a different facility
-				brsstrcpy((UDINT)sAdminMessage, (UDINT)&"Log buffer emptied. Accepting new events.");
+			else { /* promptEmpty */
+				fbWrite.EventID = ArEventLogMakeEventID(USERLOG_SEVERITY_INFORMATION, 1, 0); /* Use facility 1 */
+				strcpy(adminMessage, "Log buffer emptied. Accepting new events.");
 			}
 			fbWrite.AddDataFormat 	= arEVENTLOG_ADDFORMAT_TEXT;
-			fbWrite.AddDataSize 	= brsstrlen((UDINT)sAdminMessage) + 1;
-			fbWrite.AddData 		= (UDINT)sAdminMessage;
-			brsstrcpy((UDINT)fbWrite.ObjectID, (UDINT)&"Admin");
+			fbWrite.AddDataSize 	= strlen(adminMessage) + 1;
+			fbWrite.AddData 		= (unsigned long)adminMessage;
+			strcpy(fbWrite.ObjectID, "Admin");
 			fbWrite.Execute 		= true;
 			
-			// Go to WRITE
-			Info.State = USER_LOG_STATE_WRITE;
+			info.state = USERLOG_STATE_WRITE;
 			
 			break;
 			
-		// WRITE
-		case USER_LOG_STATE_WRITE:
+		/* WRITE */
+		case USERLOG_STATE_WRITE:
 			if(fbWrite.Done) {
-				// Reset the function block execution
 				fbWrite.Execute = false;
+				info.loggedCount++; 
 				
-				// Increment the number of entries logged
-				Info.NumEntriesLogged++;
-				
-				// Check for the admin flag
-				if(Info.Full && WriteAdminMessage){
-					// Reset the flag and go to IDLE
-					WriteAdminMessage 	= false;
-					Info.State			= USER_LOG_STATE_IDLE;
+				/* Check for full prompt */
+				if(info.full && promptFull) {
+					promptFull = false;
+					info.state = USERLOG_STATE_IDLE;
 				}
-				// Check if the indices match
-				else if(Info.ReadIndex == Info.WriteIndex && Info.Full) {
-					// Reset the buffer full status and go to ADMIN
-					Info.Full 	= false;
-					Info.State 	= USER_LOG_STATE_ADMIN;
+				/* Check for empty prompt */
+				else if(info.full && promptEmpty) {
+					promptEmpty = false;
+					info.full 	= false; /* Reset buffer full status for new messages */
+					info.state 	= USERLOG_STATE_IDLE;
 				}
-				else {
-					// Return to the IDLE state
-					Info.State = USER_LOG_STATE_IDLE;
+				/* Check if buffer has emptied */
+				else if(info.readIndex == info.writeIndex && info.full) {
+					promptEmpty = true;
+					info.state = USERLOG_STATE_ADMIN;
+				}
+				else { /* Normal message */
+					info.state = USERLOG_STATE_IDLE;
 				}
 				
 			}
 			else if(fbWrite.Error) {
-				// Report the error
-				inst->ReturnValue = USER_LOG_ERROR_WRITE;
-			
-				// Go to the ERROR state
-				Info.State = USER_LOG_STATE_ERROR;
+				fbWrite.Execute 		= false;
+				inst->status 			= USERLOG_ERROR_WRITE;
+				info.arEventLogStatusID = fbWrite.StatusID;
+				info.full 				= true; /* Prevent more entries to buffer */
+				info.state 				= USERLOG_STATE_ERROR;
 			}
 		
 			break;
 			
-		case USER_LOG_STATE_ERROR:
-			if(inst->ErrorReset && !ErrorResetPrevious) {
-				// Reset the buffer
-				Info.WriteIndex = 0;
-				Info.ReadIndex	= 0;
-				Info.Full		= 0;
+		/* ERROR */
+		case USERLOG_STATE_ERROR:
+			if(inst->reset && !previousReset) {
+				/* Reset the buffer */
+				info.writeIndex = 0;
+				info.readIndex 	= 0;
+				info.full 		= 0;
 				
-				// Reset the function blocks
-				fbGetIdent.Execute	= false;
-				fbWrite.Execute		= false;
-				
-				// Reset the return value
-				inst->ReturnValue = USER_LOG_ERROR_NONE;
-				
-				// Return to the INIT state
-				Info.State = USER_LOG_STATE_INIT;
+				/* Reset and go to INIT */
+				inst->status 	= USERLOG_ERROR_NONE;
+				info.state 		= USERLOG_STATE_IDENT;
 			}
 		
 			break;
 	}
 	
-	/* Update all status information */
-	ErrorResetPrevious = inst->ErrorReset; // Used in the ERROR state
+	previousReset = inst->reset; /* Update for next scan */
 	
-	// Determine the number of entries in the buffer
-	if(Info.WriteIndex > Info.ReadIndex) 
-		Info.NumEntriesInBuffer = Info.WriteIndex - Info.ReadIndex;
-		
-	else if(Info.WriteIndex < Info.ReadIndex) 
-		Info.NumEntriesInBuffer = (USER_LOG_BUFFER_SIZE - Info.ReadIndex) + Info.WriteIndex;
-	
-	else { // Indicies are equal
-		// The buffer is full and we are not executing except when writing the first admin message
-		if(Info.Full && (!fbWrite.Execute ^ WriteAdminMessage))
-			Info.NumEntriesInBuffer = USER_LOG_BUFFER_SIZE;
-		else
-			Info.NumEntriesInBuffer = 0;
+	/* Count the entries in the buffer */
+	if(info.writeIndex > info.readIndex) info.bufferCount = info.writeIndex - info.readIndex;
+	else if(info.writeIndex < info.readIndex) info.bufferCount = (USERLOG_BUFFER_SIZE - info.readIndex) - info.writeIndex;
+	else {
+		if(info.full && !promptEmpty) info.bufferCount = USERLOG_BUFFER_SIZE;
+		else info.bufferCount = 0;
 	}
 	
-	/* Call all function blocks */
+	/* Call function blocks */
 	ArEventLogGetIdent(&fbGetIdent);
 	ArEventLogWrite(&fbWrite);
 
-}
+} /* End function block */

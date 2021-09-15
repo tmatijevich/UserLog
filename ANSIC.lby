@@ -6,9 +6,9 @@
     <File Description="Exported data types">UserLog.typ</File>
     <File Description="Exported constants">UserLog.var</File>
     <File Description="Internal declarations">UserLogMain.h</File>
-    <File Description="Function to add event to the FIFO buffer">LogMessage.c</File>
-    <File Description="Write buffered entries to the user logbook">CyclicLogBuffer.c</File>
-    <File Description="Get the event log buffer information structure">GetBufferInfo.c</File>
+    <File Description="Add event entry to logging FIFO buffer">LogMessage.c</File>
+    <File Description="Write buffered entries to User logbook">CyclicLogBuffer.c</File>
+    <File Description="Get log buffer information">GetBufferInfo.c</File>
     <File Description="Version description history">VersionHistory.txt</File>
   </Files>
   <Dependencies>
