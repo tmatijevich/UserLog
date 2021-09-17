@@ -47,7 +47,7 @@ signed long LogMessage(enum UserLogSeverityEnum severity, unsigned short code, c
 	buffer[info.writeIndex].message[USERLOG_MESSAGE_LENGTH] = '\0'; /* Ensure null terminator if the incoming message exceeds MESSAGE_LENGTH */
 	
 	/* Increment the write index */
-	info.writeIndex = ++info.writeIndex % USERLOG_BUFFER_SIZE;
+	info.writeIndex = (info.writeIndex + 1) % USERLOG_BUFFER_SIZE;
 	
 	/* Check if the buffer is now full */
 	if(info.writeIndex == info.readIndex) {
