@@ -25,8 +25,8 @@ void CyclicLogBuffer(struct CyclicLogBuffer *inst) {
 	static unsigned char previousReset = false; /* Detect rising edge on error reset */
 	static char adminMessage[81]; /* Store admin message */
 	static char bufferSizeText[12]; /* Store buffer size text in admin message */
-	static unsigned char nextWrite = 0;
-	unsigned char i;
+	static unsigned char nextWrite = 0, previousWrite;
+	unsigned char i, j;
 	
 	/* Assign global threshold, read by LogMessage() */
 	severityThreshold = inst->SeverityThreshold;
@@ -159,7 +159,8 @@ void CyclicLogBuffer(struct CyclicLogBuffer *inst) {
 	}
 	
 	/* Run user writes */
-	for(i = 0; i < USERLOG_BUFFER_SIZE; i++) {
+	for(j = 0; j < USERLOG_BUFFER_SIZE; j++) {
+		i = (previousWrite + j) % USERLOG_BUFFER_SIZE;
 		ArEventLogWrite(&fbWrite[i]);
 		if(fbWrite[i].Done) {
 			fbWrite[i].Execute = false;
@@ -175,6 +176,7 @@ void CyclicLogBuffer(struct CyclicLogBuffer *inst) {
 			/* Continue checking other write blocks */
 		}
 	}
+	previousWrite = nextWrite;
 	
 	previousReset = inst->ErrorReset; /* Update for next scan */
 	
