@@ -98,7 +98,7 @@ fbCyclicLogBuffer();
 
 In Automation Studio, connect to the target, and open the logger. The result looks like this.
 
-
+![2021-09-26_11 35 14](https://user-images.githubusercontent.com/33841634/134816278-53b1bc4c-2bcf-475b-8978-12f787a16dca.png)
 
 By default, `USERLOG_BUFFER_SIZE` is 10.
 
