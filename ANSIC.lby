@@ -10,6 +10,7 @@
     <File Description="Write buffered event entries to user logbook">CyclicLogBuffer.c</File>
     <File Description="Get logging buffer information">GetBufferInfo.c</File>
     <File Description="Version description history">VersionHistory.txt</File>
+    <File>LogMessage2.c</File>
   </Files>
   <Dependencies>
     <Dependency ObjectName="ArEventLog" />

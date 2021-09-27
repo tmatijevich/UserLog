@@ -2,6 +2,8 @@
 
 UserLog is an Automation Studio library with functions to buffer log messages written to the user logbook. A one-line function call records a new message. A single function block instance manages all function calls, writing all messages recorded within the buffer to the user logbook.
 
+[Download the library here](https://github/com/tmatijevich/UserLog/releases/latest/download/UserLog.zip).
+
 The buffer is scalable and can be sized by the user. When the buffer is filled, the user is notified with an entry in the logbook. Once emptied, the user is notified again. The message passed to the log function is written to the ASCII Data column of the system logger.
 
 ## Clone

@@ -22,3 +22,11 @@ FUNCTION GetBufferInfo : DINT (*Get logging buffer information, returns 0*)
 		bufferInfo : UserLogBufferInfoType; (*Local information structure*)
 	END_VAR
 END_FUNCTION
+
+FUNCTION LogMessage2 : DINT (*Add entry to user logbook event buffer*)
+	VAR_INPUT
+		severity : UserLogSeverityEnum; (*Entry severity, see AS Help for 32-bit event ID*)
+		code : UINT; (*Entry code, see AS Help for 32-bit event ID*)
+		message : STRING[0]; (*Message to populate entry ASC II data*)
+	END_VAR
+END_FUNCTION
