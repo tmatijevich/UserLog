@@ -12,7 +12,7 @@
 #include <stdbool.h>
 
 /* Maximum number of messages logged per start of fastest cyclic resouces calling LogMessage() */
-#define USERLOG_MAX_MESSAGES 25
+#define USERLOG_MAX_MESSAGES 10U
 
 typedef struct UserLogBufferEntryType {
 	enum UserLogSeverityEnum severity;

@@ -14,7 +14,8 @@ TYPE
 		USERLOG_SEVERITY_SUCCESS := 0, (*Success*)
 		USERLOG_SEVERITY_INFORMATION := 1, (*Information*)
 		USERLOG_SEVERITY_WARNING := 2, (*Warning*)
-		USERLOG_SEVERITY_ERROR := 3 (*Error*)
+		USERLOG_SEVERITY_ERROR := 3, (*Error*)
+		USERLOG_SEVERITY_SUPPRESS := 4 (*Placeholder to suppress all other severities*)
 		);
 	UserLogCyclicStateEnum : 
 		( (*States for the cyclic log buffer function block*)
