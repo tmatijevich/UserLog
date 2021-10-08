@@ -12,6 +12,7 @@ static signed long LogAdminMessage(ArEventLogIdentType userLogbookIdent);
 UserLogSeverityEnum severityThreshold;
 UserLogInfoType info;
 
+/* Write message to user logbook */
 signed long LogMessage(enum UserLogSeverityEnum severity, unsigned short code, char *message) {
 	
 	/********************** 

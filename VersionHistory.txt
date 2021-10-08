@@ -2,12 +2,12 @@
 
 See [releases on GitHub](https://github.com/tmatijevich/UserLog/releases).
 
-## V0.3.0 (2021-09-15)
-- Fix empty administrative message when buffer is filled immediately after emptied
+## V0.3.0 (2021-10-08)
+- Remove buffer and directly write and reset ArEventLogWrite every function call
+- Include option to suppress all messages
 - Overflow protection on message size
 - Exclusively C data types, C comments, and lower camelcase in source
 - Use string.h for source except for itoa
-- Additional status IDs in diagnostic information
 
 ## V0.2.0 (2021-02-22)
 - Rename `LogEvent` to `LogMessage` to avoid conflict is AsArProf

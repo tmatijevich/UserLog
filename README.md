@@ -1,10 +1,17 @@
 # UserLog
 
-UserLog is an Automation Studio library with functions to buffer log messages written to the user logbook. A one-line function call records a new message. A single function block instance manages all function calls, writing all messages recorded within the buffer to the user logbook.
+UserLog is an Automation Studio library with functions to quickly log messages to the user logbook.
+
+**Feaures**:
+
+- Write to the user logbook by providing
+	- Severity (Success, Information, Warning, Error)
+	- Code (0 - 65535)
+	- Message text
+- Set the severity threshold to suppress messages 
+- Retreive information on the logging history
 
 [Download the library here](https://github/com/tmatijevich/UserLog/releases/latest/download/UserLog.zip).
-
-The buffer is scalable and can be sized by the user. When the buffer is filled, the user is notified with an entry in the logbook. Once emptied, the user is notified again. The message passed to the log function is written to the ASCII Data column of the system logger.
 
 ## Clone
 
@@ -35,7 +42,7 @@ typedef enum UserLogSeverityEnum
     USERLOG_SEVERITY_ERROR = 3
 } UserLogSeverityEnum;
 
-/* Add entry to user logbook event buffer */
+/* Write message to user logbook */
 signed long LogMessage(enum UserLogSeverityEnum severity, unsigned short code, char *message);
 ```
 
@@ -43,21 +50,32 @@ signed long LogMessage(enum UserLogSeverityEnum severity, unsigned short code, c
 
 #### IEC Structured Text
 
-```
-/* Write a new message */
+``` 
+(* Write a new message *)
 LogMessage(severity := USERLOG_SEVERITY_SUCCESS, code := 1234, message := 'Hello World!');
-
-/* Declare fbCyclicLogBuffer and continuously call at the desired rate */
-fbCyclicLogBuffer();
 ```
 
 #### ANSI C 
-```C 
+```C
 /* Write a new message */
 LogMessage(USERLOG_SEVERITY_SUCCESS, 1234, "Hello World!");
+```
 
-/* Declare fbCyclicLogBuffer and continuously call at the desired rate */
-CyclicLogBuffer(&fbCyclicLogBuffer);
+#### Log Info
+
+Retrieve logging information. 
+```
+(* Get logging information during runtime *)
+GetLogInfo(LogInfo);
+```
+
+Example
+```
+LogInfo
+  loggedCount        128
+  lostCount            8
+  suppressedCount    551
+  arEventLogStatusID   0
 ```
 
 ### Sample
@@ -75,11 +93,12 @@ VAR
     MyCode : UINT;
     Index : USINT;
     NumOfMessages : USINT := 12;
-    fbCyclicLogBuffer : CyclicLogBuffer;
+    LogInfo : UserLogInfoType;
+    SeverityThreshold : UserLogSeverityEnum;
 END_VAR
 ```
 
-Setup a loop to log `NumOfMessages` messages. Then call `fbCyclicLogBuffer`.
+Setup a loop to log `NumOfMessages` messages.
 
 ```
 IF Run THEN
@@ -95,14 +114,13 @@ IF Run THEN
     END_FOR
 END_IF
 
-fbCyclicLogBuffer();
+SetThreshold(SeverityThreshold);
+GetLogInfo(LogInfo);
 ```
 
 In Automation Studio, connect to the target, and open the logger. The result looks like this.
 
-![2021-09-26_11 35 14](https://user-images.githubusercontent.com/33841634/134816278-53b1bc4c-2bcf-475b-8978-12f787a16dca.png)
-
-By default, `USERLOG_BUFFER_SIZE` is 10.
+By default, `USERLOG_MAX_MESSAGES` is 10.
 
 ## Automation Studio
 
@@ -121,6 +139,7 @@ Add `-W 9232 9233` to your CPU's build properties window under *Additional build
 - `ArEventLog`
 - `AsBrStr`
 - `sys_lib`
+- `AsIOTime`
 
 ### Recommended
 

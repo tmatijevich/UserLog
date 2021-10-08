@@ -2,7 +2,7 @@
 <?AutomationStudio FileVersion="4.9"?>
 <Library Version="0.02.0" SubType="ANSIC" Description="Buffer user logbook event function calls" xmlns="http://br-automation.co.at/AS/Library">
   <Files>
-    <File Description="Exported functions and function blocks">UserLog.fun</File>
+    <File Description="Exported functions">UserLog.fun</File>
     <File Description="Exported data types">UserLog.typ</File>
     <File Description="Exported constants">UserLog.var</File>
     <File Description="Internal declarations">UserLogMain.h</File>
@@ -15,5 +15,6 @@
     <Dependency ObjectName="ArEventLog" />
     <Dependency ObjectName="AsBrStr" />
     <Dependency ObjectName="sys_lib" />
+    <Dependency ObjectName="AsIOTime" />
   </Dependencies>
 </Library>
