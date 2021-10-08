@@ -10,6 +10,7 @@ static signed long LogAdminMessage(ArEventLogIdentType userLogbookIdent);
 
 /* Declare global variables */
 UserLogSeverityEnum severityThreshold;
+UserLogInfoType info;
 
 signed long LogMessage(enum UserLogSeverityEnum severity, unsigned short code, char *message) {
 	
@@ -22,12 +23,17 @@ signed long LogMessage(enum UserLogSeverityEnum severity, unsigned short code, c
 	static short cyclicLogCount;
 	char asciiMessage[USERLOG_MESSAGE_LENGTH + 1];
 	
+	info.arEventLogStatusID = 0;
+	
 	/***********************************
 	Suppress if below severity threshold
 	***********************************/
-	if(severity < USERLOG_SEVERITY_SUCCESS || severity > USERLOG_SEVERITY_ERROR)
+	if(severity < USERLOG_SEVERITY_SUCCESS || severity > USERLOG_SEVERITY_ERROR) {
+		info.lostCount++;
 		return USERLOG_ERROR_SEVERITY;
+	}
 	else if(severity < severityThreshold) {
+		info.suppressedCount++;
 		return USERLOG_ERROR_NONE;
 	}
 	
@@ -37,7 +43,8 @@ signed long LogMessage(enum UserLogSeverityEnum severity, unsigned short code, c
 	if(timeStamp != AsIOTimeCyclicStart()) 				/* First call this cycle */
 		cyclicLogCount = 0; 							/* Reset count */
 	if(cyclicLogCount >= USERLOG_MAX_MESSAGES) { 		/* More than max cycles */
-		return USERLOG_ERROR_BUFFERFULL;
+		info.lostCount++;
+		return USERLOG_ERROR_MAX;
 	}
 	else cyclicLogCount++; 								/* Ensure the counter doesn't overrun */
 	timeStamp = AsIOTimeCyclicStart();
@@ -50,14 +57,16 @@ signed long LogMessage(enum UserLogSeverityEnum severity, unsigned short code, c
 		fbGetIdent.Execute = true;
 		ArEventLogGetIdent(&fbGetIdent);
 		
-		if(fbGetIdent.Done) { 					/* Success */
+		if(fbGetIdent.Done) { 								/* Success */
 			fbWrite.Ident = fbGetIdent.Ident;
 			fbGetIdent.Execute = false;
-			ArEventLogGetIdent(&fbGetIdent); 	/* Reset */
+			ArEventLogGetIdent(&fbGetIdent); 				/* Reset */
 		}
-		else { 									/* Error, or did not complete in one scan */
+		else { 												/* Error, or did not complete in one scan */
+			info.lostCount++;
+			info.arEventLogStatusID = fbGetIdent.StatusID;
 			fbGetIdent.Execute = false;
-			ArEventLogGetIdent(&fbGetIdent); 	/* Reset */
+			ArEventLogGetIdent(&fbGetIdent); 				/* Reset */
 			return USERLOG_ERROR_IDENT;
 		}
 	}
@@ -84,16 +93,19 @@ signed long LogMessage(enum UserLogSeverityEnum severity, unsigned short code, c
 	fbWrite.Execute 		= true;
 	ArEventLogWrite(&fbWrite);
 	
-	if(fbWrite.Done) { 				/* Success */
+	if(fbWrite.Done) { 									/* Success */
+		info.loggedCount++;
 		fbWrite.Execute = false;
-		ArEventLogWrite(&fbWrite); 	/* Reset */
+		ArEventLogWrite(&fbWrite); 						/* Reset */
 		if(cyclicLogCount == USERLOG_MAX_MESSAGES)
 			LogAdminMessage(fbWrite.Ident);
 		return USERLOG_ERROR_NONE;
 	}
-	else { 							/* Error, or did not complete in one scan */
-		fbWrite.Execute = false;
-		ArEventLogWrite(&fbWrite); 	/* Reset */
+	else { 												/* Error, or did not complete in one scan */
+		info.lostCount++;
+		info.arEventLogStatusID = fbGetIdent.StatusID;
+		fbWrite.Execute 		= false;
+		ArEventLogWrite(&fbWrite); 						/* Reset */
 		return USERLOG_ERROR_WRITE;
 	}
 	
@@ -135,6 +147,7 @@ signed long LogAdminMessage(ArEventLogIdentType userLogbookIdent) {
 	/*********
 	Reset
 	*********/
+	if(fbWrite.Done) info.loggedCount++;
 	fbWrite.Execute = false;
 	ArEventLogWrite(&fbWrite);
 	

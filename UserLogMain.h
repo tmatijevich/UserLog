@@ -12,7 +12,7 @@
 #include <stdbool.h>
 
 /* Reference with a promise these variables will be declared in a source file */
-extern UserLogBufferInfoType info;
+extern UserLogInfoType info;
 extern UserLogSeverityEnum severityThreshold;
 
 #endif /* __USER_LOG_MAIN_H__ */

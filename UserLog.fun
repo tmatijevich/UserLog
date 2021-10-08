@@ -12,3 +12,9 @@ FUNCTION SetThreshold : DINT (*Suppress user logbook messages below the threshol
 		threshold : UserLogSeverityEnum; (*Suppress messages below severity level*)
 	END_VAR
 END_FUNCTION
+
+FUNCTION GetLogInfo : DINT (*Gather information on logging history*)
+	VAR_INPUT
+		logInfo : UserLogInfoType;
+	END_VAR
+END_FUNCTION
