@@ -1,4 +1,4 @@
 VAR CONSTANT
-	USERLOG_BUFFER_SIZE : USINT := 10; (*Number of buffered entries for writing to the User logbook*)
+	USERLOG_MAX_MESSAGES : USINT := 10; (*Maximum number of messages logged per start of fastest cyclic resouces calling LogMessage()*)
 	USERLOG_MESSAGE_LENGTH : USINT := 125; (*Size of message to store for each entry in log buffer*)
 END_VAR

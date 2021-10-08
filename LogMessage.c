@@ -1,5 +1,5 @@
 /*********************************************************************************
- * File:      LogMessage2.c
+ * File:      LogMessage.c
  * Author:    Tyler Matijevich
  * Created:   September 26, 2021/11:58 
  *********************************************************************************/ 
@@ -9,9 +9,9 @@
 static signed long LogAdminMessage(ArEventLogIdentType userLogbookIdent);
 
 /* Declare global variables */
-/* UserLogSeverityEnum severityThreshold; */
+UserLogSeverityEnum severityThreshold;
 
-signed long LogMessage2(enum UserLogSeverityEnum severity, unsigned short code, char *message) {
+signed long LogMessage(enum UserLogSeverityEnum severity, unsigned short code, char *message) {
 	
 	/********************** 
 	Declare local variables
@@ -25,7 +25,7 @@ signed long LogMessage2(enum UserLogSeverityEnum severity, unsigned short code, 
 	/***********************************
 	Suppress if below severity threshold
 	***********************************/
-	if(severity < USERLOG_SEVERITY_SUCCESS || severity > USERLOG_SEVERITY_SUPPRESS)
+	if(severity < USERLOG_SEVERITY_SUCCESS || severity > USERLOG_SEVERITY_ERROR)
 		return USERLOG_ERROR_SEVERITY;
 	else if(severity < severityThreshold) {
 		return USERLOG_ERROR_NONE;

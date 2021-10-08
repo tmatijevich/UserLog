@@ -6,7 +6,7 @@
 
 #include "UserLogMain.h"
 
-signed long SetSeverityThreshold(enum UserLogSeverityEnum threshold) {
+signed long SetThreshold(enum UserLogSeverityEnum threshold) {
 	
 	if(threshold < USERLOG_SEVERITY_SUCCESS || threshold > USERLOG_SEVERITY_SUPPRESS)
 		return USERLOG_ERROR_SEVERITY;
