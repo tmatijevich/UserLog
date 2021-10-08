@@ -6,12 +6,16 @@
 
 #include "UserLogMain.h"
 
+static signed long LogAdminMessage(ArEventLogIdentType userLogbookIdent);
+
 /* Declare global variables */
 /* UserLogSeverityEnum severityThreshold; */
 
 signed long LogMessage2(enum UserLogSeverityEnum severity, unsigned short code, char *message) {
 	
-	/* Declare local variables */
+	/********************** 
+	Declare local variables
+	**********************/
 	static struct ArEventLogGetIdent fbGetIdent;
 	static struct ArEventLogWrite fbWrite;
 	static signed long timeStamp;
@@ -32,10 +36,10 @@ signed long LogMessage2(enum UserLogSeverityEnum severity, unsigned short code, 
 	*******************************/
 	if(timeStamp != AsIOTimeCyclicStart()) 				/* First call this cycle */
 		cyclicLogCount = 0; 							/* Reset count */
-	else if(cyclicLogCount >= USERLOG_MAX_MESSAGES) { 	/* More than max cycles */
+	if(cyclicLogCount >= USERLOG_MAX_MESSAGES) { 		/* More than max cycles */
 		return USERLOG_ERROR_BUFFERFULL;
 	}
-	cyclicLogCount++;
+	else cyclicLogCount++; 								/* Ensure the counter doesn't overrun */
 	timeStamp = AsIOTimeCyclicStart();
 	
 	/**********************
@@ -83,6 +87,8 @@ signed long LogMessage2(enum UserLogSeverityEnum severity, unsigned short code, 
 	if(fbWrite.Done) { 				/* Success */
 		fbWrite.Execute = false;
 		ArEventLogWrite(&fbWrite); 	/* Reset */
+		if(cyclicLogCount == USERLOG_MAX_MESSAGES)
+			LogAdminMessage(fbWrite.Ident);
 		return USERLOG_ERROR_NONE;
 	}
 	else { 							/* Error, or did not complete in one scan */
@@ -90,5 +96,48 @@ signed long LogMessage2(enum UserLogSeverityEnum severity, unsigned short code, 
 		ArEventLogWrite(&fbWrite); 	/* Reset */
 		return USERLOG_ERROR_WRITE;
 	}
+	
+} /* End function */
+
+
+/* Log an administrative message when the max messages have been reached per cycle */
+signed long LogAdminMessage(ArEventLogIdentType userLogbookIdent) {
+	
+	/********************** 
+	Declare local variables
+	**********************/
+	static struct ArEventLogWrite fbWrite;
+	char asciiMessage[USERLOG_MESSAGE_LENGTH + 1];
+	char bufferSizeText[12];
+	
+	/**************
+	Prepare message
+	**************/
+	strcpy(asciiMessage, "Max number of messages ");
+	brsitoa(USERLOG_MAX_MESSAGES, (unsigned long)bufferSizeText);
+	strcat(asciiMessage, bufferSizeText);
+	strcat(asciiMessage, " reached, since start of cycle");
+	
+	/***********************
+	Write message to logbook
+	***********************/
+	fbWrite.Ident 			= userLogbookIdent;
+	fbWrite.EventID 		= ArEventLogMakeEventID(USERLOG_SEVERITY_WARNING, 1, 0);
+	fbWrite.OriginRecordID 	= 0;
+	fbWrite.AddDataFormat 	= arEVENTLOG_ADDFORMAT_TEXT;
+	fbWrite.AddDataSize 	= strlen(asciiMessage) + 1;
+	fbWrite.AddData 		= (unsigned long)asciiMessage;
+	strcpy(fbWrite.ObjectID, "Admin");
+	fbWrite.TimeStamp 		= 0;
+	fbWrite.Execute 		= true;
+	ArEventLogWrite(&fbWrite);
+	
+	/*********
+	Reset
+	*********/
+	fbWrite.Execute = false;
+	ArEventLogWrite(&fbWrite);
+	
+	return USERLOG_ERROR_NONE;
 	
 } /* End function */
