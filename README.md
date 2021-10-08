@@ -32,7 +32,7 @@ Then add as an existing library with the Automation Studio toolbox.
 
 ## Functions
 
-#### LogMessage()
+#### [LogMessage](https://github.com/tmatijevich/UserLog/blob/main/LogMessage.c?ts=4)()
 
 ```C 
 typedef enum UserLogSeverityEnum
@@ -119,6 +119,8 @@ GetLogInfo(LogInfo);
 ```
 
 In Automation Studio, connect to the target, and open the logger. The result looks like this.
+
+![UserLog sample 2021-10-07_09 49 18](https://user-images.githubusercontent.com/33841634/136633532-f9bfb8b7-e399-4919-ac75-0d778910f490.png)
 
 By default, `USERLOG_MAX_MESSAGES` is 10.
 
