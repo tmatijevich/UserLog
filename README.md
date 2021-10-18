@@ -11,7 +11,7 @@ UserLog is an Automation Studio library with functions to quickly log messages t
 - Set the severity threshold to suppress messages 
 - Retreive information on the logging history
 
-[Download the library here](https://github/com/tmatijevich/UserLog/releases/latest/download/UserLog.zip).
+[Download the library here](https://github.com/tmatijevich/UserLog/releases/latest/download/UserLog.zip).
 
 ## Clone
 
