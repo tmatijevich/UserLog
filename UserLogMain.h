@@ -13,6 +13,7 @@
 
 /* Reference with a promise these variables will be declared in a source file */
 extern UserLogInfoType info;
-extern UserLogSeverityEnum severityThreshold;
+extern UserLogSeverityEnum verbosityLevel;
+extern unsigned char severityMap[];
 
 #endif /* __USER_LOG_MAIN_H__ */

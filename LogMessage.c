@@ -6,11 +6,13 @@
 
 #include "UserLogMain.h"
 
+/* Function prototypes */
 static signed long LogAdminMessage(ArEventLogIdentType userLogbookIdent);
 
 /* Declare global variables */
-UserLogSeverityEnum severityThreshold;
+UserLogSeverityEnum verbosityLevel = USERLOG_SEVERITY_SUCCESS; /* All but debug */
 UserLogInfoType info;
+unsigned char severityMap[] = {3, 3, 2, 1, 0, 1}; /* 0 - Success, 1 - Information, 2 - Warning, 3 - Error */
 
 /* Write message to user logbook */
 signed long LogMessage(enum UserLogSeverityEnum severity, unsigned short code, char *message) {
@@ -29,11 +31,11 @@ signed long LogMessage(enum UserLogSeverityEnum severity, unsigned short code, c
 	/***********************************
 	Suppress if below severity threshold
 	***********************************/
-	if(severity < USERLOG_SEVERITY_SUCCESS || severity > USERLOG_SEVERITY_ERROR) {
+	if(severity > USERLOG_SEVERITY_DEBUG) {
 		info.lostCount++;
-		return USERLOG_ERROR_SEVERITY;
+		return USERLOG_ERROR_LEVEL;
 	}
-	else if(severity < severityThreshold) {
+	else if(severity > verbosityLevel) {
 		info.suppressedCount++;
 		return USERLOG_ERROR_NONE;
 	}
@@ -81,16 +83,16 @@ signed long LogMessage(enum UserLogSeverityEnum severity, unsigned short code, c
 	/***********************
 	Write message to logbook
 	***********************/
-	/* fbWrite.Ident */ 												/* Ident already assigned */
-	fbWrite.EventID 		= ArEventLogMakeEventID(severity, 0, code); /* See AH 32-bit event ID. Use facility 0 for simplicity */
-	fbWrite.OriginRecordID 	= 0; 										/* No origin record for simplicity */
-	fbWrite.AddDataFormat 	= arEVENTLOG_ADDFORMAT_TEXT; 				/* ASCII data */
-	strncpy(asciiMessage, message, USERLOG_MESSAGE_LENGTH); 			/* Copy up to MESSAGE_LENGTH characters */
-	asciiMessage[USERLOG_MESSAGE_LENGTH] = '\0'; 						/* Ensure null terminator if the incoming message exceeds MESSAGE_LENGTH */
+	/* fbWrite.Ident */ 																/* Ident already assigned */
+	fbWrite.EventID 		= ArEventLogMakeEventID(severityMap[severity], 0, code); 	/* See AH 32-bit event ID. Use facility 0 for simplicity */
+	fbWrite.OriginRecordID 	= 0; 														/* No origin record for simplicity */
+	fbWrite.AddDataFormat 	= arEVENTLOG_ADDFORMAT_TEXT; 								/* ASCII data */
+	strncpy(asciiMessage, message, USERLOG_MESSAGE_LENGTH); 							/* Copy up to MESSAGE_LENGTH characters */
+	asciiMessage[USERLOG_MESSAGE_LENGTH] = '\0'; 										/* Ensure null terminator if the incoming message exceeds MESSAGE_LENGTH */
 	fbWrite.AddDataSize 	= strlen(asciiMessage) + 1; 
 	fbWrite.AddData 		= (unsigned long)asciiMessage;
-	/* fbWrite.ObjectID */												/* ObjectID already assigned */
-	fbWrite.TimeStamp 		= 0; 										/* Null, handled by AR */
+	/* fbWrite.ObjectID */																/* ObjectID already assigned */
+	fbWrite.TimeStamp 		= 0; 														/* Null, handled by AR */
 	fbWrite.Execute 		= true;
 	ArEventLogWrite(&fbWrite);
 	

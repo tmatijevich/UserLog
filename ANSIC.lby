@@ -7,7 +7,7 @@
     <File Description="Exported constants">UserLog.var</File>
     <File Description="Internal declarations">UserLogMain.h</File>
     <File Description="Write to user logbook">LogMessage.c</File>
-    <File Description="Suppress log messages">SetThreshold.c</File>
+    <File Description="Suppress log messages">SetVebosityLevel.c</File>
     <File Description="Logging history and errors">GetLogInfo.c</File>
     <File Description="Version description history">VersionHistory.txt</File>
   </Files>

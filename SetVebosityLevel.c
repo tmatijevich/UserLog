@@ -1,17 +1,17 @@
 /*********************************************************************************
- * File:      B&R Industrial Automation GmbH 
+ * File:      SetVerbosityLevel.c
  * Author:    Tyler Matijevich
  * Created:   October 6, 2021/17:20 
  *********************************************************************************/ 
 
 #include "UserLogMain.h"
 
-signed long SetThreshold(enum UserLogSeverityEnum threshold) {
+signed long SetVebosityLevel(enum UserLogSeverityEnum level) {
 	
-	if(threshold < USERLOG_SEVERITY_SUCCESS || threshold > USERLOG_SEVERITY_SUPPRESS)
-		return USERLOG_ERROR_SEVERITY;
+	if(level > USERLOG_SEVERITY_DEBUG)
+		return USERLOG_ERROR_LEVEL;
 		
-	severityThreshold = threshold; /* Set the global threshold */
+	verbosityLevel = level; /* Set global verbosity level */
 	return USERLOG_ERROR_NONE;
 	
 } /* End function */

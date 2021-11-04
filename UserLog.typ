@@ -4,17 +4,18 @@ TYPE
 		( (*Error codes returned by all functions and function blocks*)
 		USERLOG_ERROR_NONE := 0, (*Successful operation*)
 		USERLOG_ERROR_MAX := 10, (*Log buffer is already full. No further entries will be written until the buffer is emptied.*)
-		USERLOG_ERROR_SEVERITY, (*Invalid severity*)
+		USERLOG_ERROR_LEVEL, (*Invalid severity level*)
 		USERLOG_ERROR_IDENT, (*Unable to retreive user logbook ident. See info.arEventLogErrorID*)
 		USERLOG_ERROR_WRITE (*Unable to write to user logbook. See info.arEventLogErrorID*)
 		);
 	UserLogSeverityEnum : 
 		( (*Levels of severity, see AS Help 32-bit event ID*)
-		USERLOG_SEVERITY_SUCCESS := 0, (*Success*)
-		USERLOG_SEVERITY_INFORMATION := 1, (*Information*)
-		USERLOG_SEVERITY_WARNING := 2, (*Warning*)
-		USERLOG_SEVERITY_ERROR := 3, (*Error*)
-		USERLOG_SEVERITY_SUPPRESS := 4 (*Placeholder to suppress all other severities*)
+		USERLOG_SEVERITY_CRITICAL := 0, (*Error: The application in unrecoverable*)
+		USERLOG_SEVERITY_ERROR := 1, (*Error: The application in recoverable*)
+		USERLOG_SEVERITY_WARNING := 2, (*Warning: The application may continue*)
+		USERLOG_SEVERITY_INFORMATION := 3, (*Information: User information*)
+		USERLOG_SEVERITY_SUCCESS := 4, (*Success: Completion*)
+		USERLOG_SEVERITY_DEBUG := 5 (*Information: Developer information*)
 		);
 	UserLogCyclicStateEnum : 
 		( (*States for the cyclic log buffer function block*)

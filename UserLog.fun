@@ -7,9 +7,9 @@ FUNCTION LogMessage : DINT (*Add entry to user logbook event buffer*)
 	END_VAR
 END_FUNCTION
 
-FUNCTION SetThreshold : DINT (*Suppress user logbook messages below the threshold*)
+FUNCTION SetVebosityLevel : DINT (*Set level of verbosity*)
 	VAR_INPUT
-		threshold : UserLogSeverityEnum; (*Suppress messages below severity level*)
+		level : UserLogSeverityEnum; (*Suppress messages above verbosity level*)
 	END_VAR
 END_FUNCTION
 
