@@ -6,7 +6,7 @@
 
 #include "UserLogMain.h"
 
-signed long SetVebosityLevel(enum UserLogSeverityEnum level) {
+signed long SetVebosityLevel(UserLogSeverityEnum level) {
 	
 	if(level > USERLOG_SEVERITY_DEBUG)
 		return USERLOG_ERROR_LEVEL;

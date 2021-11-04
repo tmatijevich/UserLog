@@ -15,13 +15,13 @@ UserLogInfoType info;
 unsigned char severityMap[] = {3, 3, 2, 1, 0, 1}; /* 0 - Success, 1 - Information, 2 - Warning, 3 - Error */
 
 /* Write message to user logbook */
-signed long LogMessage(enum UserLogSeverityEnum severity, unsigned short code, char *message) {
+signed long LogMessage(UserLogSeverityEnum severity, unsigned short code, char *message) {
 	
 	/********************** 
 	Declare local variables
 	**********************/
-	static struct ArEventLogGetIdent fbGetIdent;
-	static struct ArEventLogWrite fbWrite;
+	static ArEventLogGetIdent_typ fbGetIdent;
+	static ArEventLogWrite_typ fbWrite;
 	static signed long timeStamp;
 	static short cyclicLogCount;
 	char asciiMessage[USERLOG_MESSAGE_LENGTH + 1];
@@ -121,7 +121,7 @@ signed long LogAdminMessage(ArEventLogIdentType userLogbookIdent) {
 	/********************** 
 	Declare local variables
 	**********************/
-	static struct ArEventLogWrite fbWrite;
+	static ArEventLogWrite_typ fbWrite;
 	char asciiMessage[USERLOG_MESSAGE_LENGTH + 1];
 	char bufferSizeText[12];
 	
