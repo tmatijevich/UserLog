@@ -1,13 +1,15 @@
 /*********************************************************************************
- * File:      GetLogInfo.c
+ * File:      GetUserLogInfo.c
  * Author:    Tyler Matijevich
  * Created:   October 8, 2021/17:45 
  *********************************************************************************/ 
 
 #include "UserLogMain.h"
  
-/* Get logging history and error information */
-signed long GetLogInfo(UserLogInfoType *logInfo) {
+/* Gather information on this library's logging history */
+signed long GetUserLogInfo(UserLogInfoType *logInfo) {
+	
 	memcpy(logInfo, &info, sizeof(info));
 	return 0;
+	
 } /* End function */
