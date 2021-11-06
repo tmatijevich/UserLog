@@ -2,14 +2,14 @@
 
 UserLog is an Automation Studio library with functions to quickly log messages to the user logbook.
 
-**Feaures**:
+#### Features
 
-- Write to the user logbook by providing
-	- Severity (Success, Information, Warning, Error)
+- Write to the user logbook with information:
+	- Severity (Critical, Error, Warning, Information, Success, Debug)
 	- Code (0 - 65535)
 	- Message text
-- Set the severity threshold to suppress messages 
-- Retreive information on the logging history
+- Set the verbosity level (Default: Success) to suppress messages
+- Retrieve library's logging history
 
 [Download the library here](https://github.com/tmatijevich/UserLog/releases/latest/download/UserLog.zip).
 
@@ -32,44 +32,53 @@ Then add as an existing library with the Automation Studio toolbox.
 
 ## Functions
 
-#### [LogMessage](https://github.com/tmatijevich/UserLog/blob/main/LogMessage.c?ts=4)()
+### [LogMessage](https://github.com/tmatijevich/UserLog/blob/main/LogMessage.c?ts=4)
 
 ```C 
 typedef enum UserLogSeverityEnum
-{   USERLOG_SEVERITY_SUCCESS = 0,
-    USERLOG_SEVERITY_INFORMATION = 1,
+{   USERLOG_SEVERITY_CRITICAL = 0,
+    USERLOG_SEVERITY_ERROR = 1,
     USERLOG_SEVERITY_WARNING = 2,
-    USERLOG_SEVERITY_ERROR = 3
+    USERLOG_SEVERITY_INFORMATION = 3,
+    USERLOG_SEVERITY_SUCCESS = 4,
+    USERLOG_SEVERITY_DEBUG = 5
 } UserLogSeverityEnum;
 
-/* Write message to user logbook */
-signed long LogMessage(enum UserLogSeverityEnum severity, unsigned short code, char *message);
+/* Write message (event) to user logbook */
+signed long LogMessage(UserLogSeverityEnum severity, unsigned short code, char *message);
 ```
 
-### Usage
+#### Usage
 
-#### IEC Structured Text
+##### IEC Structured Text
 
 ``` 
 (* Write a new message *)
 LogMessage(severity := USERLOG_SEVERITY_SUCCESS, code := 1234, message := 'Hello World!');
 ```
 
-#### ANSI C 
+##### ANSI C 
 ```C
 /* Write a new message */
 LogMessage(USERLOG_SEVERITY_SUCCESS, 1234, "Hello World!");
 ```
 
-#### Log Info
+### [SetVerbosityLevel](https://github.com/tmatijevich/UserLog/blob/main/SetVerbosityLevel.c?ts=4)
 
-Retrieve logging information. 
+```C
+/* Set the verbosity level to suppress high verbose messages */
+signed long SetVebosityLevel(UserLogSeverityEnum level);
 ```
-(* Get logging information during runtime *)
-GetLogInfo(LogInfo);
+
+### [GetUserLogInfo](https://github.com/tmatijevich/UserLog/blob/main/GetUserLogInfo.c?ts=4)
+
+```C
+/* Gather information on this library's logging history */
+signed long GetUserLogInfo(UserLogInfoType *logInfo)
 ```
 
 Example
+
 ```
 LogInfo
   loggedCount        128
@@ -92,43 +101,49 @@ VAR
     MySeverity : UserLogSeverityEnum;
     MyCode : UINT;
     Index : USINT;
-    NumOfMessages : USINT := 12;
+    NumOfMessages : USINT := 24;
     LogInfo : UserLogInfoType;
-    SeverityThreshold : UserLogSeverityEnum;
+    MyVerbosityLevel : UserLogSeverityEnum := USERLOG_SEVERITY_DEBUG;
 END_VAR
 ```
 
 Setup a loop to log `NumOfMessages` messages.
 
 ```
+// Write a burst of events to the user logbook
 IF Run THEN
     Run := FALSE;
     FOR Index := 1 TO NumOfMessages DO
+        // Setup
+        SetVebosityLevel(MyVerbosityLevel);
+        MySeverity := (Index - 1) MOD 6;
+        MyCode := 1000 + Index;
+        // Format
         FormatArgs.i[0] := Index;
         FormatArgs.i[1] := NumOfMessages;
-        IecFormatString(MyMessage, SIZEOF(MyMessage), 'Event %i of %i', FormatArgs);
-        
-        MySeverity := (Index - 1) MOD 4;
-        MyCode := 1000 + Index;
+        CASE MySeverity OF
+            USERLOG_SEVERITY_CRITICAL:      FormatArgs.s[0] := 'Critical';
+            USERLOG_SEVERITY_ERROR:         FormatArgs.s[0] := 'Error';
+            USERLOG_SEVERITY_WARNING:       FormatArgs.s[0] := 'Warning';
+            USERLOG_SEVERITY_INFORMATION:   FormatArgs.s[0] := 'Infomration';
+            USERLOG_SEVERITY_SUCCESS:       FormatArgs.s[0] := 'Success';
+            USERLOG_SEVERITY_DEBUG:         FormatArgs.s[0] := 'Debug';
+        END_CASE
+        IecFormatString(MyMessage, SIZEOF(MyMessage), 'Event: %i of %i Severity: %s', FormatArgs);
+        // Log
         LogMessage(MySeverity, MyCode, MyMessage);
     END_FOR
 END_IF
 
-SetThreshold(SeverityThreshold);
-GetLogInfo(LogInfo);
+GetUserLogInfo(LogInfo);
 ```
 
 In Automation Studio, connect to the target, and open the logger. The result looks like this.
 
-![UserLog sample 2021-10-07_09 49 18](https://user-images.githubusercontent.com/33841634/136633532-f9bfb8b7-e399-4919-ac75-0d778910f490.png)
 
-By default, `USERLOG_MAX_MESSAGES` is 10.
+By default, `USERLOG_MAX_MESSAGES` is 20.
 
-## Automation Studio
-
-Version 4.9.3.144 SP
-
-### Build
+## Build
 
 You may notice build warnings such as "Additional directory/file found ..." from the IecString submodule.
 

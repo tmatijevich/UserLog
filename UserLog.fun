@@ -1,9 +1,9 @@
 
-FUNCTION LogMessage : DINT (*Add entry to user logbook event buffer*)
+FUNCTION LogMessage : DINT (*Write message (event) to user logbook*)
 	VAR_INPUT
 		severity : UserLogSeverityEnum; (*Entry severity (verbosity) - mapped to ArEventLog severities, see AS Help*)
 		code : UINT; (*Entry code (0 - 65535), see AS Help for 32-bit event ID*)
-		message : STRING[0]; (*Message to populate entry ASC II data up to USERLOG_MESSAGE_LENGTH characters*)
+		message : STRING[0]; (*Message to populate entry ASCII data up to USERLOG_MESSAGE_LENGTH characters*)
 	END_VAR
 END_FUNCTION
 

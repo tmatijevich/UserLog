@@ -2,6 +2,11 @@
 
 See [releases on GitHub](https://github.com/tmatijevich/UserLog/releases).
 
+## V0.3.1 (2021-11-06)
+- Create more granular severity/verbosity levels in increasing order
+- Map new severities to ArEventLog severities
+- Update administrative function names
+
 ## V0.3.0 (2021-10-08)
 - Remove buffer and directly write and reset ArEventLogWrite every function call
 - Include option to suppress all messages

@@ -14,7 +14,7 @@ UserLogSeverityEnum verbosityLevel = USERLOG_SEVERITY_SUCCESS; /* All but debug 
 UserLogInfoType info;
 unsigned char severityMap[] = {3, 3, 2, 1, 0, 1}; /* 0 - Success, 1 - Information, 2 - Warning, 3 - Error */
 
-/* Write message to user logbook */
+/* Write message (event) to user logbook */
 signed long LogMessage(UserLogSeverityEnum severity, unsigned short code, char *message) {
 	
 	/********************** 
