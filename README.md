@@ -140,6 +140,7 @@ GetUserLogInfo(LogInfo);
 
 In Automation Studio, connect to the target, and open the logger. The result looks like this.
 
+![2021-11-06_18 59 52](https://user-images.githubusercontent.com/33841634/140626835-f11d83f0-fa00-4d29-ac9a-8e0c019fc800.png)
 
 By default, `USERLOG_MAX_MESSAGES` is 20.
 
