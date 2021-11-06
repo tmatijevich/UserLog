@@ -7,7 +7,7 @@
 #include "UserLogMain.h"
 
 /* Set the verbosity level to suppress high verbose messages */
-signed long SetVebosityLevel(UserLogSeverityEnum level) {
+signed long SetVerbosityLevel(UserLogSeverityEnum level) {
 	
 	if(level > USERLOG_SEVERITY_DEBUG)
 		return USERLOG_ERROR_LEVEL;

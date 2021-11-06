@@ -7,7 +7,7 @@ FUNCTION LogMessage : DINT (*Write message (event) to user logbook*)
 	END_VAR
 END_FUNCTION
 
-FUNCTION SetVebosityLevel : DINT (*Set the verbosity level to suppress high verbose messages*)
+FUNCTION SetVerbosityLevel : DINT (*Set the verbosity level to suppress high verbose messages*)
 	VAR_INPUT
 		level : UserLogSeverityEnum; (*Suppress messages above verbosity level*)
 	END_VAR
