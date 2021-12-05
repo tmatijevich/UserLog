@@ -2,6 +2,9 @@
 
 See [releases on GitHub](https://github.com/tmatijevich/UserLog/releases).
 
+## V0.3.2 (2021-12-05)
+- Expand messaging with option for custom logbook (user responsible for enough memory)
+
 ## V0.3.1 (2021-11-06)
 - Create more granular severity/verbosity levels in increasing order
 - Map new severities to ArEventLog severities

@@ -1,6 +1,7 @@
 # UserLog
 
-UserLog is an Automation Studio library with functions to quickly log messages to the user logbook.
+UserLog is an Automation Studio library with functions to quickly log messages to the user logbook.  
+**NOTE:** This is not an official library. UserLog is provided as is under the GNU GPL v3.0 license agreement.
 
 #### Features
 
@@ -10,6 +11,7 @@ UserLog is an Automation Studio library with functions to quickly log messages t
 	- Message text
 - Set the verbosity level (Default: Success) to suppress messages
 - Retrieve library's logging history
+- Create and write to custom logbooks (user responsible for enough memory)
 
 [Download the library here](https://github.com/tmatijevich/UserLog/releases/latest/download/UserLog.zip).
 
@@ -74,7 +76,7 @@ signed long SetVebosityLevel(UserLogSeverityEnum level);
 
 ```C
 /* Gather information on this library's logging history */
-signed long GetUserLogInfo(UserLogInfoType *logInfo)
+signed long GetUserLogInfo(UserLogInfoType *logInfo);
 ```
 
 Example
@@ -85,6 +87,24 @@ LogInfo
   lostCount            8
   suppressedCount    551
   arEventLogStatusID   0
+```
+
+### [CustomMessage](https://github.com/tmatijevich/UserLog/blob/main/LogMessage.c?ts=4)
+
+Same as [LogMessage](#logmessage) with inputs for logbook name and facility number. Use facility to differentiate code (0-65535) area of available event IDs.
+
+```C
+/* Write message (event) to custom logbook */
+signed long CustomMessage(UserLogSeverityEnum severity, unsigned short code, char *message, char *logbook, unsigned char facility);
+```
+
+### [CreateCustomLogbook](https://github.com/tmatijevich/UserLog/blob/main/CreateCustomLogbook.c?ts=4)
+
+**IMPORTANT: For use in _INIT routine only!** The function asynchronously creates the new logbook (if it does not already exist), this can cause cycle time violations in _CYCLIC routines.
+
+```C
+/* _INIT routine ONLY! Create custom logbook in USERROM, skip if already exists */
+signed long CreateCustomLogbook(char *name, unsigned long size);
 ```
 
 ### Sample
