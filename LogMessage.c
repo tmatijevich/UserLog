@@ -25,19 +25,14 @@ signed long LogMessage(UserLogSeverityEnum severity, unsigned short code, char *
 	static signed long timeStamp;
 	static short cyclicLogCount;
 	char asciiMessage[USERLOG_MESSAGE_LENGTH + 1];
-	
-	info.arEventLogStatusID = 0;
+	signed long arEventLogStatusID;
 	
 	/***********************************
 	Suppress if below severity threshold
 	***********************************/
-	if(severity > USERLOG_SEVERITY_DEBUG) {
-		info.lostCount++;
-		return USERLOG_ERROR_LEVEL;
-	}
-	else if(severity > verbosityLevel) {
+	if(severity > verbosityLevel) { 					/* From SetVerbosityLevel, never greater than USERLOG_SEVERITY_DEBUG */
 		info.suppressedCount++;
-		return USERLOG_ERROR_NONE;
+		return 0;
 	}
 	
 	/*******************************
@@ -47,7 +42,7 @@ signed long LogMessage(UserLogSeverityEnum severity, unsigned short code, char *
 		cyclicLogCount = 0; 							/* Reset count */
 	if(cyclicLogCount >= USERLOG_MAX_MESSAGES) { 		/* More than max cycles */
 		info.lostCount++;
-		return USERLOG_ERROR_MAX;
+		return 0;
 	}
 	else cyclicLogCount++; 								/* Ensure the counter doesn't overrun */
 	timeStamp = AsIOTimeCyclicStart();
@@ -67,10 +62,13 @@ signed long LogMessage(UserLogSeverityEnum severity, unsigned short code, char *
 		}
 		else { 												/* Error, or did not complete in one scan */
 			info.lostCount++;
-			info.arEventLogStatusID = fbGetIdent.StatusID;
+			arEventLogStatusID = fbGetIdent.StatusID;
 			fbGetIdent.Execute = false;
 			ArEventLogGetIdent(&fbGetIdent); 				/* Reset */
-			return USERLOG_ERROR_IDENT;
+			if(arEventLogStatusID != 0) 
+				return arEventLogStatusID;
+			else
+				return -1;
 		}
 	}
 	
@@ -102,14 +100,17 @@ signed long LogMessage(UserLogSeverityEnum severity, unsigned short code, char *
 		ArEventLogWrite(&fbWrite); 						/* Reset */
 		if(cyclicLogCount == USERLOG_MAX_MESSAGES)
 			LogAdminMessage(fbWrite.Ident);
-		return USERLOG_ERROR_NONE;
+		return 0;
 	}
 	else { 												/* Error, or did not complete in one scan */
 		info.lostCount++;
-		info.arEventLogStatusID = fbGetIdent.StatusID;
+		arEventLogStatusID 		= fbGetIdent.StatusID;
 		fbWrite.Execute 		= false;
 		ArEventLogWrite(&fbWrite); 						/* Reset */
-		return USERLOG_ERROR_WRITE;
+		if(arEventLogStatusID != 0)
+			return arEventLogStatusID;
+		else
+			return -1;
 	}
 	
 } /* End function */
@@ -154,6 +155,6 @@ signed long LogAdminMessage(ArEventLogIdentType userLogbookIdent) {
 	fbWrite.Execute = false;
 	ArEventLogWrite(&fbWrite);
 	
-	return USERLOG_ERROR_NONE;
+	return 0;
 	
 } /* End function */

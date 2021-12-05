@@ -10,9 +10,9 @@
 signed long SetVerbosityLevel(UserLogSeverityEnum level) {
 	
 	if(level > USERLOG_SEVERITY_DEBUG)
-		return USERLOG_ERROR_LEVEL;
+		return -1;
 		
 	verbosityLevel = level; /* Set global verbosity level */
-	return USERLOG_ERROR_NONE;
+	return 0;
 	
 } /* End function */
