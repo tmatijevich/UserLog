@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <?AutomationStudio FileVersion="4.9"?>
-<Library Version="0.03.2" SubType="ANSIC" Description="Quick functions for writing to user logbook" xmlns="http://br-automation.co.at/AS/Library">
+<Library Version="0.03.2" SubType="ANSIC" Description="Quick functions for writing to logbook" xmlns="http://br-automation.co.at/AS/Library">
   <Files>
     <File Description="Exported functions">UserLog.fun</File>
     <File Description="Exported data types">UserLog.typ</File>

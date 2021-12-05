@@ -1,7 +1,8 @@
 # UserLog
 
 UserLog is an Automation Studio library with functions to quickly log messages to the user logbook.  
-**NOTE:** This is not an official library. UserLog is provided as is under the GNU GPL v3.0 license agreement.
+**NOTE:** This is not an official library. UserLog is provided as is under the GNU GPL v3.0 license agreement.  
+[Download the library here](https://github.com/tmatijevich/UserLog/releases/latest/download/UserLog.zip).
 
 #### Features
 
@@ -13,7 +14,13 @@ UserLog is an Automation Studio library with functions to quickly log messages t
 - Retrieve library's logging history
 - Create and write to custom logbooks (user responsible for enough memory)
 
-[Download the library here](https://github.com/tmatijevich/UserLog/releases/latest/download/UserLog.zip).
+#### Functions
+
+- [LogMessage](#logmessage)
+- [SetVerbosityLevel](#setverbositylevel)
+- [GetUserLogInfo](#getuserloginfo)
+- [CustomMessage](#custommessage)
+- [CreateCustomLogbook](#createcustomlogbook)
 
 ## Clone
 
