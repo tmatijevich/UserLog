@@ -16,6 +16,11 @@ unsigned char severityMap[] = {3, 3, 2, 1, 0, 1}; /* 0 - Success, 1 - Informatio
 
 /* Write message (event) to user logbook */
 signed long LogMessage(UserLogSeverityEnum severity, unsigned short code, char *message) {
+	return CustomMessage(severity, code, message, "$arlogusr", 0);
+}
+
+/* Write message (event) to custom logbook */
+signed long CustomMessage(UserLogSeverityEnum severity, unsigned short code, char *message, char *logbook, unsigned char facility) {
 	
 	/********************** 
 	Declare local variables
@@ -50,26 +55,25 @@ signed long LogMessage(UserLogSeverityEnum severity, unsigned short code, char *
 	/**********************
 	Find user logbook ident 
 	**********************/
-	if(fbWrite.Ident == 0) {
-		strcpy(fbGetIdent.Name, "$arlogusr");
-		fbGetIdent.Execute = true;
-		ArEventLogGetIdent(&fbGetIdent);
-		
-		if(fbGetIdent.Done) { 								/* Success */
-			fbWrite.Ident = fbGetIdent.Ident;
-			fbGetIdent.Execute = false;
-			ArEventLogGetIdent(&fbGetIdent); 				/* Reset */
-		}
-		else { 												/* Error, or did not complete in one scan */
-			info.lostCount++;
-			arEventLogStatusID = fbGetIdent.StatusID;
-			fbGetIdent.Execute = false;
-			ArEventLogGetIdent(&fbGetIdent); 				/* Reset */
-			if(arEventLogStatusID != 0) 
-				return arEventLogStatusID;
-			else
-				return -1;
-		}
+	strncpy(fbGetIdent.Name, logbook, 10);
+	fbGetIdent.Name[10] = '\0';
+	fbGetIdent.Execute 	= true;
+	ArEventLogGetIdent(&fbGetIdent);
+	
+	if(fbGetIdent.Done) { 								/* Success */
+		fbWrite.Ident = fbGetIdent.Ident;
+		fbGetIdent.Execute = false;
+		ArEventLogGetIdent(&fbGetIdent); 				/* Reset */
+	}
+	else { 												/* Error, or did not complete in one scan */
+		info.lostCount++;
+		arEventLogStatusID = fbGetIdent.StatusID;
+		fbGetIdent.Execute = false;
+		ArEventLogGetIdent(&fbGetIdent); 				/* Reset */
+		if(arEventLogStatusID != 0) 
+			return arEventLogStatusID;
+		else
+			return -1;
 	}
 	
 	/**************************
@@ -81,16 +85,16 @@ signed long LogMessage(UserLogSeverityEnum severity, unsigned short code, char *
 	/***********************
 	Write message to logbook
 	***********************/
-	/* fbWrite.Ident */ 																/* Ident already assigned */
-	fbWrite.EventID 		= ArEventLogMakeEventID(severityMap[severity], 0, code); 	/* See AH 32-bit event ID. Use facility 0 for simplicity */
-	fbWrite.OriginRecordID 	= 0; 														/* No origin record for simplicity */
-	fbWrite.AddDataFormat 	= arEVENTLOG_ADDFORMAT_TEXT; 								/* ASCII data */
-	strncpy(asciiMessage, message, USERLOG_MESSAGE_LENGTH); 							/* Copy up to MESSAGE_LENGTH characters */
-	asciiMessage[USERLOG_MESSAGE_LENGTH] = '\0'; 										/* Ensure null terminator if the incoming message exceeds MESSAGE_LENGTH */
+	/* fbWrite.Ident */ 																	/* Ident already assigned */
+	fbWrite.EventID 		= ArEventLogMakeEventID(severityMap[severity], facility, code); /* See AH 32-bit event ID. Use facility 0 for simplicity */
+	fbWrite.OriginRecordID 	= 0; 															/* No origin record for simplicity */
+	fbWrite.AddDataFormat 	= arEVENTLOG_ADDFORMAT_TEXT; 									/* ASCII data */
+	strncpy(asciiMessage, message, USERLOG_MESSAGE_LENGTH); 								/* Copy up to MESSAGE_LENGTH characters */
+	asciiMessage[USERLOG_MESSAGE_LENGTH] = '\0'; 											/* Ensure null terminator if the incoming message exceeds MESSAGE_LENGTH */
 	fbWrite.AddDataSize 	= strlen(asciiMessage) + 1; 
 	fbWrite.AddData 		= (unsigned long)asciiMessage;
-	/* fbWrite.ObjectID */																/* ObjectID already assigned */
-	fbWrite.TimeStamp 		= 0; 														/* Null, handled by AR */
+	/* fbWrite.ObjectID */																	/* ObjectID already assigned */
+	fbWrite.TimeStamp 		= 0; 															/* Null, handled by AR */
 	fbWrite.Execute 		= true;
 	ArEventLogWrite(&fbWrite);
 	
