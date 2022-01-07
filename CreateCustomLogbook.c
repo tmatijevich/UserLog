@@ -6,7 +6,7 @@
 
 #include "UserLogMain.h"
 
-/* _INIT routine ONLY! Create custom logbook in USERROM, skip if already exists */
+/* _INIT routine ONLY! Create custom logbook in USERROM (if not already existing) */
 signed long CreateCustomLogbook(char *name, unsigned long size) {
 	
 	/********************** 

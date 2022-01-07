@@ -110,7 +110,7 @@ signed long CustomMessage(UserLogSeverityEnum severity, unsigned short code, cha
 **IMPORTANT: For use in _INIT routine only!** The function asynchronously creates the new logbook (if it does not already exist), this can cause cycle time violations in _CYCLIC routines.
 
 ```C
-/* _INIT routine ONLY! Create custom logbook in USERROM, skip if already exists */
+/* _INIT routine ONLY! Create custom logbook in USERROM (if not already existing) */
 signed long CreateCustomLogbook(char *name, unsigned long size);
 ```
 

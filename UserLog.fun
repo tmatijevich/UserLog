@@ -22,7 +22,7 @@ END_FUNCTION
 FUNCTION CreateCustomLogbook : DINT (*_INIT routine ONLY! Create custom logbook in USERROM, skip if already exists*)
 	VAR_INPUT
 		name : STRING[0]; (*Set name of logbook, see ArEventLogCreate for details*)
-		size : UDINT; (*Size of logbook in bytes (minimum 4096), user is responsible for enough memory in USERROM - see user partition size*)
+		size : UDINT; (*Size of logbook in bytes (minimum 4096, commonly 200000), user is responsible for enough memory in USERROM - see user partition size*)
 	END_VAR
 END_FUNCTION
 
