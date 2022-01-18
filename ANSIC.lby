@@ -17,5 +17,6 @@
     <Dependency ObjectName="AsBrStr" />
     <Dependency ObjectName="sys_lib" />
     <Dependency ObjectName="AsIOTime" />
+    <Dependency ObjectName="IecString" FromVersion="0.03.0" />
   </Dependencies>
 </Library>

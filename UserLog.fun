@@ -4,6 +4,7 @@ FUNCTION LogMessage : DINT (*Write message (event) to user logbook*)
 		severity : UserLogSeverityEnum; (*Entry severity (verbosity) - mapped to ArEventLog severities, see AS Help*)
 		code : UINT; (*Entry code (0 - 65535), see AS Help for 32-bit event ID*)
 		message : STRING[0]; (*Message to populate entry ASCII data up to USERLOG_MESSAGE_LENGTH characters*)
+		args : FormatStringArgumentsType; (*Format message arguments %b boolean %i integer %r real %s string*)
 	END_VAR
 END_FUNCTION
 
@@ -31,6 +32,7 @@ FUNCTION CustomMessage : DINT (*Write message (event) to custom logbook*)
 		severity : UserLogSeverityEnum; (*Entry severity (verbosity) - mapped to ArEventLog severities, see AS Help*)
 		code : UINT; (*Entry code (0 - 65535), see AS Help for 32-bit event ID*)
 		message : STRING[0]; (*Message to populate entry ASCII data up to USERLOG_MESSAGE_LENGTH characters*)
+		args : FormatStringArgumentsType; (*Format message arguments %b boolean %i integer %r real %s string*)
 		logbook : STRING[0]; (*Name of logbook to write message to*)
 		facility : USINT; (*0..15 event ID area, see AS Help for 32-bit event ID*)
 	END_VAR

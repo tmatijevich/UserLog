@@ -15,12 +15,12 @@ UserLogInfoType info;
 unsigned char severityMap[] = {3, 3, 2, 1, 0, 1}; /* 0 - Success, 1 - Information, 2 - Warning, 3 - Error */
 
 /* Write message (event) to user logbook */
-signed long LogMessage(UserLogSeverityEnum severity, unsigned short code, char *message) {
-	return CustomMessage(severity, code, message, "$arlogusr", 0);
+signed long LogMessage(UserLogSeverityEnum severity, unsigned short code, char *message, FormatStringArgumentsType *args) {
+	return CustomMessage(severity, code, message, args, "$arlogusr", 0);
 }
 
 /* Write message (event) to custom logbook */
-signed long CustomMessage(UserLogSeverityEnum severity, unsigned short code, char *message, char *logbook, unsigned char facility) {
+signed long CustomMessage(UserLogSeverityEnum severity, unsigned short code, char *message, FormatStringArgumentsType *args, char *logbook, unsigned char facility) {
 	
 	/********************** 
 	Declare local variables
@@ -89,8 +89,7 @@ signed long CustomMessage(UserLogSeverityEnum severity, unsigned short code, cha
 	fbWrite.EventID 		= ArEventLogMakeEventID(severityMap[severity], facility, code); /* See AH 32-bit event ID. Use facility 0 for simplicity */
 	fbWrite.OriginRecordID 	= 0; 															/* No origin record for simplicity */
 	fbWrite.AddDataFormat 	= arEVENTLOG_ADDFORMAT_TEXT; 									/* ASCII data */
-	strncpy(asciiMessage, message, USERLOG_MESSAGE_LENGTH); 								/* Copy up to MESSAGE_LENGTH characters */
-	asciiMessage[USERLOG_MESSAGE_LENGTH] = '\0'; 											/* Ensure null terminator if the incoming message exceeds MESSAGE_LENGTH */
+	IecFormatString(asciiMessage, sizeof(asciiMessage), message, args); 					/* Format message */
 	fbWrite.AddDataSize 	= strlen(asciiMessage) + 1; 
 	fbWrite.AddData 		= (unsigned long)asciiMessage;
 	/* fbWrite.ObjectID */																	/* ObjectID already assigned */
