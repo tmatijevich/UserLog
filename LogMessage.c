@@ -1,13 +1,13 @@
 /*********************************************************************************
  * File:      LogMessage.c
  * Author:    Tyler Matijevich
- * Created:   September 26, 2021/11:58 
+ * Created:   2020-10-29
  *********************************************************************************/ 
 
 #include "UserLogMain.h"
 
 /* Function prototypes */
-static signed long LogAdminMessage(ArEventLogIdentType userLogbookIdent);
+static long LogAdminMessage(ArEventLogIdentType userLogbookIdent);
 
 /* Declare global variables */
 UserLogSeverityEnum verbosityLevel = USERLOG_SEVERITY_SUCCESS; /* All but debug */
@@ -15,22 +15,22 @@ UserLogInfoType info;
 unsigned char severityMap[] = {3, 3, 2, 1, 0, 1}; /* 0 - Success, 1 - Information, 2 - Warning, 3 - Error */
 
 /* Write message (event) to user logbook */
-signed long LogMessage(UserLogSeverityEnum severity, unsigned short code, char *message, FormatStringArgumentsType *args) {
+long LogMessage(UserLogSeverityEnum severity, unsigned short code, char *message, FormatStringArgumentsType *args) {
 	return CustomMessage(severity, code, message, args, "$arlogusr", 0);
 }
 
 /* Write message (event) to custom logbook */
-signed long CustomMessage(UserLogSeverityEnum severity, unsigned short code, char *message, FormatStringArgumentsType *args, char *logbook, unsigned char facility) {
+long CustomMessage(UserLogSeverityEnum severity, unsigned short code, char *message, FormatStringArgumentsType *args, char *logbook, unsigned char facility) {
 	
 	/********************** 
 	Declare local variables
 	**********************/
 	static ArEventLogGetIdent_typ fbGetIdent;
 	static ArEventLogWrite_typ fbWrite;
-	static signed long timeStamp;
+	static long timeStamp;
 	static short cyclicLogCount;
 	char asciiMessage[USERLOG_MESSAGE_LENGTH + 1];
-	signed long arEventLogStatusID;
+	long arEventLogStatusID;
 	
 	/***********************************
 	Suppress if below severity threshold
@@ -120,7 +120,7 @@ signed long CustomMessage(UserLogSeverityEnum severity, unsigned short code, cha
 
 
 /* Log an administrative message when the max messages have been reached per cycle */
-signed long LogAdminMessage(ArEventLogIdentType userLogbookIdent) {
+long LogAdminMessage(ArEventLogIdentType userLogbookIdent) {
 	
 	/********************** 
 	Declare local variables

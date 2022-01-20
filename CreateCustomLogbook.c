@@ -7,14 +7,14 @@
 #include "UserLogMain.h"
 
 /* _INIT routine ONLY! Create custom logbook in USERROM (if not already existing) */
-signed long CreateCustomLogbook(char *name, unsigned long size) {
+long CreateCustomLogbook(char *name, unsigned long size) {
 	
 	/********************** 
 	Declare local variables
 	**********************/
 	static ArEventLogGetIdent_typ fbGetIdent;
 	static ArEventLogCreate_typ fbCreate;
-	signed long arEventLogStatusID;
+	long arEventLogStatusID;
 	
 	/****************
 	Check for logbook

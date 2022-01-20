@@ -4,8 +4,13 @@
  * Created:   October 21, 2020/21:31 
  *********************************************************************************/ 
 
-#ifndef __USER_LOG_MAIN_H__
-#define __USER_LOG_MAIN_H__
+#ifndef USER_LOG_MAIN_H
+#define USER_LOG_MAIN_H
+
+#ifdef __cplusplus
+extern "C" 
+{
+#endif
 
 #include <UserLog.h>
 #include <string.h>
@@ -16,4 +21,8 @@ extern UserLogInfoType info;
 extern UserLogSeverityEnum verbosityLevel;
 extern unsigned char severityMap[];
 
-#endif /* __USER_LOG_MAIN_H__ */
+#ifdef __cplusplus
+};
+#endif
+
+#endif /* USER_LOG_MAIN_H */

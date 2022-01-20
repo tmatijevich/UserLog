@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <?AutomationStudio FileVersion="4.9"?>
-<Library Version="0.03.2" SubType="ANSIC" Description="Quick functions for writing to logbook" xmlns="http://br-automation.co.at/AS/Library">
+<Library Version="0.03.2" SubType="ANSIC" Description="Write to logbooks" xmlns="http://br-automation.co.at/AS/Library">
   <Files>
-    <File Description="Exported functions">UserLog.fun</File>
-    <File Description="Exported data types">UserLog.typ</File>
-    <File Description="Exported constants">UserLog.var</File>
+    <File Description="Function declarations">UserLog.fun</File>
+    <File Description="Data types">UserLog.typ</File>
+    <File Description="Constants">UserLog.var</File>
     <File Description="Internal declarations">UserLogMain.h</File>
-    <File Description="Write message to logbook">LogMessage.c</File>
-    <File Description="Suppress log messages">SetVerbosityLevel.c</File>
-    <File Description="Logging history and errors">GetUserLogInfo.c</File>
-    <File Description="Create logbook in _INIT">CreateCustomLogbook.c</File>
-    <File Description="Version description history">VersionHistory.txt</File>
+    <File Description="Write message">LogMessage.c</File>
+    <File Description="Suppress messages">SetVerbosityLevel.c</File>
+    <File Description="Logging history">GetUserLogInfo.c</File>
+    <File Description="Create logbook">CreateCustomLogbook.c</File>
+    <File Description="Version update history">VersionHistory.txt</File>
   </Files>
   <Dependencies>
     <Dependency ObjectName="ArEventLog" />
