@@ -29,7 +29,7 @@ long CustomMessage(UserLogSeverityEnum severity, unsigned short code, char *mess
 	static ArEventLogWrite_typ fbWrite;
 	static long timeStamp;
 	static short cyclicLogCount;
-	char asciiMessage[USERLOG_MESSAGE_LENGTH + 1];
+	char asciiMessage[USERLOG_STRLEN_MESSAGE + 1];
 	long arEventLogStatusID;
 	
 	/***********************************
@@ -45,7 +45,7 @@ long CustomMessage(UserLogSeverityEnum severity, unsigned short code, char *mess
 	*******************************/
 	if(timeStamp != AsIOTimeCyclicStart()) 				/* First call this cycle */
 		cyclicLogCount = 0; 							/* Reset count */
-	if(cyclicLogCount >= USERLOG_MAX_MESSAGES) { 		/* More than max cycles */
+	if(cyclicLogCount >= USERLOG_MESSAGE_MAXCOUNT) { 		/* More than max cycles */
 		info.lostCount++;
 		return 0;
 	}
@@ -101,7 +101,7 @@ long CustomMessage(UserLogSeverityEnum severity, unsigned short code, char *mess
 		info.loggedCount++;
 		fbWrite.Execute = false;
 		ArEventLogWrite(&fbWrite); 						/* Reset */
-		if(cyclicLogCount == USERLOG_MAX_MESSAGES)
+		if(cyclicLogCount == USERLOG_MESSAGE_MAXCOUNT)
 			LogAdminMessage(fbWrite.Ident);
 		return 0;
 	}
@@ -126,13 +126,13 @@ long LogAdminMessage(ArEventLogIdentType userLogbookIdent) {
 	Declare local variables
 	**********************/
 	static ArEventLogWrite_typ fbWrite;
-	char asciiMessage[USERLOG_MESSAGE_LENGTH + 1];
+	char asciiMessage[USERLOG_STRLEN_MESSAGE + 1];
 	FormatStringArgumentsType args;
 	
 	/**************
 	Prepare message
 	**************/
-	args.i[0] = USERLOG_MAX_MESSAGES;
+	args.i[0] = USERLOG_MESSAGE_MAXCOUNT;
 	IecFormatString(asciiMessage, sizeof(asciiMessage), "Max numbers of messages, %i, reached since start of cycle", &args);
 	
 	/***********************

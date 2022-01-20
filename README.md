@@ -9,7 +9,7 @@ UserLog is an Automation Studio library with functions to quickly log messages t
 - Write to the user logbook with information:
 	- Severity (Critical, Error, Warning, Information, Success, Debug)
 	- Code (0 - 65535)
-	- Message text
+	- Formatted message
 - Set the verbosity level (Default: Success) to suppress messages
 - Retrieve library's logging history
 - Create and write to custom logbooks (user responsible for enough memory)
@@ -54,7 +54,7 @@ typedef enum UserLogSeverityEnum
 } UserLogSeverityEnum;
 
 /* Write message (event) to user logbook */
-signed long LogMessage(UserLogSeverityEnum severity, unsigned short code, char *message);
+long LogMessage(UserLogSeverityEnum severity, unsigned short code, char *message, FormatStringArgumentsType *args);
 ```
 
 #### Usage
@@ -63,27 +63,27 @@ signed long LogMessage(UserLogSeverityEnum severity, unsigned short code, char *
 
 ``` 
 (* Write a new message *)
-LogMessage(severity := USERLOG_SEVERITY_SUCCESS, code := 1234, message := 'Hello World!');
+LogMessage(severity := USERLOG_SEVERITY_SUCCESS, code := 1234, message := 'Hello World!', args := MyArgs);
 ```
 
 ##### ANSI C 
 ```C
 /* Write a new message */
-LogMessage(USERLOG_SEVERITY_SUCCESS, 1234, "Hello World!");
+LogMessage(USERLOG_SEVERITY_SUCCESS, 1234, "Hello World!", &formatArgs);
 ```
 
 ### [SetVerbosityLevel](https://github.com/tmatijevich/UserLog/blob/main/SetVerbosityLevel.c?ts=4)
 
 ```C
 /* Set the verbosity level to suppress high verbose messages */
-signed long SetVebosityLevel(UserLogSeverityEnum level);
+long SetVebosityLevel(UserLogSeverityEnum level);
 ```
 
 ### [GetUserLogInfo](https://github.com/tmatijevich/UserLog/blob/main/GetUserLogInfo.c?ts=4)
 
 ```C
 /* Gather information on this library's logging history */
-signed long GetUserLogInfo(UserLogInfoType *logInfo);
+long GetUserLogInfo(UserLogInfoType *logInfo);
 ```
 
 Example
@@ -93,7 +93,6 @@ LogInfo
   loggedCount        128
   lostCount            8
   suppressedCount    551
-  arEventLogStatusID   0
 ```
 
 ### [CustomMessage](https://github.com/tmatijevich/UserLog/blob/main/LogMessage.c?ts=4)
@@ -102,7 +101,7 @@ Same as [LogMessage](#logmessage) with inputs for logbook name and facility numb
 
 ```C
 /* Write message (event) to custom logbook */
-signed long CustomMessage(UserLogSeverityEnum severity, unsigned short code, char *message, char *logbook, unsigned char facility);
+long CustomMessage(UserLogSeverityEnum severity, unsigned short code, char *message, FormatStringArgumentsType *args, char *logbook, unsigned char facility);
 ```
 
 ### [CreateCustomLogbook](https://github.com/tmatijevich/UserLog/blob/main/CreateCustomLogbook.c?ts=4)
@@ -111,7 +110,7 @@ signed long CustomMessage(UserLogSeverityEnum severity, unsigned short code, cha
 
 ```C
 /* _INIT routine ONLY! Create custom logbook in USERROM (if not already existing) */
-signed long CreateCustomLogbook(char *name, unsigned long size);
+long CreateCustomLogbook(char *name, unsigned long size);
 ```
 
 ### Sample
@@ -124,7 +123,6 @@ Declare local variables.
 VAR
     Run : BOOL;
     FormatArgs : FormatStringArgumentsType;
-    MyMessage : STRING[80];
     MySeverity : UserLogSeverityEnum;
     MyCode : UINT;
     Index : USINT;
@@ -156,20 +154,19 @@ IF Run THEN
             USERLOG_SEVERITY_SUCCESS:       FormatArgs.s[0] := 'Success';
             USERLOG_SEVERITY_DEBUG:         FormatArgs.s[0] := 'Debug';
         END_CASE
-        IecFormatString(MyMessage, SIZEOF(MyMessage), 'Event: %i of %i Severity: %s', FormatArgs);
         // Log
-        LogMessage(MySeverity, MyCode, MyMessage);
+        LogMessage(MySeverity, MyCode, 'Event: %i of %i Severity: %s', FormatArgs);
     END_FOR
 END_IF
 
 GetUserLogInfo(LogInfo);
 ```
 
-In Automation Studio, connect to the target, and open the logger. The result looks like this.
+In Automation Studio, connect to the target and open the logger. The result looks like this.
 
 ![2021-11-06_18 59 52](https://user-images.githubusercontent.com/33841634/140626835-f11d83f0-fa00-4d29-ac9a-8e0c019fc800.png)
 
-By default, `USERLOG_MAX_MESSAGES` is 20.
+By default, `USERLOG_MESSAGE_MAXCOUNT` is 20.
 
 ## Build
 
@@ -185,10 +182,7 @@ Add `-W 9232 9233` to your CPU's build properties window under *Additional build
 - `AsBrStr`
 - `sys_lib`
 - `AsIOTime`
-
-### Recommended
-
-- [`IecString`](https://github.com/tmatijevich/IecString)
+- [`IecString`](https://github.com/tmatijevich/IecString) >= 0.3.0
 
 ## Git
 

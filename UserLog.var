@@ -3,8 +3,7 @@
  * Author: Tyler Matijevich
  * Created: 2020-10-29
 *******************************************************************************)
-
 VAR CONSTANT
-	USERLOG_MAX_MESSAGES : USINT := 20; (*Maximum number of messages logged per start of fastest cyclic resouces calling LogMessage()*)
-	USERLOG_MESSAGE_LENGTH : USINT := 125; (*Size of message to store for each entry in log buffer*)
+	USERLOG_MESSAGE_MAXCOUNT : USINT := 20; (*Maximum messages logged since start of cycle*)
+	USERLOG_STRLEN_MESSAGE : USINT := 125; (*Message length*)
 END_VAR
