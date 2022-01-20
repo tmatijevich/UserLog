@@ -80,7 +80,7 @@ long CustomMessage(UserLogSeverityEnum severity, unsigned short code, char *mess
 	Get name of cyclic resource
 	**************************/
 	if(ST_name(0, fbWrite.ObjectID, 0) != ERR_OK)
-		strcpy(fbWrite.ObjectID, "Unknown");
+		strcpy(fbWrite.ObjectID, "Unknown"); 			/* Up to 36 characters */
 	
 	/***********************
 	Write message to logbook
@@ -127,15 +127,13 @@ long LogAdminMessage(ArEventLogIdentType userLogbookIdent) {
 	**********************/
 	static ArEventLogWrite_typ fbWrite;
 	char asciiMessage[USERLOG_MESSAGE_LENGTH + 1];
-	char bufferSizeText[12];
+	FormatStringArgumentsType args;
 	
 	/**************
 	Prepare message
 	**************/
-	strcpy(asciiMessage, "Max number of messages ");
-	brsitoa(USERLOG_MAX_MESSAGES, (unsigned long)bufferSizeText);
-	strcat(asciiMessage, bufferSizeText);
-	strcat(asciiMessage, " reached, since start of cycle");
+	args.i[0] = USERLOG_MAX_MESSAGES;
+	IecFormatString(asciiMessage, sizeof(asciiMessage), "Max numbers of messages, %i, reached since start of cycle", &args);
 	
 	/***********************
 	Write message to logbook
@@ -146,7 +144,7 @@ long LogAdminMessage(ArEventLogIdentType userLogbookIdent) {
 	fbWrite.AddDataFormat 	= arEVENTLOG_ADDFORMAT_TEXT;
 	fbWrite.AddDataSize 	= strlen(asciiMessage) + 1;
 	fbWrite.AddData 		= (unsigned long)asciiMessage;
-	strcpy(fbWrite.ObjectID, "Admin");
+	strcpy(fbWrite.ObjectID, "Admin"); /* Up to 36 characters */
 	fbWrite.TimeStamp 		= 0;
 	fbWrite.Execute 		= true;
 	ArEventLogWrite(&fbWrite);
