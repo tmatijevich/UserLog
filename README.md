@@ -182,7 +182,7 @@ Add `-W 9232 9233` to your CPU's build properties window under *Additional build
 - `AsBrStr`
 - `sys_lib`
 - `AsIOTime`
-- [`IecString`](https://github.com/tmatijevich/IecString) >= 0.3.0
+- [`IecString`](https://github.com/tmatijevich/IecString#readme) >= 0.3.0
 
 ## Git
 

@@ -2,6 +2,10 @@
 
 See [releases on GitHub](https://github.com/tmatijevich/UserLog/releases).
 
+## 0.3.3 (2022-01-20)
+- Use formatted messaging with [IecString](https://github.com/tmatijevich/IecString#readme)
+- Update comments and header
+
 ## V0.3.2 (2021-12-05)
 - Expand messaging with option for custom logbook (user responsible for enough memory)
 
