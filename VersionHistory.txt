@@ -2,8 +2,9 @@
 
 See [releases on GitHub](https://github.com/tmatijevich/UserLog/releases).
 
-## 0.3.3 (2022-01-20)
+## 0.4.0 (2022-01-20)
 - Use formatted messaging with [IecString](https://github.com/tmatijevich/IecString#readme)
+- Minor version incremented for additional format parameter and constants rename
 - Update comments and header
 
 ## V0.3.2 (2021-12-05)
