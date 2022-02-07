@@ -9,6 +9,14 @@ FUNCTION LogMessage : DINT (*Write message (event) to user logbook*)
 		severity : UserLogSeverityEnum; (*Severity (verbosity), see map and AH for 32bit event ID*)
 		code : UINT; (*Code, see AH for 32bit event ID*)
 		message : STRING[0]; (*Additional (ASCII) data of logbook record*)
+	END_VAR
+END_FUNCTION
+
+FUNCTION LogFormatMessage : DINT (*Write formatted message to user logbook*)
+	VAR_INPUT
+		severity : UserLogSeverityEnum; (*Severity (verbosity), see map and AH for 32bit event ID*)
+		code : UINT; (*Code, see AH for 32bit event ID*)
+		message : STRING[0]; (*Additional (ASCII) data of logbook record*)
 		args : FormatStringArgumentsType; (*Format message arguments %b bool %i dint %r lreal %s string*)
 	END_VAR
 END_FUNCTION
@@ -33,6 +41,16 @@ FUNCTION CreateCustomLogbook : DINT (*_INIT routine ONLY! Create custom logbook 
 END_FUNCTION
 
 FUNCTION CustomMessage : DINT (*Write message (event) to custom logbook*)
+	VAR_INPUT
+		severity : UserLogSeverityEnum; (*Severity (verbosity), see map and AH for 32bit event ID*)
+		code : UINT; (*Code, see AH for 32bit event ID*)
+		message : STRING[0]; (*Additional (ASCII) data of logbook record*)
+		logbook : STRING[0]; (*Name of logbook*)
+		facility : USINT; (*0..15 area, see AH for 32bit event ID*)
+	END_VAR
+END_FUNCTION
+
+FUNCTION CustomFormatMessage : DINT (*Write formatted message to custom logbook*)
 	VAR_INPUT
 		severity : UserLogSeverityEnum; (*Severity (verbosity), see map and AH for 32bit event ID*)
 		code : UINT; (*Code, see AH for 32bit event ID*)

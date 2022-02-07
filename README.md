@@ -2,7 +2,7 @@
 
 UserLog is an Automation Studio library with functions to quickly log messages to the user logbook.  
 **NOTE:** This is not an official library. UserLog is provided as is under the GNU GPL v3.0 license agreement.  
-[Download the library here](https://github.com/tmatijevich/UserLog/releases/latest/download/UserLog.zip).
+[Download the library here](https://github.com/tmatijevich/UserLog/releases/latest/download/UserLog.zip). 
 
 #### Features
 
@@ -19,8 +19,8 @@ UserLog is an Automation Studio library with functions to quickly log messages t
 - [LogMessage](#logmessage)
 - [SetVerbosityLevel](#setverbositylevel)
 - [GetUserLogInfo](#getuserloginfo)
-- [CustomMessage](#custommessage)
 - [CreateCustomLogbook](#createcustomlogbook)
+- [CustomMessage](#custommessage)
 
 ## Clone
 
@@ -54,7 +54,10 @@ typedef enum UserLogSeverityEnum
 } UserLogSeverityEnum;
 
 /* Write message (event) to user logbook */
-long LogMessage(UserLogSeverityEnum severity, unsigned short code, char *message, FormatStringArgumentsType *args);
+long LogMessage(UserLogSeverityEnum severity, unsigned short code, char *message);
+
+/* Write formatted message to user logbook */
+long LogFormatMessage(UserLogSeverityEnum severity, unsigned short code, char *message, FormatStringArgumentsType *args);
 ```
 
 #### Usage
@@ -63,13 +66,21 @@ long LogMessage(UserLogSeverityEnum severity, unsigned short code, char *message
 
 ``` 
 (* Write a new message *)
-LogMessage(severity := USERLOG_SEVERITY_SUCCESS, code := 1234, message := 'Hello World!', args := MyArgs);
+LogMessage(severity := USERLOG_SEVERITY_SUCCESS, code := 1234, message := 'Hello World!');
+
+(* Or *)
+MyArgs.i[0] := 4;
+LogFormatMessage(severity := USERLOG_SEVERITY_ERROR, code := 5678, message := 'Error in state %i', args := MyArgs);
 ```
 
 ##### ANSI C 
 ```C
 /* Write a new message */
-LogMessage(USERLOG_SEVERITY_SUCCESS, 1234, "Hello World!", &formatArgs);
+LogMessage(USERLOG_SEVERITY_SUCCESS, 1234, "Hello World!");
+
+/* Or */
+formatArgs.i[0] = 4;
+LogFormatMessage(USERLOG_SEVERITY_ERROR, 5678, "Error in state %i", &formatArgs);
 ```
 
 ### [SetVerbosityLevel](https://github.com/tmatijevich/UserLog/blob/main/SetVerbosityLevel.c?ts=4)
@@ -95,15 +106,6 @@ LogInfo
   suppressedCount    551
 ```
 
-### [CustomMessage](https://github.com/tmatijevich/UserLog/blob/main/LogMessage.c?ts=4)
-
-Same as [LogMessage](#logmessage) with inputs for logbook name and facility number. Use facility to differentiate code (0-65535) area of available event IDs.
-
-```C
-/* Write message (event) to custom logbook */
-long CustomMessage(UserLogSeverityEnum severity, unsigned short code, char *message, FormatStringArgumentsType *args, char *logbook, unsigned char facility);
-```
-
 ### [CreateCustomLogbook](https://github.com/tmatijevich/UserLog/blob/main/CreateCustomLogbook.c?ts=4)
 
 **IMPORTANT: For use in _INIT routine only!** The function asynchronously creates the new logbook (if it does not already exist), this can cause cycle time violations in _CYCLIC routines.
@@ -113,9 +115,19 @@ long CustomMessage(UserLogSeverityEnum severity, unsigned short code, char *mess
 long CreateCustomLogbook(char *name, unsigned long size);
 ```
 
-### Sample
+### [CustomMessage](https://github.com/tmatijevich/UserLog/blob/main/LogMessage.c?ts=4)
 
-Write a series of messages to the user logbook in Structured Text with the help of the [IecString library](https://github.com/tmatijevich/IecString).
+Same as [LogMessage](#logmessage) with additional parameters for logbook name and facility number. Use the facility number (0-15) to differentiate the code area of available event IDs.
+
+```C
+/* Write message (event) to custom logbook */
+long CustomMessage(UserLogSeverityEnum severity, unsigned short code, char *message, char *logbook, unsigned char facility);
+
+/* Write formatted message to customer logbook */
+long CustomFormatMessage(UserLogSeverityEnum severity, unsigned short code, char *message, FormatStringArgumentsType *args, char *logbook, unsigned char facility);
+```
+
+### Sample
 
 Declare local variables.
 
@@ -132,7 +144,7 @@ VAR
 END_VAR
 ```
 
-Setup a loop to log `NumOfMessages` messages.
+Write a series of messages to the user logbook.
 
 ```
 // Write a burst of events to the user logbook
@@ -155,7 +167,7 @@ IF Run THEN
             USERLOG_SEVERITY_DEBUG:         FormatArgs.s[0] := 'Debug';
         END_CASE
         // Log
-        LogMessage(MySeverity, MyCode, 'Event: %i of %i Severity: %s', FormatArgs);
+        LogFormatMessage(MySeverity, MyCode, 'Event: %i of %i Severity: %s', FormatArgs);
     END_FOR
 END_IF
 

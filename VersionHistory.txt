@@ -2,6 +2,10 @@
 
 See [releases on GitHub](https://github.com/tmatijevich/UserLog/releases).
 
+## 0.4.1 (2022-02-06)
+- Function overload is not possible with IEC languages, separate LogMessage and LogFormatMessage functions for compatibility
+- Remove 0.4.0 tag
+
 ## 0.4.0 (2022-01-20)
 - Use formatted messaging with [IecString](https://github.com/tmatijevich/IecString#readme)
 - Minor version incremented for additional format parameter and constants rename
