@@ -2,6 +2,12 @@
 
 See [releases on GitHub](https://github.com/tmatijevich/UserLog/releases).
 
+## 0.4.2 (2022-02-18)
+- Simplify CreateCustomLogbook execution
+- Specify function declaration prototypes and usage samples in readme 
+- Guard null pointers
+- Include IecString 0.3.1 in release downloads
+
 ## 0.4.1 (2022-02-06)
 - Function overload is not possible with IEC languages, separate LogMessage and LogFormatMessage functions for compatibility
 - Remove 0.4.0 tag
