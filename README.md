@@ -43,6 +43,8 @@ Then add as an existing library with the Automation Studio toolbox.
 
 ### [LogMessage](https://github.com/tmatijevich/UserLog/blob/main/LogMessage.c?ts=4)
 
+#### Declaration
+
 ```C 
 typedef enum UserLogSeverityEnum
 {   USERLOG_SEVERITY_CRITICAL = 0,
@@ -64,7 +66,7 @@ long LogFormatMessage(UserLogSeverityEnum severity, unsigned short code, char *m
 
 ##### IEC Structured Text
 
-``` 
+```iecst
 (* Write a new message *)
 LogMessage(severity := USERLOG_SEVERITY_SUCCESS, code := 1234, message := 'Hello World!');
 
@@ -85,19 +87,39 @@ LogFormatMessage(USERLOG_SEVERITY_ERROR, 5678, "Error in state %i", &formatArgs)
 
 ### [SetVerbosityLevel](https://github.com/tmatijevich/UserLog/blob/main/SetVerbosityLevel.c?ts=4)
 
+#### Declaration
+
 ```C
 /* Set the verbosity level to suppress high verbose messages */
 long SetVebosityLevel(UserLogSeverityEnum level);
 ```
 
+#### Usage
+
+##### IEC Structured Text
+
+```iecst
+(* Set verbosity level to 2 *)
+SetVerbosityLevel(level := USERLOG_SEVERITY_WARNING);
+```
+
+##### ANSI C
+
+```C
+/* Set verbosity level to 2 */
+SetVerbosityLevel(USERLOG_SEVERITY_WARNING);
+```
+
 ### [GetUserLogInfo](https://github.com/tmatijevich/UserLog/blob/main/GetUserLogInfo.c?ts=4)
+
+#### Declaration
 
 ```C
 /* Gather information on this library's logging history */
 long GetUserLogInfo(UserLogInfoType *logInfo);
 ```
 
-Example
+#### Example
 
 ```
 LogInfo
@@ -108,6 +130,8 @@ LogInfo
 
 ### [CreateCustomLogbook](https://github.com/tmatijevich/UserLog/blob/main/CreateCustomLogbook.c?ts=4)
 
+#### Declaration
+
 **IMPORTANT: For use in _INIT routine only!** The function asynchronously creates the new logbook (if it does not already exist), this can cause cycle time violations in _CYCLIC routines.
 
 ```C
@@ -116,6 +140,8 @@ long CreateCustomLogbook(char *name, unsigned long size);
 ```
 
 ### [CustomMessage](https://github.com/tmatijevich/UserLog/blob/main/LogMessage.c?ts=4)
+
+#### Declaration
 
 Same as [LogMessage](#logmessage) with additional parameters for logbook name and facility number. Use the facility number (0-15) to differentiate the code area of available event IDs.
 
@@ -127,11 +153,11 @@ long CustomMessage(UserLogSeverityEnum severity, unsigned short code, char *mess
 long CustomFormatMessage(UserLogSeverityEnum severity, unsigned short code, char *message, FormatStringArgumentsType *args, char *logbook, unsigned char facility);
 ```
 
-### Sample
+### UserLog Sample
 
 Declare local variables.
 
-```
+```iecst
 VAR
     Run : BOOL;
     FormatArgs : FormatStringArgumentsType;
@@ -146,7 +172,7 @@ END_VAR
 
 Write a series of messages to the user logbook.
 
-```
+```iecst
 // Write a burst of events to the user logbook
 IF Run THEN
     Run := FALSE;
@@ -182,7 +208,7 @@ By default, `USERLOG_MESSAGE_MAXCOUNT` is 20.
 
 ## Build
 
-You may notice build warnings such as "Additional directory/file found ..." from the IecString submodule.
+You may notice build warnings such as "Additional directory/file found ..." from the submodule.
 
 ![Build warnings project independent](https://user-images.githubusercontent.com/33841634/133009811-98cf2414-ec89-40d3-a529-34980b59e27f.png)
 

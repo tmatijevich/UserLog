@@ -12,36 +12,9 @@ long CreateCustomLogbook(char *name, unsigned long size) {
 	/********************** 
 	Declare local variables
 	**********************/
-	static ArEventLogGetIdent_typ fbGetIdent;
-	static ArEventLogCreate_typ fbCreate;
-	long arEventLogStatusID;
+	ArEventLogCreate_typ fbCreate;
 	
-	/****************
-	Check for logbook
-	****************/
-	strncpy(fbGetIdent.Name, name, 10);
-	fbGetIdent.Name[10] = '\0';
-	fbGetIdent.Execute 	= true;
-	ArEventLogGetIdent(&fbGetIdent);
-	
-	if(fbGetIdent.Done) { 								/* Success */
-		fbGetIdent.Execute = false;
-		ArEventLogGetIdent(&fbGetIdent); 				/* Reset */
-		return 0; 										/* Logbook exists */
-	}
-	else if(fbGetIdent.StatusID == arEVENTLOG_ERR_LOGBOOK_NOT_FOUND) {
-		fbGetIdent.Execute = false;
-		ArEventLogGetIdent(&fbGetIdent); 				/* Reset and continue */
-	}
-	else { 												/* Unknown error, or did not complete in one scan */
-		arEventLogStatusID = fbGetIdent.StatusID;
-		fbGetIdent.Execute = false;
-		ArEventLogGetIdent(&fbGetIdent); 				/* Reset */
-		if(arEventLogStatusID != 0) 
-			return arEventLogStatusID;
-		else
-			return -1;
-	}
+	memset(&fbCreate, 0, sizeof(fbCreate)); /* Clear function block memory */
 	
 	/*************
 	Create logbook
@@ -51,21 +24,12 @@ long CreateCustomLogbook(char *name, unsigned long size) {
 	fbCreate.Name[10] 		= '\0';
 	fbCreate.Size 			= size;
 	fbCreate.Persistence 	= arEVENTLOG_PERSISTENCE_PERSIST;
-	fbCreate.Ident 			= 0;
+	fbCreate.Info 			= 0;
 	
 	ArEventLogCreate(&fbCreate);
 	while(fbCreate.Busy)
-		ArEventLogCreate(&fbCreate); 				/* Continue to call, _INIT only! */
-	if(fbCreate.Done) 
-		return 0; 									/* Success */
-	else { 											/* Error */
-		arEventLogStatusID 	= fbCreate.StatusID; 	/* Record */
-		fbCreate.Execute 	= false;
-		ArEventLogCreate(&fbCreate); 				/* Reset */
-		if(arEventLogStatusID != 0) 
-			return arEventLogStatusID;
-		else
-			return -1;
-	}
+		ArEventLogCreate(&fbCreate); /* Continue to call, _INIT only! */
+	
+	return fbCreate.StatusID;
 	
 } /* End function */
