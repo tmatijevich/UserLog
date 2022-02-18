@@ -42,6 +42,12 @@ long CustomFormatMessage(UserLogSeverityEnum severity, unsigned short code, char
 	char asciiMessage[USERLOG_STRLEN_MESSAGE + 1];
 	long arEventLogStatusID;
 	
+	/******************
+	Guard null pointers
+	******************/
+	if(message == NULL || args == NULL || logbook == NULL)
+		return -1;
+	
 	/***********************************
 	Suppress if below severity threshold
 	***********************************/

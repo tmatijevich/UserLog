@@ -14,7 +14,16 @@ long CreateCustomLogbook(char *name, unsigned long size) {
 	**********************/
 	ArEventLogCreate_typ fbCreate;
 	
-	memset(&fbCreate, 0, sizeof(fbCreate)); /* Clear function block memory */
+	/******************
+	Guard null pointers
+	******************/
+	if(name == NULL)
+		return -1;
+	
+	/***********
+	Clear memory
+	***********/
+	memset(&fbCreate, 0, sizeof(fbCreate));
 	
 	/*************
 	Create logbook
