@@ -2,6 +2,10 @@
 
 See [releases on GitHub](https://github.com/tmatijevich/UserLog/releases).
 
+## 0.4.3 (2022-03-11)
+- Remove first null guard on format arguments parameter. LogMessage and CustomMessage from 0.4.2 are unusable.
+- Use ArEventLog constants to declare severity map
+
 ## 0.4.2 (2022-02-18)
 - Simplify CreateCustomLogbook execution
 - Specify function declaration prototypes and usage samples in readme 

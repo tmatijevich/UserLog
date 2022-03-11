@@ -12,7 +12,14 @@ static long LogAdminMessage(ArEventLogIdentType userLogbookIdent);
 /* Declare global variables */
 UserLogSeverityEnum verbosityLevel = USERLOG_SEVERITY_SUCCESS; /* All but debug */
 UserLogInfoType info;
-unsigned char severityMap[] = {3, 3, 2, 1, 0, 1}; /* 0 - Success, 1 - Information, 2 - Warning, 3 - Error */
+unsigned char severityMap[] = {
+  arEVENTLOG_SEVERITY_ERROR,   /* 0: USERLOG_SEVERITY_CRITICAL */
+  arEVENTLOG_SEVERITY_ERROR,   /* 1: USERLOG_SEVERITY_ERROR */ 
+  arEVENTLOG_SEVERITY_WARNING, /* 2: USERLOG_SEVERITY_WARNING */ 
+  arEVENTLOG_SEVERITY_INFO,    /* 3: USERLOG_SEVERITY_INFORMATION */ 
+  arEVENTLOG_SEVERITY_SUCCESS, /* 4: USERLOG_SEVERITY_SUCCESS */ 
+  arEVENTLOG_SEVERITY_INFO,    /* 5: USERLOG_SEVERITY_DEBUG */
+}; 
 
 /* Write message (event) to user logbook */
 long LogMessage(UserLogSeverityEnum severity, unsigned short code, char *message) {
@@ -45,7 +52,7 @@ long CustomFormatMessage(UserLogSeverityEnum severity, unsigned short code, char
 	/******************
 	Guard null pointers
 	******************/
-	if(message == NULL || args == NULL || logbook == NULL)
+	if(message == NULL || logbook == NULL)
 		return -1;
 	
 	/***********************************
