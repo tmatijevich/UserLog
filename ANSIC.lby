@@ -5,18 +5,11 @@
     <File Description="Function declarations">UserLog.fun</File>
     <File Description="Data types">UserLog.typ</File>
     <File Description="Constants">UserLog.var</File>
-    <File Description="Internal declarations">UserLogMain.h</File>
-    <File Description="Write message">LogMessage.c</File>
-    <File Description="Suppress messages">SetVerbosityLevel.c</File>
-    <File Description="Logging history">GetUserLogInfo.c</File>
-    <File Description="Create logbook">CreateCustomLogbook.c</File>
-    <File Description="Version update history">VersionHistory.txt</File>
+    <File Description="Log message">message.c</File>
   </Files>
   <Dependencies>
     <Dependency ObjectName="ArEventLog" />
     <Dependency ObjectName="AsBrStr" />
     <Dependency ObjectName="sys_lib" />
-    <Dependency ObjectName="AsIOTime" />
-    <Dependency ObjectName="IecString" FromVersion="0.03.0" />
   </Dependencies>
 </Library>

@@ -4,6 +4,6 @@
  * Created: 2020-10-29
 *******************************************************************************)
 VAR CONSTANT
-	USERLOG_MESSAGE_MAXCOUNT : USINT := 20; (*Maximum messages logged since start of cycle*)
-	USERLOG_STRLEN_MESSAGE : USINT := 125; (*Message length*)
+	USERLOG_FORMATARG_INDEX : USINT := 4; (*Maximum index of each argument type*)
+	USERLOG_FORMATARG_STRLEN : USINT := 80; (*Maximum length of string argument*)
 END_VAR

@@ -7,16 +7,17 @@
 TYPE
 	UserLogSeverityEnum : 
 		( (*Levels of severity, see AS Help 32-bit event ID*)
-		USERLOG_SEVERITY_CRITICAL := 0, (*Error: The application in unrecoverable*)
-		USERLOG_SEVERITY_ERROR := 1, (*Error: The application in recoverable*)
-		USERLOG_SEVERITY_WARNING := 2, (*Warning: The application may continue*)
-		USERLOG_SEVERITY_INFORMATION := 3, (*Information: User information*)
-		USERLOG_SEVERITY_SUCCESS := 4, (*Success: Completion*)
-		USERLOG_SEVERITY_DEBUG := 5 (*Information: Developer information*)
+		USERLOG_SEVERITY_CRITICAL, (*Error: The application in unrecoverable*)
+		USERLOG_SEVERITY_ERROR, (*Error: The application in recoverable*)
+		USERLOG_SEVERITY_WARNING, (*Warning: The application may continue*)
+		USERLOG_SEVERITY_INFORMATION, (*Information: User information*)
+		USERLOG_SEVERITY_SUCCESS, (*Success: Completion*)
+		USERLOG_SEVERITY_DEBUG (*Information: Developer information*)
 		);
-	UserLogInfoType : 	STRUCT  (*Logging history and error information*)
-		loggedCount : UDINT; (*Entries successfully written to the User logbook*)
-		lostCount : UDINT; (*Entries lost due to ArEventLog error or messages exceeding max per cycle*)
-		suppressedCount : UDINT; (*Entries suppressed due to verbosity level*)
+	UserLogFormatArgumentType : 	STRUCT  (*Argument structure for runtime data*)
+		b : ARRAY[0..USERLOG_FORMATARG_INDEX]OF BOOL; (*Place boolean (TRUE or FALSE)*)
+		f : ARRAY[0..USERLOG_FORMATARG_INDEX]OF LREAL; (*Place floating point (double casted float)*)
+		i : ARRAY[0..USERLOG_FORMATARG_INDEX]OF DINT; (*Place integer (32-bit signed)*)
+		s : ARRAY[0..USERLOG_FORMATARG_INDEX]OF STRING[USERLOG_FORMATARG_STRLEN]; (*Place string*)
 	END_STRUCT;
 END_TYPE
