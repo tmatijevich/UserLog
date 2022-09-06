@@ -7,13 +7,13 @@
 #include "main.h"
 
 /* Write to logbook synchronously */
-int32_t UserLogMessage(char *logbook, UserLogSeverityEnum severity, uint8_t facility, uint16_t code, ArEventLogRecordIDType origin, char *object, char *message, UserLogFormatArgumentType *args) {
+int32_t UserLogMessage(char *logbook, UserLogSeverityEnum severity, uint16_t facility, uint16_t code, ArEventLogRecordIDType origin, char *object, char *message, UserLogFormatArgumentType *args) {
 	
 	/* Declare local variables */
 	ArEventLogGetIdent_typ getLogbookIdent;
 	ArEventLogWrite_typ writeToLogbook;
 	int32_t status;
-	ArEventLogIdentType ident;
+	ArEventLogIdentType ident, result;
 	const uint8_t severityMap[] = {
 		arEVENTLOG_SEVERITY_ERROR,
 		arEVENTLOG_SEVERITY_ERROR,
@@ -23,6 +23,7 @@ int32_t UserLogMessage(char *logbook, UserLogSeverityEnum severity, uint8_t faci
 		arEVENTLOG_SEVERITY_INFO
 	};
 	char asciiMessage[121];
+	UserLogFormatArgumentType localArgs;
 	
 	/* Get logbook ident */
 	memset(&getLogbookIdent, 0, sizeof(getLogbookIdent));
@@ -37,14 +38,22 @@ int32_t UserLogMessage(char *logbook, UserLogSeverityEnum severity, uint8_t faci
 	getLogbookIdent.Execute = false;
 	ArEventLogGetIdent(&getLogbookIdent);
 	
-	if(status) return status;
+	if(severity < USERLOG_SEVERITY_CRITICAL) severity = USERLOG_SEVERITY_CRITICAL;
+	else if(severity > USERLOG_SEVERITY_DEBUG) severity = USERLOG_SEVERITY_DEBUG;
+	
+	if(status) {
+		stringCopy(localArgs.s[0], message, MIN(21, sizeof(localArgs.s[0])));
+		stringCopy(localArgs.s[1], logbook, MIN(11, sizeof(localArgs.s[1])));
+		localArgs.i[0] = status;
+		localArgs.i[1] = ArEventLogMakeEventID(severityMap[severity], facility, code);
+		UserLogMessage("$arlogusr", USERLOG_SEVERITY_ERROR, 3, 1000, 0, NULL, "UserLog: ArEventLog error %i. (message \"%s\", event %i, logbook \"%s\")", &localArgs);
+		return 0;
+	}
 	
 	/* Write to logbook */
 	memset(&writeToLogbook, 0, sizeof(writeToLogbook));
 	writeToLogbook.Ident = ident;
 	
-	if(severity < USERLOG_SEVERITY_CRITICAL) severity = USERLOG_SEVERITY_CRITICAL;
-	else if(severity > USERLOG_SEVERITY_DEBUG) severity = USERLOG_SEVERITY_DEBUG;
 	writeToLogbook.EventID = ArEventLogMakeEventID(severityMap[severity], facility, code);
 	
 	writeToLogbook.OriginRecordID = origin;
@@ -63,9 +72,19 @@ int32_t UserLogMessage(char *logbook, UserLogSeverityEnum severity, uint8_t faci
 	writeToLogbook.Execute = true;
 	ArEventLogWrite(&writeToLogbook);
 	status = writeToLogbook.StatusID;
+	result = writeToLogbook.RecordID;
 	writeToLogbook.Execute = false;
 	ArEventLogWrite(&writeToLogbook);
 	
-	return status;
+	if(status) {
+		stringCopy(localArgs.s[0], message, MIN(21, sizeof(localArgs.s[0])));
+		stringCopy(localArgs.s[1], logbook, MIN(11, sizeof(localArgs.s[1])));
+		localArgs.i[0] = status;
+		localArgs.i[1] = ArEventLogMakeEventID(severityMap[severity], facility, code);
+		UserLogMessage("$arlogusr", USERLOG_SEVERITY_ERROR, 3, 1001, 0, NULL, "UserLog: ArEventLog error %i. (message \"%s\", event %i, logbook \"%s\")", &localArgs);
+		return 0;
+	}
+	
+	return result;
 	
 } /* End function */
