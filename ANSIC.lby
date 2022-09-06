@@ -5,7 +5,9 @@
     <File Description="Function declarations">UserLog.fun</File>
     <File Description="Data types">UserLog.typ</File>
     <File Description="Constants">UserLog.var</File>
+    <File Description="Common header">main.h</File>
     <File Description="Log message">message.c</File>
+    <File Description="String handling">string.c</File>
   </Files>
   <Dependencies>
     <Dependency ObjectName="ArEventLog" />
