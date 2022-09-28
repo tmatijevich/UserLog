@@ -10,7 +10,7 @@
 UserLogSeverityEnum severity_level = USERLOG_SEVERITY_SUCCESS;
 
 /* Set severity level. Suppresses messages below level */
-uint32_t UserLogSeverity (int32_t level)
+int32_t UserLogSeverity (int32_t level)
 {
 	/* Saturate level */
 	if (level < USERLOG_SEVERITY_DEBUG) 

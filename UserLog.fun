@@ -34,8 +34,15 @@ FUNCTION UserLogMessage : UDINT (*Write to logbook synchronously. Returns record
 	END_VAR
 END_FUNCTION
 
-FUNCTION UserLogSeverity : UDINT (*Set severity level. Suppresses messages below level*)
+FUNCTION UserLogSeverity : DINT (*Set severity level. Suppresses messages below level*)
 	VAR_INPUT
 		level : DINT;
+	END_VAR
+END_FUNCTION
+
+FUNCTION UserLogCreate : DINT (*Create custom logbook. Only use in _INIT routine*)
+	VAR_INPUT
+		name : STRING[0]; (*Name of logbook limited to 10 characters*)
+		size : UDINT; (*Size of logbook in bytes (minimum 4096)*)
 	END_VAR
 END_FUNCTION

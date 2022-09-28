@@ -4,6 +4,10 @@
  * Created: 2020-10-29
 *******************************************************************************)
 VAR CONSTANT
+	USERLOG_FACILITY : UINT := 1; (*Facility number used for UserLogQuick and UserLogFormat functions*)
+	USERLOG_ERROR_IDENT : DINT := -536664304; (*An error occurred when calling ArEventLogGetIdent. See user logbook for details*)
+	USERLOG_ERROR_WRITE : DINT := -536664294; (*An error occurred when calling ArEventLogWrite. See user logbook for details*)
+	USERLOG_ERROR_CREATE : DINT := -536664284; (*An error occurred when calling ArEventLogCreate. See user logbook for details*)
 	USERLOG_FORMAT_INDEX : USINT := 4; (*Maximum index of each argument type*)
 	USERLOG_FORMAT_LENGTH : USINT := 80; (*Length of string argument*)
 END_VAR

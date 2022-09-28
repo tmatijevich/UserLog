@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <?AutomationStudio FileVersion="4.9"?>
-<Library Version="0.04.3" SubType="ANSIC" Description="Write to logbooks" xmlns="http://br-automation.co.at/AS/Library">
+<Library Version="1.00.0" SubType="ANSIC" Description="Write to logbooks" xmlns="http://br-automation.co.at/AS/Library">
   <Files>
     <File Description="Function declarations">UserLog.fun</File>
     <File Description="Data types">UserLog.typ</File>
@@ -9,6 +9,7 @@
     <File Description="Log message">message.c</File>
     <File Description="String handling">string.c</File>
     <File Description="Severity level">severity.c</File>
+    <File Description="Custom logbook">create.c</File>
   </Files>
   <Dependencies>
     <Dependency ObjectName="ArEventLog" />

@@ -62,7 +62,7 @@ ArEventLogRecordIDType UserLogMessage (char *logbook, int32_t severity, uint16_t
 		string_copy(local_args.s[0], USERLOG_LOGBOOK_LENGTH + 1, logbook);
 		local_args.i[1] = code;
 		string_copy(local_args.s[1], USERLOG_MESSAGE_PREVIEW_LENGTH + 1, message);
-		UserLogMessage(USERLOG_USER_LOGBOOK, USERLOG_SEVERITY_ERROR, USERLOG_FACILITY, USERLOG_CODE_IDENT, 0, NULL, 
+		UserLogMessage(USERLOG_USER_LOGBOOK, USERLOG_SEVERITY_ERROR, USERLOG_ERROR_FACILITY, USERLOG_CODE_IDENT, 0, NULL, 
 						"UserLog: ArEventLog error %i. (logbook \"%s\", code %i, message \"%s\")", &local_args);
 		
 		/* Set error */
@@ -114,7 +114,7 @@ ArEventLogRecordIDType UserLogMessage (char *logbook, int32_t severity, uint16_t
 		string_copy(local_args.s[0], USERLOG_LOGBOOK_LENGTH + 1, logbook);
 		local_args.i[1] = code;
 		string_copy(local_args.s[1], USERLOG_MESSAGE_PREVIEW_LENGTH + 1, message);
-		UserLogMessage(USERLOG_USER_LOGBOOK, USERLOG_SEVERITY_ERROR, USERLOG_FACILITY, USERLOG_CODE_WRITE, 0, NULL, 
+		UserLogMessage(USERLOG_USER_LOGBOOK, USERLOG_SEVERITY_ERROR, USERLOG_ERROR_FACILITY, USERLOG_CODE_WRITE, 0, NULL, 
 						"UserLog: ArEventLog error %i. (logbook \"%s\", code %i, message \"%s\")", &local_args);
 		
 		/* Set error */
@@ -129,12 +129,12 @@ ArEventLogRecordIDType UserLogMessage (char *logbook, int32_t severity, uint16_t
 /* Write to user logbook. Returns record ID if successful, zero otherwise */
 ArEventLogRecordIDType UserLogQuick (int32_t severity, uint16_t code, char *message)
 {
-	return UserLogMessage(USERLOG_USER_LOGBOOK, severity, USERLOG_QUICK_FACILITY, code, 0, NULL, message, NULL);
+	return UserLogMessage(USERLOG_USER_LOGBOOK, severity, USERLOG_FACILITY, code, 0, NULL, message, NULL);
 }
 
 /* Write to user logbook with runtime data.  Returns record ID if successful, zero otherwise */
 ArEventLogRecordIDType UserLogFormat (int32_t severity, uint16_t code, char *message, UserLogFormatType *args)
 {
-	return UserLogMessage(USERLOG_USER_LOGBOOK, severity, USERLOG_QUICK_FACILITY, code, 0, NULL, message, args);
+	return UserLogMessage(USERLOG_USER_LOGBOOK, severity, USERLOG_FACILITY, code, 0, NULL, message, args);
 }
 
