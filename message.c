@@ -29,6 +29,16 @@ ArEventLogRecordIDType UserLogMessage (char *logbook, int32_t severity, uint16_t
 	char ascii_message[USERLOG_MESSAGE_LENGTH + 1];
 	ArEventLogRecordIDType result;
 	
+	/* Saturate severity */
+	if (severity < USERLOG_SEVERITY_DEBUG) 
+		severity = USERLOG_SEVERITY_DEBUG;
+	else if (severity > USERLOG_SEVERITY_CRITICAL) 
+		severity = USERLOG_SEVERITY_CRITICAL;
+	
+	/* Suppress */
+	if (severity < severity_level) 
+		return 0;
+	
 	/* Call ArEventLog get ident */
 	string_copy(get_logbook_ident.Name, sizeof(get_logbook_ident.Name), logbook);
 	get_logbook_ident.Execute = true;
@@ -52,7 +62,7 @@ ArEventLogRecordIDType UserLogMessage (char *logbook, int32_t severity, uint16_t
 		string_copy(local_args.s[0], USERLOG_LOGBOOK_LENGTH + 1, logbook);
 		local_args.i[1] = code;
 		string_copy(local_args.s[1], USERLOG_MESSAGE_PREVIEW_LENGTH + 1, message);
-		UserLogMessage("$arlogusr", USERLOG_SEVERITY_ERROR, USERLOG_FACILITY, USERLOG_CODE_IDENT, 0, NULL, 
+		UserLogMessage(USERLOG_USER_LOGBOOK, USERLOG_SEVERITY_ERROR, USERLOG_FACILITY, USERLOG_CODE_IDENT, 0, NULL, 
 						"UserLog: ArEventLog error %i. (logbook \"%s\", code %i, message \"%s\")", &local_args);
 		
 		/* Set error */
@@ -62,15 +72,9 @@ ArEventLogRecordIDType UserLogMessage (char *logbook, int32_t severity, uint16_t
 	
 	/* Write to logbook */
 	write_to_logbook.Ident = ident;
-	
-	/* Saturation severity */
-	if (severity < USERLOG_SEVERITY_DEBUG) 
-		severity = USERLOG_SEVERITY_DEBUG;
-	else if (severity > USERLOG_SEVERITY_CRITICAL) 
-		severity = USERLOG_SEVERITY_CRITICAL;
 		
 	/* Get event ID */
-	write_to_logbook.EventID = ArEventLogMakeEventID(severity_map[severity], facility, code);
+	write_to_logbook.EventID = ArEventLogMakeEventID(severity_map[severity + 1], facility, code);
 	
 	/* Origin record */
 	write_to_logbook.OriginRecordID = origin;
@@ -110,7 +114,7 @@ ArEventLogRecordIDType UserLogMessage (char *logbook, int32_t severity, uint16_t
 		string_copy(local_args.s[0], USERLOG_LOGBOOK_LENGTH + 1, logbook);
 		local_args.i[1] = code;
 		string_copy(local_args.s[1], USERLOG_MESSAGE_PREVIEW_LENGTH + 1, message);
-		UserLogMessage("$arlogusr", USERLOG_SEVERITY_ERROR, USERLOG_FACILITY, USERLOG_CODE_WRITE, 0, NULL, 
+		UserLogMessage(USERLOG_USER_LOGBOOK, USERLOG_SEVERITY_ERROR, USERLOG_FACILITY, USERLOG_CODE_WRITE, 0, NULL, 
 						"UserLog: ArEventLog error %i. (logbook \"%s\", code %i, message \"%s\")", &local_args);
 		
 		/* Set error */
@@ -122,10 +126,15 @@ ArEventLogRecordIDType UserLogMessage (char *logbook, int32_t severity, uint16_t
 	return result;
 }
 
-/* Write to user logbook */
+/* Write to user logbook. Returns record ID if successful, zero otherwise */
 ArEventLogRecordIDType UserLogQuick (int32_t severity, uint16_t code, char *message)
 {
-	return UserLogMessage("$arlogusr", severity, 1, code, 0, NULL, message, NULL);
+	return UserLogMessage(USERLOG_USER_LOGBOOK, severity, USERLOG_QUICK_FACILITY, code, 0, NULL, message, NULL);
 }
 
+/* Write to user logbook with runtime data.  Returns record ID if successful, zero otherwise */
+ArEventLogRecordIDType UserLogFormat (int32_t severity, uint16_t code, char *message, UserLogFormatType *args)
+{
+	return UserLogMessage(USERLOG_USER_LOGBOOK, severity, USERLOG_QUICK_FACILITY, code, 0, NULL, message, args);
+}
 

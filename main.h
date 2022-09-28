@@ -24,8 +24,10 @@ extern "C"
 #define USERLOG_LOGBOOK_LENGTH 10U
 #define USERLOG_MESSAGE_PREVIEW_LENGTH 20U
 #define USERLOG_FACILITY 3U
+#define USERLOG_QUICK_FACILITY 1U
 #define USERLOG_CODE_IDENT 10000U
 #define USERLOG_CODE_WRITE 10010U
+#define USERLOG_USER_LOGBOOK "$arlogusr"
 
 /* Macros */
 #define MAX(x,y) (((x) > (y)) ? (x) : (y))
@@ -34,6 +36,9 @@ extern "C"
 /* Prototypes */
 void string_copy (char *destination, uint32_t size, char *source);
 void string_format (char *destination, uint32_t size, char *source, UserLogFormatType *args);
+
+/* Global variables */
+extern UserLogSeverityEnum severity_level;
 
 #ifdef __cplusplus
 };

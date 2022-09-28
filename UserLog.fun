@@ -4,6 +4,23 @@
  * Created: 2020-10-29
 *******************************************************************************)
 
+FUNCTION UserLogQuick : UDINT (*Write to user logbook. Returns record ID if successful, zero otherwise*)
+	VAR_INPUT
+		severity : DINT; (*Use UserLogSeverityEnum or arEVENTLOG_SEVERITY constants*)
+		code : UINT; (*0..65535 unique code*)
+		message : STRING[0]; (*ASCII data message*)
+	END_VAR
+END_FUNCTION
+
+FUNCTION UserLogFormat : UDINT (*Write to user logbook with runtime data.  Returns record ID if successful, zero otherwise*)
+	VAR_INPUT
+		severity : DINT; (*Use UserLogSeverityEnum or arEVENTLOG_SEVERITY constants*)
+		code : UINT; (*0..65535 unique code*)
+		message : STRING[0]; (*ASCII data message*)
+		args : UserLogFormatType; (*Format arguments*)
+	END_VAR
+END_FUNCTION
+
 FUNCTION UserLogMessage : UDINT (*Write to logbook synchronously. Returns record ID if successful, zero otherwise*)
 	VAR_INPUT
 		logbook : STRING[0]; (*Name of logbook*)
@@ -17,10 +34,8 @@ FUNCTION UserLogMessage : UDINT (*Write to logbook synchronously. Returns record
 	END_VAR
 END_FUNCTION
 
-FUNCTION UserLogQuick : UDINT (*Write to user logbook. Returns record ID if successful, zero otherwise*)
+FUNCTION UserLogSeverity : UDINT (*Set severity level. Suppresses messages below level*)
 	VAR_INPUT
-		severity : DINT; (*Use UserLogSeverityEnum or arEVENTLOG_SEVERITY constants*)
-		code : UINT; (*0..65535 unique code*)
-		message : STRING[0]; (*ASCII data message*)
+		level : DINT;
 	END_VAR
 END_FUNCTION

@@ -8,6 +8,7 @@
     <File Description="Common header">main.h</File>
     <File Description="Log message">message.c</File>
     <File Description="String handling">string.c</File>
+    <File Description="Severity level">severity.c</File>
   </Files>
   <Dependencies>
     <Dependency ObjectName="ArEventLog" />
