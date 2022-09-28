@@ -18,13 +18,22 @@ extern "C"
 #include <stdbool.h>
 #include <string.h>
 
+/* Constants */
+#define USERLOG_MESSAGE_LENGTH 120U
+/* Logbook and message preview lengths should not exceed USERLOG_MESSAGE_LENGTH */
+#define USERLOG_LOGBOOK_LENGTH 10U
+#define USERLOG_MESSAGE_PREVIEW_LENGTH 20U
+#define USERLOG_FACILITY 3U
+#define USERLOG_CODE_IDENT 10000U
+#define USERLOG_CODE_WRITE 10010U
+
 /* Macros */
 #define MAX(x,y) (((x) > (y)) ? (x) : (y))
 #define MIN(x,y) (((x) < (y)) ? (x) : (y))
 
 /* Prototypes */
-uint32_t stringCopy(char *destination, char *source, uint32_t size);
-uint32_t stringFormat(char *destination, char *source, UserLogFormatArgumentType *args, uint32_t size);
+void string_copy (char *destination, uint32_t size, char *source);
+void string_format (char *destination, uint32_t size, char *source, UserLogFormatType *args);
 
 #ifdef __cplusplus
 };

@@ -6,102 +6,112 @@
 
 #include "main.h"
 
-/* Embedded from IecString library */
-/* Format string with runtime data. Returns destination */
-uint32_t stringFormat(char *destination, char *source, UserLogFormatArgumentType *args, uint32_t size) {
-	
+/* Format string with runtime data */
+void string_format (char *destination, uint32_t size, char *source, UserLogFormatType *args)
+{	
 	/* Declare local variables */
-	char *src = source, *dst = destination;
-	const char sBool[][6] = {"FALSE", "TRUE"}; 	/* Boolean arguments = 5 + null terminator */
-	char sNumber[13]; /* Floats: [<+->]1.23456[e<+->12] = 12 + null terminator, Longs: -2147483648 to 2147483647 = 11 + null terminator */
-	uint8_t countBool = 0;
-	uint8_t countFloat = 0;
-	uint8_t countInteger = 0;
-	uint8_t countString = 0; 
-	uint32_t length, bytesRemaining = size - 1;
+	/* Boolean arguments = 5 + null terminator */
+	const char boolean[][6] = {"FALSE", "TRUE"}; 	
 	
-	/* Verify parameters */
-	if(destination == NULL || source == NULL || size == 0) return (uint32_t)destination;
-	if(args == NULL) return stringCopy(destination, source, size);
+	/* Floats: [<+->]1.23456[e<+->12] = 12 + null terminator */
+	/* Longs: -2147483648 to 2147483647 = 11 + null terminator */
+	char number[13]; 
+	
+	uint8_t count_bool = 0;
+	uint8_t count_float = 0;
+	uint8_t count_integer = 0;
+	uint8_t count_string = 0;
+	uint32_t length, bytes_remaining = size - 1;
+	
+	/* Verify parameters, attempt to copy if failed */
+	if (destination == NULL || source == NULL || args == NULL || size == 0) 
+		return string_copy(destination, size, source);
 	
 	/* Format */
-	while(*src != '\0' && bytesRemaining > 0) {
-		if(*src != '%') {
-			*dst++ = *src++; /* Direct copy */
-			bytesRemaining--;
+	while (*source != '\0' && bytes_remaining > 0)
+	{
+		if (*source != '%')
+		{
+			/* Direct copy */
+			*destination++ = *source++;
+			bytes_remaining--;
 			continue;
 		}
 		
-		*dst = '\0'; /* Temporarily add null terminator to perform concatenation */
-		length = 0; /* Set the length to zero if the format specifier is invalid */
+		/* Temporarily add null terminator to perform concatenation */
+		*destination = '\0';
 		
-		switch(*(++src)) {
+		/* Set the length to zero if the format specifier is invalid */
+		length = 0;
+		
+		switch (*(++source))
+		{
+			/* Use strncat to concatenate the formatted value up to bytes_remaining */
+			/* strlen(strncat(destination, ...)) returns the length of characters appended because destination began as null */
 			case 'b':
-				if(countBool <= USERLOG_FORMATARG_INDEX) 
-					length = strlen(strncat(dst, sBool[args->b[countBool++]], bytesRemaining));
+				if (count_bool <= USERLOG_FORMAT_INDEX) 
+					length = strlen(strncat(destination, boolean[args->b[count_bool++]], bytes_remaining));
 				break;
 			
 			 case 'f':
-			 	if(countFloat <= USERLOG_FORMATARG_INDEX) {
-					brsftoa((float)(args->f[countFloat++]), (uint32_t)sNumber);
-					length = strlen(strncat(dst, sNumber, bytesRemaining));
+			 	if (count_float <= USERLOG_FORMAT_INDEX)
+				{
+					brsftoa((float)(args->f[count_float++]), (uint32_t)number);
+					length = strlen(strncat(destination, number, bytes_remaining));
 			 	}
 			 	break;
 			 
 			 case 'i':
-			 	if(countInteger <= USERLOG_FORMATARG_INDEX) {
-					brsitoa(args->i[countInteger++], (uint32_t)sNumber);
-					length = strlen(strncat(dst, sNumber, bytesRemaining));
+			 	if (count_integer <= USERLOG_FORMAT_INDEX)
+				{
+					brsitoa(args->i[count_integer++], (uint32_t)number);
+					length = strlen(strncat(destination, number, bytes_remaining));
 			 	}
 			 	break;
 			 
 			 case 's':
-			 	if(countString <= USERLOG_FORMATARG_INDEX) 
-					length = strlen(strncat(dst, args->s[countString++], bytesRemaining));
+			 	if (count_string <= USERLOG_FORMAT_INDEX) 
+					length = strlen(strncat(destination, args->s[count_string++], bytes_remaining));
 			 	break;
 			 
 			 case '%':
-			 	*dst = '%';
+			 	*destination = '%';
 				length = 1;
 				break;
-		} /* End switch */
-		
-		dst += length;
-		bytesRemaining -= length;
-		src++;
-		
-	} /* End while */
-	
-	*dst = '\0'; /* Add the null terminator to end the string */
-	return (uint32_t)destination;
-	
-} /* End function */
-
-/* Embedded from IecString library */
-/* Copies source to destination up to size (of destination) or source length. Returns destination */
-uint32_t stringCopy(char *destination, char *source, uint32_t size) {
-	
-	/* Declare local variables */
-	char *src = source, *dst = destination;
-	uint32_t bytesRemaining = size - 1;
-	
-	/* Verify parameters */
-	if(destination == NULL || source == NULL || size == 0) return (uint32_t)destination;
-	
-	/* Initialize (size = 1) */
-	*dst = '\0';
-	
-	/* Copy */
-	while(bytesRemaining) {
-		if(*src == '\0') {
-			*dst = '\0';
-			break;
 		}
-		*dst++ = *src++;
-		bytesRemaining--;
-		if(bytesRemaining == 0) *dst = '\0';
+		
+		destination += length;
+		bytes_remaining -= length;
+		source++;
 	}
 	
-	return (uint32_t)destination;
+	/* Complete with null terminator */
+	*destination = '\0';
+}
+
+/* Copies source to destination up to size (of destination) or source length */
+void string_copy (char *destination, uint32_t size, char *source)
+{	
+	/* Declare local variables */
+	uint32_t length;
 	
-} /* End function */
+	/* Verify parameters */
+	if (destination == NULL || source == NULL || size == 0) 
+		return;
+	
+	/* Check if destination's start overwrites source */
+	length = strlen(source);
+	if (source <= destination && destination <= source + length) 
+		return;
+	
+	/* Check if destination's end overwrites source, assumming truncation */
+	if (length >= size - 1 && source - length <= destination && destination <= source) 
+		return;
+	
+	/* Copy, decrement first for size - 1 characters remaining */
+	while (--size && *source != '\0')
+		*destination++ = *source++;
+	
+	/* Complete with null terminator */
+	*destination = '\0';
+}

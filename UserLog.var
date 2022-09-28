@@ -4,6 +4,6 @@
  * Created: 2020-10-29
 *******************************************************************************)
 VAR CONSTANT
-	USERLOG_FORMATARG_INDEX : USINT := 4; (*Maximum index of each argument type*)
-	USERLOG_FORMATARG_STRLEN : USINT := 80; (*Maximum length of string argument*)
+	USERLOG_FORMAT_INDEX : USINT := 4; (*Maximum index of each argument type*)
+	USERLOG_FORMAT_LENGTH : USINT := 80; (*Length of string argument*)
 END_VAR
