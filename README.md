@@ -6,43 +6,36 @@ UserLog is an Automation Studio library with functions for writing to logbooks s
 
 ## Features
 
-- Write to user or custom logbooks
-- Parameters:
+- Synchronously write to user logbooks
+	- Timestamp is recorded at the time of the function call
+- Parameters
 	- Event ID
-		- Severity (Debug, Success, Info, Warning, Error, Critical)
+		- Severity: Debug, Success, Info, Warning, Error, Critical
+			- **NOTE:** Debug and Critical are extentions of the existing ArEventLog severities
 		- Facility 0..4095
 		- Code 0..65535
-	- Original record hierarchy (optional)
-	- Object name (optional)
-	- Message up to 120 characters
-	- Format data (%b, %f, %i, %s)
-- Automatically retrieve software object name for record data
-- Set severity level to suppress messages
+	- Origin record for hierarchy
+	- Object name
+	- Message
+	- Format message with runtime data (%b, %f, %i, %s)
+- Automatically read software object name
+- Set severity level and suppress messages
+- Error messages written to User logbook
+- String truncation to protect overflow
 - Create custom logbooks
 
 ## Functions
 
-- UserLogQuick (Write to user logbook)
-	- severity
-	- code
-	- message
-- UserLogFormat (Write to user logbook with runtime data)
-	- severity
-	- code
-	- message
-	- args
-- UserLogMessage (Write to custom logbook with optional parameters)
-	- logbook
-	- severity
-	- facility
-	- code
-	- origin
-	- object
-	- message
-	- args
-- UserLogSeverity (Set severity level)
-	- level 
-- UserLogCreate (Create custom logbook - `_INIT` routine only)
+Function | Description
+---|---
+(UserLogQuick)[https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L7] | Write to user logbook. Returns record ID if successful, zero otherwise
+(UserLogFormat)[https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L15] | Write to user logbook with runtime data.  Returns record ID if successful, zero otherwise
+(UserLogMessage)[https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L24] | Write to logbook synchronously. Returns record ID if successful, zero otherwise
+(UserLogCreate)[https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L37] | Create custom logbook. Only use in _INIT routine
+(UserLogSetSeverityLevel)[https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L44] | Set severity level. Suppresses messages below level
+(UserLogGetSeverity)[https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L50] | Get ArEventLog severity from event ID
+(UserLogGetFacility)[https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L56] | Get ArEventLog facility from event ID
+(UserLogGetCode)[https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L62] | Get ArEventLog code from event ID
 
 ## Clone
 
@@ -61,13 +54,19 @@ git submodule add https://github.com/tmatijevich/UserLog.git <project_root>/Logi
 
 Then add as an existing library from the Automation Studio toolbox.
 
-## Build
+## Build 
 
-You may notice build warnings such as "Additional directory/file found ..." from the submodule.
+Building a project with this package may result in warnings for additional files.  
 
-![Build warnings project independent](https://user-images.githubusercontent.com/33841634/133009811-98cf2414-ec89-40d3-a529-34980b59e27f.png)
+![Build warnings 2022-03-31_12 34 35](https://user-images.githubusercontent.com/33841634/161134955-5e71050f-bd1b-49cf-b07c-6408ae3c24ca.png)
 
-Add `-W 9232 9233` to your CPU's build properties window under *Additional build options* to suppress.
+In Automation Studio 4.11+, it is possible to add specific filters to warnings 9232 and 9233.  Navigate to Configuration View, right-click the PLC object and select properties, chose the Build tab, and add the follow text to the "Objects ignored for build warnings 9232 and 9233" field. The filters are case sensitive.
+
+```
+*README*;*LICENSE*;.git;.gitignore;.github
+```
+
+Prior to Automation Studio 4.11, it is possible to suppress *all* build warnings regarding additional files by using `-W 9232 9233` in the "Additional build options" field.
 
 ## Dependencies
 
