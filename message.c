@@ -58,6 +58,10 @@ ArEventLogRecordIDType UserLogMessage (char *logbook, int32_t severity, uint16_t
 		/* Check for repeat recursion */
 		if (error) return 0;
 		
+		/* Set error */
+		error = true;
+		
+		/* Report error */
 		local_args.i[0] = status;
 		string_copy(local_args.s[0], USERLOG_LOGBOOK_LENGTH + 1, logbook);
 		local_args.i[1] = code;
@@ -65,8 +69,6 @@ ArEventLogRecordIDType UserLogMessage (char *logbook, int32_t severity, uint16_t
 		UserLogMessage(USERLOG_USER_LOGBOOK, USERLOG_SEVERITY_ERROR, USERLOG_ERROR_FACILITY, USERLOG_CODE_IDENT, 0, NULL, 
 						"UserLog: ArEventLog error %i. (logbook \"%s\", code %i, message \"%s\")", &local_args);
 		
-		/* Set error */
-		error = true;
 		return 0;
 	}
 	
@@ -110,6 +112,10 @@ ArEventLogRecordIDType UserLogMessage (char *logbook, int32_t severity, uint16_t
 		/* Check for repeat recursion */
 		if (error) return 0;
 		
+		/* Set error */
+		error = true;
+		
+		/* Report error */
 		local_args.i[0] = status;
 		string_copy(local_args.s[0], USERLOG_LOGBOOK_LENGTH + 1, logbook);
 		local_args.i[1] = code;
@@ -117,8 +123,6 @@ ArEventLogRecordIDType UserLogMessage (char *logbook, int32_t severity, uint16_t
 		UserLogMessage(USERLOG_USER_LOGBOOK, USERLOG_SEVERITY_ERROR, USERLOG_ERROR_FACILITY, USERLOG_CODE_WRITE, 0, NULL, 
 						"UserLog: ArEventLog error %i. (logbook \"%s\", code %i, message \"%s\")", &local_args);
 		
-		/* Set error */
-		error = true;
 		return 0;
 	}
 	
