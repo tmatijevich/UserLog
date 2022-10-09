@@ -34,15 +34,33 @@ FUNCTION UserLogMessage : UDINT (*Write to logbook synchronously. Returns record
 	END_VAR
 END_FUNCTION
 
-FUNCTION UserLogSeverity : DINT (*Set severity level. Suppresses messages below level*)
+FUNCTION UserLogCreate : DINT (*Create custom logbook. Only use in _INIT routine*)
+	VAR_INPUT
+		name : STRING[0]; (*Name of logbook limited to 10 characters*)
+		size : UDINT; (*Size of logbook in bytes (minimum 4096)*)
+	END_VAR
+END_FUNCTION
+
+FUNCTION UserLogSetSeverityLevel : DINT (*Set severity level. Suppresses messages below level*)
 	VAR_INPUT
 		level : DINT;
 	END_VAR
 END_FUNCTION
 
-FUNCTION UserLogCreate : DINT (*Create custom logbook. Only use in _INIT routine*)
+FUNCTION UserLogGetSeverity : USINT (*Get ArEventLog severity from event ID*)
 	VAR_INPUT
-		name : STRING[0]; (*Name of logbook limited to 10 characters*)
-		size : UDINT; (*Size of logbook in bytes (minimum 4096)*)
+		event : DINT; (*Event ID*)
+	END_VAR
+END_FUNCTION
+
+FUNCTION UserLogGetFacility : UINT (*Get ArEventLog facility from event ID*)
+	VAR_INPUT
+		event : DINT; (*Event ID*)
+	END_VAR
+END_FUNCTION
+
+FUNCTION UserLogGetCode : UINT (*Get ArEventLog code from event ID*)
+	VAR_INPUT
+		event : DINT; (*Event ID*)
 	END_VAR
 END_FUNCTION
