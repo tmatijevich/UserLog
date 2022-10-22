@@ -2,7 +2,12 @@
 
 UserLog is an Automation Studio library with functions for writing to logbooks synchronously.  UserLog's simple one-line functions provide a necessary tool for software development and debug.    
 **NOTE:** This is not an official library. UserLog is provided as is under the GNU GPL v3.0 license agreement.  
-[Download the library here](https://github.com/tmatijevich/UserLog/releases/latest/download/UserLog.zip).  
+
+## Installation
+
+1. [Download](https://github.com/tmatijevich/UserLog/releases/latest/download/UserLog.zip)
+2. Extract the archive
+3. Import to your Automation Studio project's Logical View using *Existing Library* from the toolbox
 
 ## Features
 
