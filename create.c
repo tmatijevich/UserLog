@@ -17,6 +17,7 @@ int32_t UserLogCreate (char *name, uint32_t size)
 	/* Create */
 	string_copy(create_logbook.Name, MIN(USERLOG_LOGBOOK_LENGTH + 1, sizeof(create_logbook.Name)), name);
 	create_logbook.Size = size;
+	create_logbook.Persistence = arEVENTLOG_PERSISTENCE_PERSIST;
 	create_logbook.Execute = true;
 	do 
 		ArEventLogCreate(&create_logbook);
