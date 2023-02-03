@@ -6,9 +6,9 @@
 
 #include "Main.h"
 
-/* Write to any user logbook synchronously */
-ArEventLogRecordIDType UserLogCustom(char *Logbook, int32_t Severity, uint16_t Facility, uint16_t Code, 
-										ArEventLogRecordIDType Origin, char *Object, char *Message, UserLogFormatType *Arguments) {
+/* Common private function to call ArEventLogWrite synchronously */
+static ArEventLogRecordIDType WriteMessage(char *Logbook, int32_t Severity, uint16_t Facility, uint16_t Code, 
+											ArEventLogRecordIDType Origin, char *Object, char *Message, UserLogFormatType *Arguments, uint8_t Coded) {
 	
 	/* Local variables */
 	/* Make function block instances static to avoid memset initialization */
@@ -26,8 +26,9 @@ ArEventLogRecordIDType UserLogCustom(char *Logbook, int32_t Severity, uint16_t F
 		arEVENTLOG_SEVERITY_ERROR,
 		arEVENTLOG_SEVERITY_ERROR
 	};
-	char AsciiMessage[USERLOG_MESSAGE_LENGTH + 1];
+	char FormattedMessage[USERLOG_MESSAGE_LENGTH + 1];
 	ArEventLogRecordIDType Result;
+	uint8_t CodedData[USERLOG_CODED_DATA_LENGTH];
 	
 	/* Saturate severity */
 	if(Severity < USERLOG_SEVERITY_DEBUG)
@@ -75,15 +76,24 @@ ArEventLogRecordIDType UserLogCustom(char *Logbook, int32_t Severity, uint16_t F
 	/* Origin record */
 	WriteToLogbook.OriginRecordID = Origin;
 	
-	/* Add ascii message */
+	/* Format and set message */
 	if(Message == NULL)
-		StringCopy(AsciiMessage, sizeof(AsciiMessage), "UserLog: No message provided");
+		StringCopy(FormattedMessage, sizeof(FormattedMessage), "UserLog: No message provided");
 	else
-		StringFormat(AsciiMessage, sizeof(AsciiMessage), Message, Arguments);
+		StringFormat(FormattedMessage, sizeof(FormattedMessage), Message, Arguments);
 	
-	WriteToLogbook.AddDataSize = strlen(AsciiMessage) + 1;
-	WriteToLogbook.AddDataFormat = arEVENTLOG_ADDFORMAT_TEXT;
-	WriteToLogbook.AddData = (uint32_t)AsciiMessage;
+	if(Coded) {
+		ArEventLogAddDataInit((uint32_t)CodedData, sizeof(CodedData), arEVENTLOG_ADDFORMAT_CODED);
+		ArEventLogAddDataString((uint32_t)CodedData, sizeof(CodedData), (uint32_t)FormattedMessage);
+		WriteToLogbook.AddDataFormat = arEVENTLOG_ADDFORMAT_CODED;
+		WriteToLogbook.AddData = (uint32_t)CodedData;
+		WriteToLogbook.AddDataSize = 0;
+	}
+	else {
+		WriteToLogbook.AddDataSize = strlen(FormattedMessage) + 1;
+		WriteToLogbook.AddDataFormat = arEVENTLOG_ADDFORMAT_TEXT;
+		WriteToLogbook.AddData = (uint32_t)FormattedMessage;
+	}
 	
 	/* Add object name */
 	if(Object == NULL)
@@ -125,10 +135,22 @@ ArEventLogRecordIDType UserLogCustom(char *Logbook, int32_t Severity, uint16_t F
 
 /* Write to the User logbook */
 ArEventLogRecordIDType UserLogBasic(int32_t Severity, uint16_t Code, char *Message) {
-	return UserLogCustom(USERLOG_USER_LOGBOOK, Severity, USERLOG_FACILITY, Code, 0, NULL, Message, NULL);
+	return WriteMessage(USERLOG_USER_LOGBOOK, Severity, USERLOG_FACILITY, Code, 0, NULL, Message, NULL, false);
 }
 
 /* Write to the User logbook with runtime data */
 ArEventLogRecordIDType UserLogAdvanced(int32_t Severity, uint16_t Code, char *Message, UserLogFormatType *Arguments) {
-	return UserLogCustom(USERLOG_USER_LOGBOOK, Severity, USERLOG_FACILITY, Code, 0, NULL, Message, Arguments);
+	return WriteMessage(USERLOG_USER_LOGBOOK, Severity, USERLOG_FACILITY, Code, 0, NULL, Message, Arguments, false);
+}
+
+/* Write to any user logbook synchronously */
+ArEventLogRecordIDType UserLogCustom(char *Logbook, int32_t Severity, uint16_t Facility, uint16_t Code, 
+										ArEventLogRecordIDType Origin, char *Object, char *Message, UserLogFormatType *Arguments) {
+	return WriteMessage(Logbook, Severity, Facility, Code, Origin, Object, Message, Arguments, false);
+}
+
+/* Write to logbook with binary-encoded data for event log texts */
+ArEventLogRecordIDType UserLogEventText(char *Logbook, int32_t Event, ArEventLogRecordIDType Origin, 
+										char *Object, char *Message, UserLogFormatType *Arguments) {
+	return WriteMessage(Logbook, UserLogGetSeverity(Event), UserLogGetFacility(Event), UserLogGetCode(Event), Origin, Object, Message, Arguments, true);
 }

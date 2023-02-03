@@ -29,6 +29,17 @@ FUNCTION UserLogCustom : UDINT (*Write to any user logbook synchronously*)
 	END_VAR
 END_FUNCTION
 
+FUNCTION UserLogEventText : UDINT (*Write to logbook with binary-encoded data for event log texts*)
+	VAR_INPUT
+		Logbook : STRING[0]; (*Name of logbook*)
+		Event : DINT; (*Event ID match to Text ID*)
+		Origin : ArEventLogRecordIDType; (*(Optional) Origin record ID*)
+		Object : STRING[0]; (*(Optional) Object name*)
+		Message : STRING[0]; (*ASCII data message*)
+		Arguments : UserLogFormatType; (*Format arguments*)
+	END_VAR
+END_FUNCTION
+
 FUNCTION UserLogCreate : DINT (*Create custom logbook in INIT*)
 	VAR_INPUT
 		Name : STRING[0]; (*Name of logbook limited to 10 characters*)
