@@ -1,8 +1,4 @@
-(*******************************************************************************
- * File: UserLog.var
- * Author: Tyler Matijevich
- * Created: 2020-10-29
-*******************************************************************************)
+
 VAR CONSTANT
 	USERLOG_FACILITY : UINT := 10; (*Facility number used for UserLogQuick and UserLogFormat functions*)
 	USERLOG_ERROR_IDENT : DINT := -515234032; (*An error occurred when calling ArEventLogGetIdent. See user logbook for details*)

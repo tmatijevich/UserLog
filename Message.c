@@ -6,18 +6,18 @@
 
 #include "Main.h"
 
-/* Write to logbook synchronously. Returns record ID if successful, zero otherwise */
+/* Write to any user logbook synchronously */
 ArEventLogRecordIDType UserLogMessage(char *Logbook, int32_t Severity, uint16_t Facility, uint16_t Code, 
-										ArEventLogRecordIDType Origin, char *Object, char *Message, UserLogFormatType *Args) {
+										ArEventLogRecordIDType Origin, char *Object, char *Message, UserLogFormatType *Arguments) {
 	
-	/* Declare local variables */
+	/* Local variables */
 	/* Make function block instances static to avoid memset initialization */
 	static ArEventLogGetIdent_typ GetLogbookIdent;
 	static ArEventLogWrite_typ WriteToLogbook;
 	int32_t Status;
 	ArEventLogIdentType Ident;
 	static uint8_t Error;
-	UserLogFormatType LocalArgs;
+	UserLogFormatType LocalArguments;
 	const uint8_t SeverityMap[] = {
 		arEVENTLOG_SEVERITY_INFO,
 		arEVENTLOG_SEVERITY_SUCCESS,
@@ -39,35 +39,29 @@ ArEventLogRecordIDType UserLogMessage(char *Logbook, int32_t Severity, uint16_t 
 	if(Severity < SeverityLevel)
 		return 0;
 	
-	/* Call ArEventLog get ident */
+	/* Call ArEventLogGetIdent and store results */
 	StringCopy(GetLogbookIdent.Name, sizeof(GetLogbookIdent.Name), Logbook);
 	GetLogbookIdent.Execute = true;
 	ArEventLogGetIdent(&GetLogbookIdent);
-	
-	/* Store results */
 	Status = GetLogbookIdent.StatusID;
 	Ident = GetLogbookIdent.Ident;
-	
-	/* Reset execution */
 	GetLogbookIdent.Execute = false;
 	ArEventLogGetIdent(&GetLogbookIdent);
 	
 	/* Error check */
 	if(Status) {
-		/* Check for repeat recursion */
+		/* Block recursion */
 		if(Error)
 			return 0;
-		
-		/* Set error */
 		Error = true;
 		
-		/* Report error */
-		LocalArgs.i[0] = Status;
-		StringCopy(LocalArgs.s[0], USERLOG_LOGBOOK_LENGTH + 1, Logbook);
-		LocalArgs.i[1] = Code;
-		StringCopy(LocalArgs.s[1], USERLOG_MESSAGE_PREVIEW_LENGTH + 1, Message);
+		/* Log error */
+		LocalArguments.i[0] = Status;
+		StringCopy(LocalArguments.s[0], USERLOG_LOGBOOK_LENGTH + 1, Logbook);
+		LocalArguments.i[1] = Code;
+		StringCopy(LocalArguments.s[1], USERLOG_MESSAGE_PREVIEW_LENGTH + 1, Message);
 		UserLogMessage(USERLOG_USER_LOGBOOK, USERLOG_SEVERITY_ERROR, USERLOG_ERROR_FACILITY, USERLOG_CODE_IDENT, 0, NULL, 
-						"UserLog: ArEventLog error %i. (Logbook \"%s\", code %i, message \"%s\")", &LocalArgs);
+						"UserLog: ArEventLog error %i. (Logbook \"%s\", code %i, message \"%s\")", &LocalArguments);
 		
 		return 0;
 	}
@@ -85,7 +79,7 @@ ArEventLogRecordIDType UserLogMessage(char *Logbook, int32_t Severity, uint16_t 
 	if(Message == NULL)
 		StringCopy(AsciiMessage, sizeof(AsciiMessage), "UserLog: No message provided");
 	else
-		StringFormat(AsciiMessage, sizeof(AsciiMessage), Message, Args);
+		StringFormat(AsciiMessage, sizeof(AsciiMessage), Message, Arguments);
 	
 	WriteToLogbook.AddDataSize = strlen(AsciiMessage) + 1;
 	WriteToLogbook.AddDataFormat = arEVENTLOG_ADDFORMAT_TEXT;
@@ -107,21 +101,20 @@ ArEventLogRecordIDType UserLogMessage(char *Logbook, int32_t Severity, uint16_t 
 	WriteToLogbook.Execute = false;
 	ArEventLogWrite(&WriteToLogbook);
 	
+	/* Error check */
 	if(Status) {
-		/* Check for repeat recursion */
+		/* Block recursion */
 		if(Error)
 			return 0;
-		
-		/* Set error */
 		Error = true;
 		
-		/* Report error */
-		LocalArgs.i[0] = Status;
-		StringCopy(LocalArgs.s[0], USERLOG_LOGBOOK_LENGTH + 1, Logbook);
-		LocalArgs.i[1] = Code;
-		StringCopy(LocalArgs.s[1], USERLOG_MESSAGE_PREVIEW_LENGTH + 1, Message);
+		/* Log error */
+		LocalArguments.i[0] = Status;
+		StringCopy(LocalArguments.s[0], USERLOG_LOGBOOK_LENGTH + 1, Logbook);
+		LocalArguments.i[1] = Code;
+		StringCopy(LocalArguments.s[1], USERLOG_MESSAGE_PREVIEW_LENGTH + 1, Message);
 		UserLogMessage(USERLOG_USER_LOGBOOK, USERLOG_SEVERITY_ERROR, USERLOG_ERROR_FACILITY, USERLOG_CODE_WRITE, 0, NULL, 
-						"UserLog: ArEventLog error %i. (Logbook \"%s\", code %i, message \"%s\")", &LocalArgs);
+						"UserLog: ArEventLog error %i. (Logbook \"%s\", code %i, message \"%s\")", &LocalArguments);
 		
 		return 0;
 	}
@@ -130,12 +123,12 @@ ArEventLogRecordIDType UserLogMessage(char *Logbook, int32_t Severity, uint16_t 
 	return Result;
 }
 
-/* Write to user logbook. Returns record ID if successful, zero otherwise */
+/* Write to the User logbook */
 ArEventLogRecordIDType UserLogQuick(int32_t Severity, uint16_t Code, char *Message) {
 	return UserLogMessage(USERLOG_USER_LOGBOOK, Severity, USERLOG_FACILITY, Code, 0, NULL, Message, NULL);
 }
 
-/* Write to user logbook with runtime data.  Returns record ID if successful, zero otherwise */
-ArEventLogRecordIDType UserLogFormat(int32_t Severity, uint16_t Code, char *Message, UserLogFormatType *Args) {
-	return UserLogMessage(USERLOG_USER_LOGBOOK, Severity, USERLOG_FACILITY, Code, 0, NULL, Message, Args);
+/* Write to the User logbook with runtime data */
+ArEventLogRecordIDType UserLogFormat(int32_t Severity, uint16_t Code, char *Message, UserLogFormatType *Arguments) {
+	return UserLogMessage(USERLOG_USER_LOGBOOK, Severity, USERLOG_FACILITY, Code, 0, NULL, Message, Arguments);
 }

@@ -1,12 +1,7 @@
-(*******************************************************************************
- * File: UserLog.typ
- * Author: Tyler Matijevich
- * Created: 2020-10-29
-*******************************************************************************)
 
 TYPE
 	UserLogSeverityEnum : 
-		( (*Levels of severity. See 32-bit event ID in help*)
+		( (*Levels of severity. See 32-bit event ID in Automation Help*)
 		USERLOG_SEVERITY_DEBUG := -1, (*Information: Developer information*)
 		USERLOG_SEVERITY_SUCCESS, (*Success: Completion*)
 		USERLOG_SEVERITY_INFORMATION, (*Information: User information*)

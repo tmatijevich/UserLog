@@ -6,13 +6,13 @@
 
 #include "Main.h"
 
-/* Create custom logbook. Only use in _INIT routine */
+/* Create custom logbook in INIT */
 int32_t UserLogCreate(char *Name, uint32_t Size) {
 	
-	/* Declare local variables */
+	/* Local variables */
 	static ArEventLogCreate_typ CreateLogbook;
 	int32_t Status;
-	UserLogFormatType Args;
+	UserLogFormatType Arguments;
 	
 	/* Create */
 	StringCopy(CreateLogbook.Name, MIN(USERLOG_LOGBOOK_LENGTH + 1, sizeof(CreateLogbook.Name)), Name);
@@ -29,10 +29,10 @@ int32_t UserLogCreate(char *Name, uint32_t Size) {
 	ArEventLogCreate(&CreateLogbook);
 	
 	if(Status && Status != arEVENTLOG_ERR_LOGBOOK_EXISTS) {
-		Args.i[0] = Status;
-		StringCopy(Args.s[0], USERLOG_LOGBOOK_LENGTH + 1, Name);
+		Arguments.i[0] = Status;
+		StringCopy(Arguments.s[0], USERLOG_LOGBOOK_LENGTH + 1, Name);
 		UserLogMessage(USERLOG_USER_LOGBOOK, USERLOG_SEVERITY_ERROR, USERLOG_ERROR_FACILITY, USERLOG_CODE_CREATE, 0, NULL, 
-						"UserLog: ArEventLog error %i. Could not create logbook %s.", &Args);
+						"UserLog: ArEventLog error %i. Could not create logbook %s.", &Arguments);
 	}
 	
 	return Status;

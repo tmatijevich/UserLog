@@ -9,12 +9,12 @@
 /* Ignore DEBUG messages by default */
 UserLogSeverityEnum SeverityLevel = USERLOG_SEVERITY_SUCCESS;
 
-/* Set severity level. Suppresses messages below level */
+/* Suppress messages below level */
 int32_t UserLogSetSeverityLevel(int32_t Level) {
 	/* Saturate Level */
-	if (Level < USERLOG_SEVERITY_DEBUG) 
+	if (Level < USERLOG_SEVERITY_DEBUG)
 		Level = USERLOG_SEVERITY_DEBUG;
-	else if (Level > USERLOG_SEVERITY_CRITICAL) 
+	else if (Level > USERLOG_SEVERITY_CRITICAL)
 		Level = USERLOG_SEVERITY_CRITICAL;
 	
 	return SeverityLevel = Level;

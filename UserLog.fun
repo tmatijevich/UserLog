@@ -1,66 +1,61 @@
-(*******************************************************************************
- * File: UserLog.fun
- * Author: Tyler Matijevich
- * Created: 2020-10-29
-*******************************************************************************)
 
-FUNCTION UserLogQuick : UDINT (*Write to user logbook. Returns record ID if successful, zero otherwise*)
+FUNCTION UserLogQuick : UDINT (*Write to the User logbook*)
 	VAR_INPUT
-		severity : DINT; (*Use UserLogSeverityEnum or arEVENTLOG_SEVERITY constants*)
-		code : UINT; (*0..65535 unique code*)
-		message : STRING[0]; (*ASCII data message*)
+		Severity : DINT; (*Use UserLogSeverityEnum or arEVENTLOG_SEVERITY constants*)
+		Code : UINT; (*0..65535 unique code*)
+		Message : STRING[0]; (*ASCII data message*)
 	END_VAR
 END_FUNCTION
 
-FUNCTION UserLogFormat : UDINT (*Write to user logbook with runtime data.  Returns record ID if successful, zero otherwise*)
+FUNCTION UserLogFormat : UDINT (*Write to the User logbook with runtime data*)
 	VAR_INPUT
-		severity : DINT; (*Use UserLogSeverityEnum or arEVENTLOG_SEVERITY constants*)
-		code : UINT; (*0..65535 unique code*)
-		message : STRING[0]; (*ASCII data message*)
-		args : UserLogFormatType; (*Format arguments*)
+		Severity : DINT; (*Use UserLogSeverityEnum or arEVENTLOG_SEVERITY constants*)
+		Code : UINT; (*0..65535 unique code*)
+		Message : STRING[0]; (*ASCII data message*)
+		Arguments : UserLogFormatType; (*Format arguments*)
 	END_VAR
 END_FUNCTION
 
-FUNCTION UserLogMessage : UDINT (*Write to logbook synchronously. Returns record ID if successful, zero otherwise*)
+FUNCTION UserLogMessage : UDINT (*Write to any user logbook synchronously*)
 	VAR_INPUT
-		logbook : STRING[0]; (*Name of logbook*)
-		severity : DINT; (*Use UserLogSeverityEnum or arEVENTLOG_SEVERITY constants*)
-		facility : UINT; (*0..15 application area 16..4095 3rd-party device area*)
-		code : UINT; (*0..65535 unique code*)
-		origin : ArEventLogRecordIDType; (*(Optional) Origin record ID*)
-		object : STRING[0]; (*(Optional) Object name*)
-		message : STRING[0]; (*ASCII data message*)
-		args : UserLogFormatType; (*Format arguments*)
+		Logbook : STRING[0]; (*Name of logbook*)
+		Severity : DINT; (*Use UserLogSeverityEnum or arEVENTLOG_SEVERITY constants*)
+		Facility : UINT; (*0..15 application area 16..4095 3rd-party device area*)
+		Code : UINT; (*0..65535 unique code*)
+		Origin : ArEventLogRecordIDType; (*(Optional) Origin record ID*)
+		Object : STRING[0]; (*(Optional) Object name*)
+		Message : STRING[0]; (*ASCII data message*)
+		Arguments : UserLogFormatType; (*Format arguments*)
 	END_VAR
 END_FUNCTION
 
-FUNCTION UserLogCreate : DINT (*Create custom logbook. Only use in _INIT routine*)
+FUNCTION UserLogCreate : DINT (*Create custom logbook in INIT*)
 	VAR_INPUT
-		name : STRING[0]; (*Name of logbook limited to 10 characters*)
-		size : UDINT; (*Size of logbook in bytes (minimum 4096)*)
+		Name : STRING[0]; (*Name of logbook limited to 10 characters*)
+		Size : UDINT; (*Size of logbook in bytes (minimum 4096)*)
 	END_VAR
 END_FUNCTION
 
-FUNCTION UserLogSetSeverityLevel : DINT (*Set severity level. Suppresses messages below level*)
+FUNCTION UserLogSetSeverityLevel : DINT (*Suppress messages below level*)
 	VAR_INPUT
-		level : DINT;
+		Level : DINT;
 	END_VAR
 END_FUNCTION
 
 FUNCTION UserLogGetSeverity : USINT (*Get ArEventLog severity from event ID*)
 	VAR_INPUT
-		event : DINT; (*Event ID*)
+		Event : DINT; (*Event ID*)
 	END_VAR
 END_FUNCTION
 
 FUNCTION UserLogGetFacility : UINT (*Get ArEventLog facility from event ID*)
 	VAR_INPUT
-		event : DINT; (*Event ID*)
+		Event : DINT; (*Event ID*)
 	END_VAR
 END_FUNCTION
 
 FUNCTION UserLogGetCode : UINT (*Get ArEventLog code from event ID*)
 	VAR_INPUT
-		event : DINT; (*Event ID*)
+		Event : DINT; (*Event ID*)
 	END_VAR
 END_FUNCTION
