@@ -1,0 +1,4 @@
+Severity (0-3),Facility (0-4095),Code (0-65535),Description,Note
+3,330,10000,UserLog could not reference the logbook name. Please see ArEventLog error,
+3,330,10010,UserLog could not write to the logbook. Please see ArEventLog error,
+3,330,10020,UserLog could not create the logbook. Please see ArEventLog error,
