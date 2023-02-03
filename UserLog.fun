@@ -1,5 +1,5 @@
 
-FUNCTION UserLogQuick : UDINT (*Write to the User logbook*)
+FUNCTION UserLogBasic : UDINT (*Write to the User logbook*)
 	VAR_INPUT
 		Severity : DINT; (*Use UserLogSeverityEnum or arEVENTLOG_SEVERITY constants*)
 		Code : UINT; (*0..65535 unique code*)
@@ -7,7 +7,7 @@ FUNCTION UserLogQuick : UDINT (*Write to the User logbook*)
 	END_VAR
 END_FUNCTION
 
-FUNCTION UserLogFormat : UDINT (*Write to the User logbook with runtime data*)
+FUNCTION UserLogAdvanced : UDINT (*Write to the User logbook with runtime data*)
 	VAR_INPUT
 		Severity : DINT; (*Use UserLogSeverityEnum or arEVENTLOG_SEVERITY constants*)
 		Code : UINT; (*0..65535 unique code*)
@@ -16,7 +16,7 @@ FUNCTION UserLogFormat : UDINT (*Write to the User logbook with runtime data*)
 	END_VAR
 END_FUNCTION
 
-FUNCTION UserLogMessage : UDINT (*Write to any user logbook synchronously*)
+FUNCTION UserLogCustom : UDINT (*Write to any user logbook synchronously*)
 	VAR_INPUT
 		Logbook : STRING[0]; (*Name of logbook*)
 		Severity : DINT; (*Use UserLogSeverityEnum or arEVENTLOG_SEVERITY constants*)

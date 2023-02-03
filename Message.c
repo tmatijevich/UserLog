@@ -7,7 +7,7 @@
 #include "Main.h"
 
 /* Write to any user logbook synchronously */
-ArEventLogRecordIDType UserLogMessage(char *Logbook, int32_t Severity, uint16_t Facility, uint16_t Code, 
+ArEventLogRecordIDType UserLogCustom(char *Logbook, int32_t Severity, uint16_t Facility, uint16_t Code, 
 										ArEventLogRecordIDType Origin, char *Object, char *Message, UserLogFormatType *Arguments) {
 	
 	/* Local variables */
@@ -60,7 +60,7 @@ ArEventLogRecordIDType UserLogMessage(char *Logbook, int32_t Severity, uint16_t 
 		StringCopy(LocalArguments.s[0], USERLOG_LOGBOOK_LENGTH + 1, Logbook);
 		LocalArguments.i[1] = Code;
 		StringCopy(LocalArguments.s[1], USERLOG_MESSAGE_PREVIEW_LENGTH + 1, Message);
-		UserLogMessage(USERLOG_USER_LOGBOOK, USERLOG_SEVERITY_ERROR, USERLOG_ERROR_FACILITY, USERLOG_CODE_IDENT, 0, NULL, 
+		UserLogCustom(USERLOG_USER_LOGBOOK, USERLOG_SEVERITY_ERROR, USERLOG_ERROR_FACILITY, USERLOG_CODE_IDENT, 0, NULL, 
 						"UserLog: ArEventLog error %i. (Logbook \"%s\", code %i, message \"%s\")", &LocalArguments);
 		
 		return 0;
@@ -113,7 +113,7 @@ ArEventLogRecordIDType UserLogMessage(char *Logbook, int32_t Severity, uint16_t 
 		StringCopy(LocalArguments.s[0], USERLOG_LOGBOOK_LENGTH + 1, Logbook);
 		LocalArguments.i[1] = Code;
 		StringCopy(LocalArguments.s[1], USERLOG_MESSAGE_PREVIEW_LENGTH + 1, Message);
-		UserLogMessage(USERLOG_USER_LOGBOOK, USERLOG_SEVERITY_ERROR, USERLOG_ERROR_FACILITY, USERLOG_CODE_WRITE, 0, NULL, 
+		UserLogCustom(USERLOG_USER_LOGBOOK, USERLOG_SEVERITY_ERROR, USERLOG_ERROR_FACILITY, USERLOG_CODE_WRITE, 0, NULL, 
 						"UserLog: ArEventLog error %i. (Logbook \"%s\", code %i, message \"%s\")", &LocalArguments);
 		
 		return 0;
@@ -124,11 +124,11 @@ ArEventLogRecordIDType UserLogMessage(char *Logbook, int32_t Severity, uint16_t 
 }
 
 /* Write to the User logbook */
-ArEventLogRecordIDType UserLogQuick(int32_t Severity, uint16_t Code, char *Message) {
-	return UserLogMessage(USERLOG_USER_LOGBOOK, Severity, USERLOG_FACILITY, Code, 0, NULL, Message, NULL);
+ArEventLogRecordIDType UserLogBasic(int32_t Severity, uint16_t Code, char *Message) {
+	return UserLogCustom(USERLOG_USER_LOGBOOK, Severity, USERLOG_FACILITY, Code, 0, NULL, Message, NULL);
 }
 
 /* Write to the User logbook with runtime data */
-ArEventLogRecordIDType UserLogFormat(int32_t Severity, uint16_t Code, char *Message, UserLogFormatType *Arguments) {
-	return UserLogMessage(USERLOG_USER_LOGBOOK, Severity, USERLOG_FACILITY, Code, 0, NULL, Message, Arguments);
+ArEventLogRecordIDType UserLogAdvanced(int32_t Severity, uint16_t Code, char *Message, UserLogFormatType *Arguments) {
+	return UserLogCustom(USERLOG_USER_LOGBOOK, Severity, USERLOG_FACILITY, Code, 0, NULL, Message, Arguments);
 }
