@@ -1,5 +1,5 @@
 /*******************************************************************************
- * File: UserLog\main.h
+ * File: UserLog\Main.h
  * Author: Tyler Matijevich
  * Created: 2022-08-30
  ******************************************************************************/
@@ -33,11 +33,11 @@ extern "C"
 #define USERLOG_USER_LOGBOOK "$arlogusr"
 
 /* Prototypes */
-void string_copy (char *destination, uint32_t size, char *source);
-void string_format (char *destination, uint32_t size, char *source, UserLogFormatType *args);
+void StringCopy(char *Destination, uint32_t Size, char *Source);
+void StringFormat(char *Sestination, uint32_t Size, char *Source, UserLogFormatType *Args);
 
 /* Global variables */
-extern UserLogSeverityEnum severity_level;
+extern UserLogSeverityEnum SeverityLevel;
 
 #ifdef __cplusplus
 };

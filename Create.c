@@ -1,5 +1,5 @@
 /*******************************************************************************
- * File: UserLog\create.c
+ * File: UserLog\Create.c
  * Author: Tyler Matijevich
  * Created: 2021-12-05
  ******************************************************************************/
@@ -7,35 +7,33 @@
 #include "Main.h"
 
 /* Create custom logbook. Only use in _INIT routine */
-int32_t UserLogCreate (char *name, uint32_t size)
-{
+int32_t UserLogCreate(char *Name, uint32_t Size) {
+	
 	/* Declare local variables */
-	static ArEventLogCreate_typ create_logbook;
-	int32_t status;
-	UserLogFormatType args;
+	static ArEventLogCreate_typ CreateLogbook;
+	int32_t Status;
+	UserLogFormatType Args;
 	
 	/* Create */
-	string_copy(create_logbook.Name, MIN(USERLOG_LOGBOOK_LENGTH + 1, sizeof(create_logbook.Name)), name);
-	create_logbook.Size = size;
-	create_logbook.Persistence = arEVENTLOG_PERSISTENCE_PERSIST;
-	create_logbook.Execute = true;
-	do 
-		ArEventLogCreate(&create_logbook);
-	while (create_logbook.Busy);
+	StringCopy(CreateLogbook.Name, MIN(USERLOG_LOGBOOK_LENGTH + 1, sizeof(CreateLogbook.Name)), Name);
+	CreateLogbook.Size = Size;
+	CreateLogbook.Persistence = arEVENTLOG_PERSISTENCE_PERSIST;
+	CreateLogbook.Execute = true;
+	do
+		ArEventLogCreate(&CreateLogbook);
+	while(CreateLogbook.Busy);
 	
-	status = create_logbook.StatusID;
+	Status = CreateLogbook.StatusID;
 	
-	create_logbook.Execute = false;
-	ArEventLogCreate(&create_logbook);
+	CreateLogbook.Execute = false;
+	ArEventLogCreate(&CreateLogbook);
 	
-	if (status && status != arEVENTLOG_ERR_LOGBOOK_EXISTS)
-	{
-		args.i[0] = status;
-		string_copy(args.s[0], USERLOG_LOGBOOK_LENGTH + 1, name);
-		
+	if(Status && Status != arEVENTLOG_ERR_LOGBOOK_EXISTS) {
+		Args.i[0] = Status;
+		StringCopy(Args.s[0], USERLOG_LOGBOOK_LENGTH + 1, Name);
 		UserLogMessage(USERLOG_USER_LOGBOOK, USERLOG_SEVERITY_ERROR, USERLOG_ERROR_FACILITY, USERLOG_CODE_CREATE, 0, NULL, 
-						"UserLog: ArEventLog error %i. Could not create logbook %s.", &args);
+						"UserLog: ArEventLog error %i. Could not create logbook %s.", &Args);
 	}
 	
-	return status;
+	return Status;
 }
