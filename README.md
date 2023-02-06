@@ -1,13 +1,13 @@
-# UserLog
+# UserLog [![Made For B&R](https://github.com/hilch/BandR-badges/blob/main/Made-For-BrAutomation.svg)](https://www.br-automation.com)
 
-UserLog is an Automation Studio library with functions for writing to logbooks synchronously.  UserLog's simple one-line functions provide a necessary tool for software development and debug.    
+UserLog is an Automation Studio library with functions for writing to logbooks synchronously.  UserLog's simple one-line functions provide a necessary tool for software development and debug.
+
 **NOTE:** This is not an official library. UserLog is provided as is under the GNU GPL v3.0 license agreement.  
 
 ## Installation
 
-1. [Download](https://github.com/tmatijevich/UserLog/releases/latest/download/UserLog.zip)
-2. Extract the archive
-3. Import to your Automation Studio project's Logical View using *Existing Library* from the toolbox
+1. [Download](https://github.com/tmatijevich/UserLog/releases/latest/download/UserLog.zip) and extract the archive
+2. Import the UserLog package to your Automation Studio project's Logical View using *Existing Library* from the toolbox
 
 ## Features
 
@@ -16,31 +16,33 @@ UserLog is an Automation Studio library with functions for writing to logbooks s
 - Parameters
 	- Event ID
 		- Severity: Debug, Success, Info, Warning, Error, Critical
-			- **NOTE:** Debug and Critical are extentions of the existing ArEventLog severities
+			- **NOTE:** Debug and Critical are extentions of ArEventLog severities
 		- Facility 0..4095
 		- Code 0..65535
-	- Origin record for hierarchy
+	- Origin record ID for hierarchy
 	- Object name
 	- Message
 	- Format message with runtime data (%b, %f, %i, %s)
 - Automatically read software object name
-- Set severity level and suppress messages
-- Error messages written to User logbook
+- Set severity level to suppress messages
+- Error messages written to the User logbook
 - String truncation to protect overflow
 - Create custom logbooks
+- Compatible with text system
 
 ## Functions
 
 Function | Description
 ---|---
-[UserLogQuick](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L7) | Write to user logbook. Returns record ID if successful, zero otherwise
-[UserLogFormat](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L15) | Write to user logbook with runtime data.  Returns record ID if successful, zero otherwise
-[UserLogMessage](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L24) | Write to logbook synchronously. Returns record ID if successful, zero otherwise
-[UserLogCreate](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L37) | Create custom logbook. Only use in _INIT routine
-[UserLogSetSeverityLevel](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L44) | Set severity level. Suppresses messages below level
-[UserLogGetSeverity](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L50) | Get ArEventLog severity from event ID
-[UserLogGetFacility](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L56) | Get ArEventLog facility from event ID
-[UserLogGetCode](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L62) | Get ArEventLog code from event ID
+[UserLogBasic](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L2) | Write to the User logbook
+[UserLogAdvanced](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L10) | Write to the User logbook with runtime data
+[UserLogCustom](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L19) | Write to any user logbook synchronously
+[UserLogEventText](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L32) | Write to logbook with binary-encoded data for event log texts
+[UserLogCreate](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L43) | Create custom logbook in INIT
+[UserLogSetSeverityLevel](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L50) | Suppress messages below level
+[UserLogGetSeverity](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L56) | Get ArEventLog severity from event ID
+[UserLogGetFacility](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L62) | Get ArEventLog facility from event ID
+[UserLogGetCode](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L68) | Get ArEventLog code from event ID
 
 ## Clone
 
