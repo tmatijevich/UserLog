@@ -9,7 +9,7 @@ TYPE
 		USERLOG_SEVERITY_ERROR, (*Error: The application in recoverable*)
 		USERLOG_SEVERITY_CRITICAL (*Error: The application in unrecoverable*)
 		);
-	UserLogFormatType : 	STRUCT  (*Argument structure for runtime format data*)
+	UserLogFormatType : 	STRUCT  (*Data structure to replace format specifier with runtime values*)
 		b : ARRAY[0..USERLOG_FORMAT_INDEX]OF BOOL; (*Place boolean (TRUE or FALSE)*)
 		f : ARRAY[0..USERLOG_FORMAT_INDEX]OF LREAL; (*Place double*)
 		i : ARRAY[0..USERLOG_FORMAT_INDEX]OF DINT; (*Place integer (32-bit signed)*)

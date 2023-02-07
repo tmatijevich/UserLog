@@ -2,17 +2,17 @@
 FUNCTION UserLogBasic : UDINT (*Write to the User logbook*)
 	VAR_INPUT
 		Severity : DINT; (*Use UserLogSeverityEnum or arEVENTLOG_SEVERITY constants*)
-		Code : UINT; (*0..65535 unique code*)
-		Message : STRING[0]; (*ASCII data message*)
+		Code : UINT; (*0..65535*)
+		Message : STRING[0]; (*Event description*)
 	END_VAR
 END_FUNCTION
 
 FUNCTION UserLogAdvanced : UDINT (*Write to the User logbook with runtime data*)
 	VAR_INPUT
 		Severity : DINT; (*Use UserLogSeverityEnum or arEVENTLOG_SEVERITY constants*)
-		Code : UINT; (*0..65535 unique code*)
-		Message : STRING[0]; (*ASCII data message*)
-		Arguments : UserLogFormatType; (*Format arguments*)
+		Code : UINT; (*0..65535*)
+		Message : STRING[0]; (*Event description with optional format specifiers*)
+		Values : UserLogFormatType; (*Format values to replace specifiers (%b, %f, %i, %s)*)
 	END_VAR
 END_FUNCTION
 
@@ -20,23 +20,23 @@ FUNCTION UserLogCustom : UDINT (*Write to any user logbook synchronously*)
 	VAR_INPUT
 		Logbook : STRING[0]; (*Name of logbook*)
 		Severity : DINT; (*Use UserLogSeverityEnum or arEVENTLOG_SEVERITY constants*)
-		Facility : UINT; (*0..15 application area 16..4095 3rd-party device area*)
-		Code : UINT; (*0..65535 unique code*)
+		Facility : UINT; (*0..4095*)
+		Code : UINT; (*0..65535*)
 		Origin : ArEventLogRecordIDType; (*(Optional) Origin record ID*)
 		Object : STRING[0]; (*(Optional) Object name*)
-		Message : STRING[0]; (*ASCII data message*)
-		Arguments : UserLogFormatType; (*Format arguments*)
+		Message : STRING[0]; (*Event description with optional format specifiers*)
+		Values : UserLogFormatType; (*Format values to replace specifiers (%b, %f, %i, %s)*)
 	END_VAR
 END_FUNCTION
 
 FUNCTION UserLogEventText : UDINT (*Write to logbook with binary-encoded data for event log texts*)
 	VAR_INPUT
 		Logbook : STRING[0]; (*Name of logbook*)
-		Event : DINT; (*Event ID match to Text ID*)
+		Event : DINT; (*Event ID (match Text ID)*)
 		Origin : ArEventLogRecordIDType; (*(Optional) Origin record ID*)
 		Object : STRING[0]; (*(Optional) Object name*)
-		Message : STRING[0]; (*ASCII data message*)
-		Arguments : UserLogFormatType; (*Format arguments*)
+		Message : STRING[0]; (*Event description with optional format specifiers*)
+		Values : UserLogFormatType; (*Format values to replace specifiers (%b, %f, %i, %s)*)
 	END_VAR
 END_FUNCTION
 

@@ -7,7 +7,7 @@
 #include "Main.h"
 
 /* Format string with runtime data */
-void StringFormat(char *Destination, uint32_t Size, char *Source, UserLogFormatType *Arguments) {
+void StringFormat(char *Destination, uint32_t Size, char *Source, UserLogFormatType *Values) {
 	
 	/* Local variables */
 	const char Boolean[][6] = {"FALSE", "TRUE"};
@@ -20,7 +20,7 @@ void StringFormat(char *Destination, uint32_t Size, char *Source, UserLogFormatT
 	uint32_t Length, BytesRemaining = Size - 1;
 	
 	/* Verify parameters, attempt to copy if failed */
-	if(Destination == NULL || Size == 0 || Source == NULL || Arguments == NULL)
+	if(Destination == NULL || Size == 0 || Source == NULL || Values == NULL)
 		return StringCopy(Destination, Size, Source);
 	
 	/* Format */
@@ -45,26 +45,26 @@ void StringFormat(char *Destination, uint32_t Size, char *Source, UserLogFormatT
 			/* strlen(strncat(Destination, ...)) returns the length of characters appended because Destination began as null */
 			case 'b':
 				if(CountBool <= USERLOG_FORMAT_INDEX)
-					Length = strlen(strncat(Destination, Boolean[Arguments->b[CountBool++]], BytesRemaining));
+					Length = strlen(strncat(Destination, Boolean[Values->b[CountBool++]], BytesRemaining));
 				break;
 			
 			 case 'f':
 			 	if(CountFloat <= USERLOG_FORMAT_INDEX) {
-					brsftoa((float)(Arguments->f[CountFloat++]), (uint32_t)Number);
+					brsftoa((float)(Values->f[CountFloat++]), (uint32_t)Number);
 					Length = strlen(strncat(Destination, Number, BytesRemaining));
 			 	}
 			 	break;
 			 
 			 case 'i':
 			 	if(CountInteger <= USERLOG_FORMAT_INDEX) {
-					brsitoa(Arguments->i[CountInteger++], (uint32_t)Number);
+					brsitoa(Values->i[CountInteger++], (uint32_t)Number);
 					Length = strlen(strncat(Destination, Number, BytesRemaining));
 			 	}
 			 	break;
 			 
 			 case 's':
 			 	if(CountString <= USERLOG_FORMAT_INDEX)
-					Length = strlen(strncat(Destination, Arguments->s[CountString++], BytesRemaining));
+					Length = strlen(strncat(Destination, Values->s[CountString++], BytesRemaining));
 			 	break;
 			 
 			 case '%':

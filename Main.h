@@ -35,7 +35,7 @@ extern "C"
 
 /* Prototypes */
 void StringCopy(char *Destination, uint32_t Size, char *Source);
-void StringFormat(char *Sestination, uint32_t Size, char *Source, UserLogFormatType *Arguments);
+void StringFormat(char *Sestination, uint32_t Size, char *Source, UserLogFormatType *Values);
 
 /* Global variables */
 extern UserLogSeverityEnum SeverityLevel;
