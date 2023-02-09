@@ -1,8 +1,8 @@
 # UserLog [![Made For B&R](https://github.com/hilch/BandR-badges/blob/main/Made-For-BrAutomation.svg)](https://www.br-automation.com)
 
-UserLog is an Automation Studio library with functions for writing to logbooks synchronously.  UserLog's simple one-line functions provide a necessary tool for software development and debug.
+UserLog is an [Automation Studio](https://www.br-automation.com/en-us/products/software/automation-software/automation-studio/) library with functions for writing to logbooks synchronously.  UserLog's simple one-line functions provide a necessary tool for software development and debug.
 
-**NOTE:** This is not an official library. UserLog is provided as is under the GNU GPL v3.0 license agreement.  
+**NOTE:** This is not an official library. UserLog is provided as is under the GNU GPL v3.0 license agreement.  Support for this library is provided through the [GitHub Issues List](https://github.com/tmatijevich/UserLog/issues).
 
 ## Installation
 
