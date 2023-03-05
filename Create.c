@@ -6,7 +6,7 @@
 
 #include "Main.h"
 
-/* Create custom logbook in INIT */
+/* Create a custom logbook in an Init subroutine */
 int32_t UserLogCreate(char *Name, uint32_t Size) {
 	
 	/* Local variables */

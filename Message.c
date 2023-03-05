@@ -133,7 +133,7 @@ static ArEventLogRecordIDType WriteMessage(char *Logbook, int32_t Severity, uint
 	return Result;
 }
 
-/* Write to the User logbook */
+/* Write to the User logbook synchronously */
 ArEventLogRecordIDType UserLogBasic(int32_t Severity, uint16_t Code, char *Message) {
 	return WriteMessage(USERLOG_USER_LOGBOOK, Severity, USERLOG_FACILITY, Code, 0, NULL, Message, NULL, false);
 }
@@ -149,7 +149,7 @@ ArEventLogRecordIDType UserLogCustom(char *Logbook, int32_t Severity, uint16_t F
 	return WriteMessage(Logbook, Severity, Facility, Code, Origin, Object, Message, Values, false);
 }
 
-/* Write to logbook with binary-encoded data for event log texts */
+/* Write to any user logbook through binary-encoded data and event texts */
 ArEventLogRecordIDType UserLogEventText(char *Logbook, int32_t Event, ArEventLogRecordIDType Origin, 
 										char *Object, char *Message, UserLogFormatType *Values) {
 	return WriteMessage(Logbook, UserLogGetSeverity(Event), UserLogGetFacility(Event), UserLogGetCode(Event), Origin, Object, Message, Values, true);

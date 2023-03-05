@@ -34,15 +34,15 @@ UserLog is an [Automation Studio](https://www.br-automation.com/en-us/products/s
 
 Function | Description
 ---|---
-[UserLogBasic](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L2) | Write to the User logbook
+[UserLogBasic](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L2) | Write to the User logbook synchronously
 [UserLogAdvanced](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L10) | Write to the User logbook with runtime data
 [UserLogCustom](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L19) | Write to any user logbook synchronously
-[UserLogEventText](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L32) | Write to logbook with binary-encoded data for event log texts
-[UserLogCreate](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L43) | Create custom logbook in INIT
-[UserLogSetSeverityLevel](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L50) | Suppress messages below level
-[UserLogGetSeverity](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L56) | Get ArEventLog severity from event ID
-[UserLogGetFacility](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L62) | Get ArEventLog facility from event ID
-[UserLogGetCode](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L68) | Get ArEventLog code from event ID
+[UserLogEventText](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L32) | Write to any user logbook through binary-encoded data and event texts
+[UserLogCreate](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L43) | Create a custom logbook in an Init subroutine
+[UserLogSetSeverityLevel](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L50) | Suppress messages below the input level
+[UserLogGetSeverity](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L56) | Get ArEventLog severity from an event ID
+[UserLogGetFacility](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L62) | Get ArEventLog facility from an event ID
+[UserLogGetCode](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L68) | Get ArEventLog code from an event ID
 
 ## Clone
 
