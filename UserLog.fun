@@ -49,7 +49,7 @@ END_FUNCTION
 
 FUNCTION UserLogSetSeverityLevel : DINT (*Suppress messages below the input level*)
 	VAR_INPUT
-		Level : DINT;
+		Level : DINT; (*Severity level threshold*)
 	END_VAR
 END_FUNCTION
 

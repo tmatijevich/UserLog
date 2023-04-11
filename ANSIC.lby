@@ -6,6 +6,8 @@
     <File Description="Data types">UserLog.typ</File>
     <File Description="Constants">UserLog.var</File>
     <File Description="Localized texts">UserLog.tmx</File>
+    <File Description="Library information">README.md</File>
+    <File Description="Library license">LICENSE</File>
     <File Description="Text table">Text.csv</File>
     <File Description="Convert csv to tmx">SetText.py</File>
     <File Description="Common header">Main.h</File>
@@ -15,7 +17,7 @@
     <File Description="Event ID and severity level">Event.c</File>
   </Files>
   <Dependencies>
-    <Dependency ObjectName="ArEventLog" />
+    <Dependency ObjectName="ArEventLog" FromVersion="4.21.0" />
     <Dependency ObjectName="AsBrStr" />
     <Dependency ObjectName="sys_lib" />
   </Dependencies>

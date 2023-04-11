@@ -8,7 +8,7 @@
 
 /* Common private function to call ArEventLogWrite synchronously */
 static ArEventLogRecordIDType WriteMessage(char *Logbook, int32_t Severity, uint16_t Facility, uint16_t Code, 
-											ArEventLogRecordIDType Origin, char *Object, char *Message, UserLogFormatType *Values, uint8_t Coded) {
+	ArEventLogRecordIDType Origin, char *Object, char *Message, UserLogFormatType *Values, uint8_t Coded) {
 	
 	/* Local variables */
 	/* Make function block instances static to avoid memset initialization */
@@ -62,7 +62,7 @@ static ArEventLogRecordIDType WriteMessage(char *Logbook, int32_t Severity, uint
 		LocalArguments.i[1] = Code;
 		StringCopy(LocalArguments.s[1], USERLOG_MESSAGE_PREVIEW_LENGTH + 1, Message);
 		UserLogCustom(USERLOG_USER_LOGBOOK, USERLOG_SEVERITY_ERROR, USERLOG_ERROR_FACILITY, USERLOG_CODE_IDENT, 0, NULL, 
-						"UserLog: ArEventLog error %i. (Logbook \"%s\", code %i, message \"%s\")", &LocalArguments);
+			"UserLog: ArEventLog error %i. (Logbook \"%s\", code %i, message \"%s\")", &LocalArguments);
 		
 		return 0;
 	}
@@ -124,7 +124,7 @@ static ArEventLogRecordIDType WriteMessage(char *Logbook, int32_t Severity, uint
 		LocalArguments.i[1] = Code;
 		StringCopy(LocalArguments.s[1], USERLOG_MESSAGE_PREVIEW_LENGTH + 1, Message);
 		UserLogCustom(USERLOG_USER_LOGBOOK, USERLOG_SEVERITY_ERROR, USERLOG_ERROR_FACILITY, USERLOG_CODE_WRITE, 0, NULL, 
-						"UserLog: ArEventLog error %i. (Logbook \"%s\", code %i, message \"%s\")", &LocalArguments);
+			"UserLog: ArEventLog error %i. (Logbook \"%s\", code %i, message \"%s\")", &LocalArguments);
 		
 		return 0;
 	}
@@ -145,12 +145,12 @@ ArEventLogRecordIDType UserLogAdvanced(int32_t Severity, uint16_t Code, char *Me
 
 /* Write to any user logbook synchronously */
 ArEventLogRecordIDType UserLogCustom(char *Logbook, int32_t Severity, uint16_t Facility, uint16_t Code, 
-										ArEventLogRecordIDType Origin, char *Object, char *Message, UserLogFormatType *Values) {
+	ArEventLogRecordIDType Origin, char *Object, char *Message, UserLogFormatType *Values) {
 	return WriteMessage(Logbook, Severity, Facility, Code, Origin, Object, Message, Values, false);
 }
 
 /* Write to any user logbook through binary-encoded data and event texts */
 ArEventLogRecordIDType UserLogEventText(char *Logbook, int32_t Event, ArEventLogRecordIDType Origin, 
-										char *Object, char *Message, UserLogFormatType *Values) {
+	char *Object, char *Message, UserLogFormatType *Values) {
 	return WriteMessage(Logbook, UserLogGetSeverity(Event), UserLogGetFacility(Event), UserLogGetCode(Event), Origin, Object, Message, Values, true);
 }

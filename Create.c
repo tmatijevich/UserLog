@@ -32,7 +32,7 @@ int32_t UserLogCreate(char *Name, uint32_t Size) {
 		Arguments.i[0] = Status;
 		StringCopy(Arguments.s[0], USERLOG_LOGBOOK_LENGTH + 1, Name);
 		UserLogCustom(USERLOG_USER_LOGBOOK, USERLOG_SEVERITY_ERROR, USERLOG_ERROR_FACILITY, USERLOG_CODE_CREATE, 0, NULL, 
-						"UserLog: ArEventLog error %i. Could not create logbook %s.", &Arguments);
+			"UserLog: ArEventLog error %i. Could not create logbook %s.", &Arguments);
 	}
 	
 	return Status;
