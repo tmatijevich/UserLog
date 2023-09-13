@@ -47,7 +47,7 @@ FUNCTION UserLogCreate : DINT (*Create a custom logbook in an Init subroutine*)
 	END_VAR
 END_FUNCTION
 
-FUNCTION UserLogSetSeverityLevel : DINT (*Suppress messages below the input level*)
+FUNCTION UserLogSetSeverityLevel : DINT (*Suppress messages below the input level and return previous level*)
 	VAR_INPUT
 		Level : DINT; (*Severity level threshold*)
 	END_VAR
