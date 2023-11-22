@@ -1,13 +1,13 @@
-# UserLog [![Made For B&R](https://github.com/hilch/BandR-badges/blob/main/Made-For-BrAutomation.svg)](https://www.br-automation.com)
+# UserLog [![Made for B&R](https://raw.githubusercontent.com/hilch/BandR-badges/dfd5e264d7d2dd369fd37449605673f779db437d/Made-For-BrAutomation.svg)](https://www.br-automation.com)
 
-UserLog is an [Automation Studio](https://www.br-automation.com/en-us/products/software/automation-software/automation-studio/) library with functions for writing to logbooks synchronously.  UserLog's simple one-line functions provide a necessary tool for software development and debug.
+UserLog is an [Automation Studio](https://www.br-automation.com/en-us/products/software/automation-software/automation-studio/) library with functions for writing to user logbooks synchronously.  UserLog's simple one-line functions provide a necessary tool for software development and debug.
 
 **NOTE:** This is not an official library.  UserLog is provided as-is under the [MIT License](https://mit-license.org/) agreement.  Support for this library is provided through the [GitHub Issues List](https://github.com/tmatijevich/UserLog/issues).
 
 ## Installation
 
-1. [Download](https://github.com/tmatijevich/UserLog/releases/latest/download/UserLog.zip) and extract the archive
-2. Import the UserLog package to your Automation Studio project's Logical View using *Existing Library* from the toolbox
+1. [Download](https://github.com/tmatijevich/UserLog/releases/latest/download/UserLog.zip) and extract the archive.
+2. Import the UserLog package to your Automation Studio project's Logical View using **Existing Library** from the toolbox.
 
 ## Features
 
@@ -44,42 +44,54 @@ Function | Description
 [UserLogGetFacility](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L62) | Get ArEventLog facility from an event ID
 [UserLogGetCode](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L68) | Get ArEventLog code from an event ID
 
-## Clone
+## Build
 
 Clone to a reference location.
 
-```
+```bash
 git clone https://github.com/tmatijevich/UserLog.git
 ```
 
 Or, add as a submodule to your project's libraries.
 
-```
+```bash
 cd <project_root>
 git submodule add https://github.com/tmatijevich/UserLog.git <project_root>/Logical/Libraries/UserLog
 ```
 
-Then add as an existing library from the Automation Studio toolbox.
+Then add as an **Existing Library** in Logical View from the Automation Studio toolbox.
 
-## Build 
-
-Building a project with this package may result in warnings for additional files.  
+### Warnings
 
 ![Build warnings 2022-03-31_12 34 35](https://user-images.githubusercontent.com/33841634/161134955-5e71050f-bd1b-49cf-b07c-6408ae3c24ca.png)
 
-In Automation Studio 4.11+, it is possible to add specific filters to warnings 9232 and 9233.  Navigate to Configuration View, right-click the PLC object and select properties, chose the Build tab, and add the follow text to the "Objects ignored for build warnings 9232 and 9233" field. The filters are case sensitive.
+In Automation Studio 4.11+,
+
+1. Configuration View
+2. Right-click the CPU object and select Properties
+3. Navigate to the Build tab
+4. Add the following to the **Objects ignored for build warnings 9232 and 9233** field
 
 ```
 *README*;*LICENSE*;.git;.gitignore;.github
 ```
 
-Prior to Automation Studio 4.11, it is possible to suppress *all* build warnings regarding additional files by using `-W 9232 9233` in the "Additional build options" field.
+Prior to Automation Studio 4.11,
+
+1. Configuration View
+2. Right-click the CPU object and select Properties
+3. Navigate to the Build tab
+4. Add the following to the **Additional build options** field
+
+```
+-W 9232 9233
+```
 
 ## Dependencies
 
-- `ArEventLog`
-- `AsBrStr`
-- `sys_lib`
+- ArEventLog
+- AsBrStr
+- sys_lib
 
 ## Git
 
