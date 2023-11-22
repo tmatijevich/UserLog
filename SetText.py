@@ -1,3 +1,13 @@
+# File: SetText.py
+# Created: 2023-02-03
+#
+# Authors: 
+#   Tyler Matijevich
+#
+# License:
+#   This file SetText.py is part of the UserLog project 
+#   released under the MIT license agreement.
+
 import csv
 import ctypes
 import xml.etree.ElementTree as ET

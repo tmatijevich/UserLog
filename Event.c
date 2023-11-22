@@ -1,7 +1,13 @@
 /*******************************************************************************
- * File: UserLog\Severity.c
- * Author: Tyler Matijevich
+ * File: Severity.c
  * Created: 2021-10-06
+ * 
+ * Authors: 
+ *   Tyler Matijevich
+ * 
+ * License:
+ *   This file Severity.c is part of the UserLog project 
+ *   released under the MIT license agreement.
  ******************************************************************************/
 
 #include "Main.h"

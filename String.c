@@ -1,7 +1,13 @@
 /*******************************************************************************
- * File: UserLog\String.c
- * Author: Tyler Matijevich
+ * File: String.c
  * Created: 2022-08-30
+ * 
+ * Authors: 
+ *   Tyler Matijevich
+ * 
+ * License:
+ *   This file String.c is part of the UserLog project 
+ *   released under the MIT license agreement.
  ******************************************************************************/
 
 #include "Main.h"

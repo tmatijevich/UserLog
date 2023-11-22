@@ -1,7 +1,13 @@
 /*******************************************************************************
- * File: UserLog\Main.h
- * Author: Tyler Matijevich
+ * File: Main.h
  * Created: 2022-08-30
+ * 
+ * Authors: 
+ *   Tyler Matijevich
+ * 
+ * License:
+ *   This file Main.h is part of the UserLog project 
+ *   released under the MIT license agreement.
  ******************************************************************************/
 
 #ifndef USERLOG_MAIN_H

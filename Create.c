@@ -1,7 +1,13 @@
 /*******************************************************************************
- * File: UserLog\Create.c
- * Author: Tyler Matijevich
+ * File: Create.c
  * Created: 2021-12-05
+ * 
+ * Authors: 
+ *   Tyler Matijevich
+ * 
+ * License:
+ *   This file Create.c is part of the UserLog project 
+ *   released under the MIT license agreement.
  ******************************************************************************/
 
 #include "Main.h"

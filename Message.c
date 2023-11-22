@@ -1,7 +1,13 @@
 /*******************************************************************************
- * File: UserLog\Message.c
- * Author: Tyler Matijevich
+ * File: Message.c
  * Created: 2020-10-29
+ * 
+ * Authors: 
+ *   Tyler Matijevich
+ * 
+ * License:
+ *   This file Message.c is part of the UserLog project 
+ *   released under the MIT license agreement.
  ******************************************************************************/
 
 #include "Main.h"
