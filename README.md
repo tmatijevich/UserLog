@@ -2,7 +2,9 @@
 
 UserLog is an [Automation Studio](https://www.br-automation.com/en-us/products/software/automation-software/automation-studio/) library with functions for writing to user logbooks synchronously.  UserLog's simple one-line functions provide a necessary tool for software development and debug.
 
-**NOTE:** This is not an official library.  UserLog is provided as-is under the [MIT License](https://mit-license.org/) agreement.  Support for this library is provided through the [GitHub Issues List](https://github.com/tmatijevich/UserLog/issues).
+![2023-11-17_15-06-35](https://github.com/tmatijevich/UserLog/assets/33841634/60dd7762-9ecd-48d2-9329-1b7271fbe130)
+
+**NOTE:** This is not an official library and is supported through the community.  UserLog is provided as-is under the [MIT License](https://mit-license.org/) agreement.  Source code, documentation, and issues are managed through [GitHub](https://github.com/tmatijevich/UserLog).
 
 ## Installation
 
