@@ -47,7 +47,7 @@ static ArEventLogRecordIDType WriteMessage(char *Logbook, int32_t Severity, uint
 		return 0;
 	
 	/* Call ArEventLogGetIdent and store results */
-	StringCopy(GetLogbookIdent.Name, sizeof(GetLogbookIdent.Name), Logbook);
+	IecStringCopy(GetLogbookIdent.Name, sizeof(GetLogbookIdent.Name), Logbook);
 	GetLogbookIdent.Execute = true;
 	ArEventLogGetIdent(&GetLogbookIdent);
 	Status = GetLogbookIdent.StatusID;
@@ -64,9 +64,9 @@ static ArEventLogRecordIDType WriteMessage(char *Logbook, int32_t Severity, uint
 		
 		/* Log error */
 		LocalArguments.i[0] = Status;
-		StringCopy(LocalArguments.s[0], USERLOG_LOGBOOK_LENGTH + 1, Logbook);
+		IecStringCopy(LocalArguments.s[0], USERLOG_LOGBOOK_LENGTH + 1, Logbook);
 		LocalArguments.i[1] = Code;
-		StringCopy(LocalArguments.s[1], USERLOG_MESSAGE_PREVIEW_LENGTH + 1, Message);
+		IecStringCopy(LocalArguments.s[1], USERLOG_MESSAGE_PREVIEW_LENGTH + 1, Message);
 		UserLogCustom(USERLOG_USER_LOGBOOK, USERLOG_SEVERITY_ERROR, USERLOG_ERROR_FACILITY, USERLOG_CODE_IDENT, 0, NULL, 
 			"UserLog: ArEventLog error %i. (Logbook \"%s\", code %i, message \"%s\")", &LocalArguments);
 		
@@ -84,9 +84,9 @@ static ArEventLogRecordIDType WriteMessage(char *Logbook, int32_t Severity, uint
 	
 	/* Format and set message */
 	if(Message == NULL)
-		StringCopy(FormattedMessage, sizeof(FormattedMessage), "UserLog: No message provided");
+		IecStringCopy(FormattedMessage, sizeof(FormattedMessage), "UserLog: No message provided");
 	else
-		StringFormat(FormattedMessage, sizeof(FormattedMessage), Message, Values);
+		IecStringFormat(FormattedMessage, sizeof(FormattedMessage), Message, Values);
 	
 	if(Coded) {
 		ArEventLogAddDataInit((uint32_t)CodedData, sizeof(CodedData), arEVENTLOG_ADDFORMAT_CODED);
@@ -107,7 +107,7 @@ static ArEventLogRecordIDType WriteMessage(char *Logbook, int32_t Severity, uint
 	else if(*Object == '\0')
 		ST_name(0, WriteToLogbook.ObjectID, 0);
 	else
-		StringCopy(WriteToLogbook.ObjectID, sizeof(WriteToLogbook.ObjectID), Object);
+		IecStringCopy(WriteToLogbook.ObjectID, sizeof(WriteToLogbook.ObjectID), Object);
 	
 	/* Write */
 	WriteToLogbook.Execute = true;
@@ -126,9 +126,9 @@ static ArEventLogRecordIDType WriteMessage(char *Logbook, int32_t Severity, uint
 		
 		/* Log error */
 		LocalArguments.i[0] = Status;
-		StringCopy(LocalArguments.s[0], USERLOG_LOGBOOK_LENGTH + 1, Logbook);
+		IecStringCopy(LocalArguments.s[0], USERLOG_LOGBOOK_LENGTH + 1, Logbook);
 		LocalArguments.i[1] = Code;
-		StringCopy(LocalArguments.s[1], USERLOG_MESSAGE_PREVIEW_LENGTH + 1, Message);
+		IecStringCopy(LocalArguments.s[1], USERLOG_MESSAGE_PREVIEW_LENGTH + 1, Message);
 		UserLogCustom(USERLOG_USER_LOGBOOK, USERLOG_SEVERITY_ERROR, USERLOG_ERROR_FACILITY, USERLOG_CODE_WRITE, 0, NULL, 
 			"UserLog: ArEventLog error %i. (Logbook \"%s\", code %i, message \"%s\")", &LocalArguments);
 		

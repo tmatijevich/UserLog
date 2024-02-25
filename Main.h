@@ -20,6 +20,7 @@ extern "C"
 
 /* Headers */
 #include <UserLog.h>
+#include "IecString/submodule.h"
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
@@ -37,10 +38,6 @@ extern "C"
 #define USERLOG_CODE_WRITE 10010U
 #define USERLOG_CODE_CREATE 10020U
 #define USERLOG_USER_LOGBOOK "$arlogusr"
-
-/* Prototypes */
-void StringCopy(char *Destination, uint32_t Size, char *Source);
-void StringFormat(char *Sestination, uint32_t Size, char *Source, UserLogFormatType *Values);
 
 /* Global variables */
 extern UserLogSeverityEnum SeverityLevel;

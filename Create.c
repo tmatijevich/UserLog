@@ -21,7 +21,7 @@ int32_t UserLogCreate(char *Name, uint32_t Size) {
 	UserLogFormatType Arguments;
 	
 	/* Create */
-	StringCopy(CreateLogbook.Name, MIN(USERLOG_LOGBOOK_LENGTH + 1, sizeof(CreateLogbook.Name)), Name);
+	IecStringCopy(CreateLogbook.Name, MIN(USERLOG_LOGBOOK_LENGTH + 1, sizeof(CreateLogbook.Name)), Name);
 	CreateLogbook.Size = Size;
 	CreateLogbook.Persistence = arEVENTLOG_PERSISTENCE_PERSIST;
 	CreateLogbook.Execute = true;
@@ -36,7 +36,7 @@ int32_t UserLogCreate(char *Name, uint32_t Size) {
 	
 	if(Status && Status != arEVENTLOG_ERR_LOGBOOK_EXISTS) {
 		Arguments.i[0] = Status;
-		StringCopy(Arguments.s[0], USERLOG_LOGBOOK_LENGTH + 1, Name);
+		IecStringCopy(Arguments.s[0], USERLOG_LOGBOOK_LENGTH + 1, Name);
 		UserLogCustom(USERLOG_USER_LOGBOOK, USERLOG_SEVERITY_ERROR, USERLOG_ERROR_FACILITY, USERLOG_CODE_CREATE, 0, NULL, 
 			"UserLog: ArEventLog error %i. Could not create logbook %s.", &Arguments);
 	}

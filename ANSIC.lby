@@ -1,24 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <?AutomationStudio FileVersion="4.9"?>
 <Library Version="2.00.2" SubType="ANSIC" Description="Write to logbooks" xmlns="http://br-automation.co.at/AS/Library">
-  <Files>
-    <File Description="Function declarations">UserLog.fun</File>
-    <File Description="Data types">UserLog.typ</File>
-    <File Description="Constants">UserLog.var</File>
-    <File Description="Localized texts">UserLog.tmx</File>
-    <File Description="Library information">README.md</File>
-    <File Description="Library license">LICENSE</File>
-    <File Description="Text table">Text.csv</File>
-    <File Description="Convert csv to tmx">SetText.py</File>
-    <File Description="Common header">Main.h</File>
-    <File Description="Log message">Message.c</File>
-    <File Description="String handling">String.c</File>
-    <File Description="Custom logbook">Create.c</File>
-    <File Description="Event ID and severity level">Event.c</File>
-  </Files>
+  <Objects>
+    <Object Type="File" Description="Function declarations">UserLog.fun</Object>
+    <Object Type="File" Description="Data types">UserLog.typ</Object>
+    <Object Type="File" Description="Constants">UserLog.var</Object>
+    <Object Type="File" Description="Localized texts">UserLog.tmx</Object>
+    <Object Type="File" Description="Library information">README.md</Object>
+    <Object Type="File" Description="Library license">LICENSE</Object>
+    <Object Type="File" Description="Text table">Text.csv</Object>
+    <Object Type="File" Description="Convert csv to tmx">SetText.py</Object>
+    <Object Type="File" Description="Common header">Main.h</Object>
+    <Object Type="File" Description="Log message">Message.c</Object>
+    <Object Type="File" Description="Custom logbook">Create.c</Object>
+    <Object Type="File" Description="Event ID and severity level">Event.c</Object>
+    <Object Type="Package" Description="Library submodule">IecString</Object>
+  </Objects>
   <Dependencies>
     <Dependency ObjectName="ArEventLog" FromVersion="4.21.0" />
-    <Dependency ObjectName="AsBrStr" />
     <Dependency ObjectName="sys_lib" />
+    <Dependency ObjectName="astime" />
   </Dependencies>
 </Library>
