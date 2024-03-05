@@ -77,9 +77,7 @@ ArEventLogRecordIDType UserLogCustom(char *Logbook, int32_t Severity,
     write.AddData = (uint32_t)data;
 
     /* Object name */
-    if (!Object)
-        ST_name(0, write.ObjectID, 0);
-    else if (!*Object)
+    if (!Object || !*Object)
         ST_name(0, write.ObjectID, 0);
     else
         IecStringCopy(write.ObjectID, sizeof(write.ObjectID), Object);
@@ -93,7 +91,7 @@ ArEventLogRecordIDType UserLogCustom(char *Logbook, int32_t Severity,
     {
         /* Block infinite recursion */
         if (error) return 0;
-        
+
         /* Log error */
         UserLogFormatType log_values = {0};
         log_values.i[0] = write.StatusID;
