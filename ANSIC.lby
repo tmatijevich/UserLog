@@ -10,7 +10,7 @@
     <Object Type="File" Description="Library license">LICENSE</Object>
     <Object Type="File" Description="Text table">Text.csv</Object>
     <Object Type="File" Description="Convert csv to tmx">SetText.py</Object>
-    <Object Type="File" Description="Common header">main2.h</Object>
+    <Object Type="File" Description="Common header">main.h</Object>
     <Object Type="File" Description="Log message">custom.c</Object>
     <Object Type="File" Description="Log message with encoded data">coded.c</Object>
     <Object Type="File" Description="Set severity level">severity.c</Object>
