@@ -31,8 +31,8 @@ int32_t UserLogCreate(char *Name, uint32_t Size)
         UserLogFormatType log_values = {0};
         log_values.i[0] = create.StatusID;
         IecStringCopy(log_values.s[0], sizeof(log_values.s[0]), Name);
-        UserLogCustom(USERLOG_USER_LOGBOOK, USERLOG_SEVERITY_ERROR, 
-                      USERLOG_ERROR_FACILITY, USERLOG_CODE_CREATE, 0, NULL, 
+        UserLogCustom(LOGBOOK_USER_NAME, USERLOG_SEVERITY_ERROR, 
+                      FACILITY_ERROR, CODE_ERROR_CREATE, 0, NULL, 
                       "ArEventLog error %i attempting to create logbook "
                       "\"%s\" with UserLog", &log_values);
     }

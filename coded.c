@@ -39,8 +39,8 @@ ArEventLogRecordIDType UserLogEventText(char *Logbook, int32_t Event,
         log_values.i[0] = get_ident.StatusID;
         IecStringCopy(log_values.s[0], sizeof(log_values.s[0]), Logbook);
         log_values.i[1] = Event;
-        UserLogCustom(USERLOG_USER_LOGBOOK, USERLOG_SEVERITY_ERROR,
-                      USERLOG_ERROR_FACILITY, USERLOG_CODE_WRITE, 0, NULL,
+        UserLogCustom(LOGBOOK_USER_NAME, USERLOG_SEVERITY_ERROR,
+                      FACILITY_ERROR, CODE_ERROR_IDENT, 0, NULL,
                       "ArEventLog error %i writing to logbook \"%s\" "
                       "with event ID %i using UserLog", &log_values);
         error = true;
@@ -55,8 +55,8 @@ ArEventLogRecordIDType UserLogEventText(char *Logbook, int32_t Event,
     write.EventID = Event;
 
     /* Additional coded data */
-    char data[USERLOG_CODED_DATA_LENGTH] = {0};
-    char string_data[USERLOG_MESSAGE_LENGTH + 1] = {0};
+    char data[DATA_CODED_SIZE] = {0};
+    char string_data[DATA_MESSAGE_SIZE] = {0};
     ArEventLogAddDataInit((uint32_t)data, sizeof(data), 
                           arEVENTLOG_ADDFORMAT_CODED);
     IecStringFormat(string_data, sizeof(string_data), Message, Values);
@@ -87,8 +87,8 @@ ArEventLogRecordIDType UserLogEventText(char *Logbook, int32_t Event,
         log_values.i[0] = write.StatusID;
         IecStringCopy(log_values.s[0], sizeof(log_values.s[0]), Logbook);
         log_values.i[1] = Event;
-        UserLogCustom(USERLOG_USER_LOGBOOK, USERLOG_SEVERITY_ERROR,
-                      USERLOG_ERROR_FACILITY, USERLOG_CODE_WRITE, 0, NULL,
+        UserLogCustom(LOGBOOK_USER_NAME, USERLOG_SEVERITY_ERROR,
+                      FACILITY_ERROR, CODE_ERROR_WRITE, 0, NULL,
                       "ArEventLog error %i writing to logbook \"%s\" "
                       "with event ID %i using UserLog", &log_values);
         error = true;

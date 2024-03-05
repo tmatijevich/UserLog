@@ -1,12 +1,12 @@
 /*******************************************************************************
- * File: Main.h
+ * File: main.h
  * Created: 2022-08-30
  * 
  * Authors: 
  *   Tyler Matijevich
  * 
  * License:
- *   This file Main.h is part of the UserLog project 
+ *   This file main.h is part of the UserLog project 
  *   released under the MIT license agreement.
  ******************************************************************************/
 
@@ -30,14 +30,13 @@ extern "C"
 #define MIN(x,y) (((x) < (y)) ? (x) : (y))
 
 /* Constants */
-#define USERLOG_LOGBOOK_LENGTH MIN(10U, USERLOG_FORMAT_LENGTH)
-#define USERLOG_MESSAGE_PREVIEW_LENGTH MIN(20U, USERLOG_FORMAT_LENGTH)
-#define USERLOG_CODED_DATA_LENGTH (40U + USERLOG_MESSAGE_LENGTH + 2U)
-#define USERLOG_ERROR_FACILITY 330U
-#define USERLOG_CODE_IDENT 10000U
-#define USERLOG_CODE_WRITE 10010U
-#define USERLOG_CODE_CREATE 10020U
-#define USERLOG_USER_LOGBOOK "$arlogusr"
+#define DATA_MESSAGE_SIZE (USERLOG_MESSAGE_LENGTH + 1U)
+#define DATA_CODED_SIZE (40U + USERLOG_MESSAGE_LENGTH + 2U)
+#define FACILITY_ERROR 330U
+#define CODE_ERROR_IDENT 10000U
+#define CODE_ERROR_WRITE 10010U
+#define CODE_ERROR_CREATE 10020U
+#define LOGBOOK_USER_NAME "$arlogusr"
 
 /* Global variables */
 extern UserLogSeverityEnum severity_level;
@@ -47,4 +46,4 @@ extern const uint8_t severity_map[];
 };
 #endif
 
-#endif
+#endif /* USERLOG_MAIN_H */

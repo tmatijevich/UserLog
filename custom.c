@@ -43,8 +43,8 @@ ArEventLogRecordIDType UserLogCustom(char *Logbook, int32_t Severity,
         log_values.i[0] = get_ident.StatusID;
         IecStringCopy(log_values.s[0], sizeof(log_values.s[0]), Logbook);
         log_values.i[1] = Code;
-        UserLogCustom(USERLOG_USER_LOGBOOK, USERLOG_SEVERITY_ERROR,
-                      USERLOG_ERROR_FACILITY, USERLOG_CODE_WRITE, 0, NULL,
+        UserLogCustom(LOGBOOK_USER_NAME, USERLOG_SEVERITY_ERROR,
+                      FACILITY_ERROR, CODE_ERROR_IDENT, 0, NULL,
                       "ArEventLog error %i writing to logbook \"%s\" "
                       "with code %i using UserLog", &log_values);
         error = true;
@@ -63,7 +63,7 @@ ArEventLogRecordIDType UserLogCustom(char *Logbook, int32_t Severity,
     write.OriginRecordID = Origin;
 
     /* Additional string data */
-    char data[USERLOG_MESSAGE_LENGTH + 1] = {0};
+    char data[DATA_MESSAGE_SIZE] = {0};
     IecStringFormat(data, sizeof(data), Message, Values);
     write.AddDataSize = strlen(data) + 1;
     write.AddDataFormat = arEVENTLOG_ADDFORMAT_TEXT;
@@ -90,8 +90,8 @@ ArEventLogRecordIDType UserLogCustom(char *Logbook, int32_t Severity,
         log_values.i[0] = write.StatusID;
         IecStringCopy(log_values.s[0], sizeof(log_values.s[0]), Logbook);
         log_values.i[1] = Code;
-        UserLogCustom(USERLOG_USER_LOGBOOK, USERLOG_SEVERITY_ERROR,
-                      USERLOG_ERROR_FACILITY, USERLOG_CODE_WRITE, 0, NULL,
+        UserLogCustom(LOGBOOK_USER_NAME, USERLOG_SEVERITY_ERROR,
+                      FACILITY_ERROR, CODE_ERROR_WRITE, 0, NULL,
                       "ArEventLog error %i writing to logbook \"%s\" "
                       "with code %i using UserLog", &log_values);
         error = true;
@@ -107,14 +107,14 @@ ArEventLogRecordIDType UserLogCustom(char *Logbook, int32_t Severity,
 ArEventLogRecordIDType UserLogBasic(int32_t Severity, uint16_t Code, 
                                     char *Message)
 {
-    return UserLogCustom(USERLOG_USER_LOGBOOK, Severity, USERLOG_FACILITY, 
-                         Code, 0, NULL, Message, NULL);
+    return UserLogCustom(LOGBOOK_USER_NAME, Severity, USERLOG_FACILITY, Code, 
+                         0, NULL, Message, NULL);
 }
 
 /* Write to the User logbook with runtime data */
 ArEventLogRecordIDType UserLogAdvanced(int32_t Severity, uint16_t Code, char 
                                        *Message, UserLogFormatType *Values)
 {
-    return UserLogCustom(USERLOG_USER_LOGBOOK, Severity, USERLOG_FACILITY, 
-                         Code, 0, NULL, Message, Values);
+    return UserLogCustom(LOGBOOK_USER_NAME, Severity, USERLOG_FACILITY, Code, 
+                         0, NULL, Message, Values);
 }
