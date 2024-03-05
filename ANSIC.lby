@@ -13,6 +13,7 @@
     <Object Type="File" Description="Common header">Main.h</Object>
     <Object Type="File" Description="Log message">custom.c</Object>
     <Object Type="File" Description="Log message with encoded data">coded.c</Object>
+    <Object Type="File" Description="Set severity">severity.c</Object>
     <Object Type="File" Description="Custom logbook">Create.c</Object>
     <Object Type="File" Description="Event ID and severity level">Event.c</Object>
     <Object Type="File" Description="String format type declaration">format.h</Object>

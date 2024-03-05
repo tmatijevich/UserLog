@@ -12,25 +12,6 @@
 
 #include "Main.h"
 
-/* Ignore DEBUG messages by default */
-UserLogSeverityEnum SeverityLevel = USERLOG_SEVERITY_SUCCESS;
-
-/* Suppress messages below the input level and return previous level */
-int32_t UserLogSetSeverityLevel(int32_t Level) {
-	
-	UserLogSeverityEnum PreviousSeverityLevel = SeverityLevel;
-
-	/* Saturate */
-	if (Level < USERLOG_SEVERITY_DEBUG)
-		SeverityLevel = USERLOG_SEVERITY_DEBUG;
-	else if (Level > USERLOG_SEVERITY_CRITICAL)
-		SeverityLevel = USERLOG_SEVERITY_CRITICAL;
-	else
-		SeverityLevel = Level;
-	
-	return PreviousSeverityLevel;
-}
-
 /* Get ArEventLog severity from an event ID */
 uint8_t UserLogGetSeverity(int32_t Event) {
 	/* Return bit 31-30. See 32-bit event ID in ArEventLog help */

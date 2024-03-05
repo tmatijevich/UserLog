@@ -40,7 +40,8 @@ extern "C"
 #define USERLOG_USER_LOGBOOK "$arlogusr"
 
 /* Global variables */
-extern UserLogSeverityEnum SeverityLevel;
+extern UserLogSeverityEnum severity_level;
+extern const uint8_t severity_map[];
 
 #ifdef __cplusplus
 };

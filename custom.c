@@ -11,13 +11,6 @@
  ******************************************************************************/
 
 #include "Main.h"
-const uint8_t severity_map[] = {
-    arEVENTLOG_SEVERITY_INFO,
-    arEVENTLOG_SEVERITY_SUCCESS,
-    arEVENTLOG_SEVERITY_INFO,
-    arEVENTLOG_SEVERITY_WARNING,
-    arEVENTLOG_SEVERITY_ERROR,
-    arEVENTLOG_SEVERITY_ERROR};
 
 /* Write to any user logbook synchronously */
 ArEventLogRecordIDType UserLogCustom(char *Logbook, int32_t Severity, 
@@ -30,7 +23,7 @@ ArEventLogRecordIDType UserLogCustom(char *Logbook, int32_t Severity,
                        USERLOG_SEVERITY_CRITICAL);
 
     /* Suppress message */
-    if (Severity < SeverityLevel) return 0;
+    if (Severity < severity_level) return 0;
 
     /* Get logbook identifier */
     ArEventLogGetIdent_typ get_ident = {0};

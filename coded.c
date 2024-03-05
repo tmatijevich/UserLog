@@ -19,7 +19,7 @@ ArEventLogRecordIDType UserLogEventText(char *Logbook, int32_t Event,
                                         UserLogFormatType *Values)
 {
     /* Suppress message */
-    if (UserLogGetSeverity(Event) < SeverityLevel) return 0;
+    if (UserLogGetSeverity(Event) < severity_level) return 0;
 
     /* Get logbook identifier */
     ArEventLogGetIdent_typ get_ident = {0};
