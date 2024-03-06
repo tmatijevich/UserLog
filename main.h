@@ -20,7 +20,7 @@ extern "C"
 
 /* Headers */
 #include <UserLog.h>
-#include "IecString/submodule.h"
+#include "IecString/main.h"
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
