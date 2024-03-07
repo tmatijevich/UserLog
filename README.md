@@ -1,38 +1,24 @@
-# UserLog [![Made for B&R](https://raw.githubusercontent.com/hilch/BandR-badges/dfd5e264d7d2dd369fd37449605673f779db437d/Made-For-BrAutomation.svg)](https://www.br-automation.com)
+# UserLog
 
-UserLog is an [Automation Studio](https://www.br-automation.com/en-us/products/software/automation-software/automation-studio/) library with functions for writing to user logbooks synchronously.  UserLog's simple one-line functions provide a necessary tool for software development and debug.
+[![Made for B&R](https://raw.githubusercontent.com/hilch/BandR-badges/dfd5e264d7d2dd369fd37449605673f779db437d/Made-For-BrAutomation.svg)](https://www.br-automation.com)
+![GitHub License](https://img.shields.io/github/license/tmatijevich/UserLog)
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/tmatijevich/UserLog/total)
+[![GitHub issues](https://img.shields.io/github/issues-raw/tmatijevich/UserLog)](https://github.com/tmatijevich/UserLog/issues)
 
-![2023-11-17_15-06-35](https://github.com/tmatijevich/UserLog/assets/33841634/60dd7762-9ecd-48d2-9329-1b7271fbe130)
+UserLog is an [Automation Studio](https://www.br-automation.com/en-us/products/software/automation-software/automation-studio/) library for writing to user logbooks synchronously.  
+UserLog's simple one-line functions provide an essential **diagnostic tool** for software development.
 
 **NOTE:** This is not an official library and is supported through the community.  UserLog is provided as-is under the [MIT License](https://mit-license.org/) agreement.  Source code, documentation, and issues are managed through [GitHub](https://github.com/tmatijevich/UserLog).
 
-## Installation
+![2023-11-17_15-06-35](https://github.com/tmatijevich/UserLog/assets/33841634/60dd7762-9ecd-48d2-9329-1b7271fbe130)
 
-1. [Download](https://github.com/tmatijevich/UserLog/releases/latest/download/UserLog.zip) and extract the archive.
-2. Import the UserLog package to your Automation Studio project's Logical View using **Existing Library** from the toolbox.
+# Features
 
-## Features
-
-- Synchronously write to user logbooks
-	- Timestamp is recorded at the time of the function call
-- Parameters
-	- Event ID
-		- Severity: Debug, Success, Info, Warning, Error, Critical
-			- **NOTE:** Debug and Critical are extentions of ArEventLog severities
-		- Facility 0..4095
-		- Code 0..65535
-	- Origin record ID for hierarchy
-	- Object name
-	- Message
-	- Format message with runtime data (%b, %f, %i, %s)
-- Automatically read software object name
-- Set severity level to suppress messages
-- Error messages written to the User logbook
-- String truncation to protect overflow
-- Create custom logbooks
-- Compatible with text system
-
-## Functions
+- :repeat: Write to logbooks synchronously
+- :pencil2: Fully customizable with message, code, and runtime data parameters
+- :warning: Suppress messages with adjustable severity level
+- :orange_book: Create custom logbooks
+- :clipboard: Compatible with text system
 
 Function | Description
 ---|---
@@ -46,60 +32,42 @@ Function | Description
 [UserLogGetFacility](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L62) | Get ArEventLog facility from an event ID
 [UserLogGetCode](https://github.com/tmatijevich/UserLog/blob/main/UserLog.fun?ts=4#L68) | Get ArEventLog code from an event ID
 
-## Build
+# Install
 
-Clone to a reference location.
+1. [Download](https://github.com/tmatijevich/UserLog/releases/latest/download/UserLog.zip) the binaries and extract the archive
+2. Add to the project as **existing library** from the toolbox in logical view
 
-```bash
-git clone https://github.com/tmatijevich/UserLog.git
-```
+# Build
 
-Or, add as a submodule to your project's libraries.
+- Clone or download source files
+- Add to the project as **existing library**
+    - Option to add as **reference**
 
-```bash
-cd <project_root>
-git submodule add https://github.com/tmatijevich/UserLog.git <project_root>/Logical/Libraries/UserLog
-```
-
-Then add as an **Existing Library** in Logical View from the Automation Studio toolbox.
-
-### Warnings
-
-![Build warnings 2022-03-31_12 34 35](https://user-images.githubusercontent.com/33841634/161134955-5e71050f-bd1b-49cf-b07c-6408ae3c24ca.png)
-
-In Automation Studio 4.11+,
-
-1. Configuration View
-2. Right-click the CPU object and select Properties
-3. Navigate to the Build tab
-4. Add the following to the **Objects ignored for build warnings 9232 and 9233** field
+Alternatively, add as submodule to an existing project repository.
 
 ```
-*README*;*LICENSE*;.git;.gitignore;.github
+cd <repository>
+git submodule add https://github.com/tmatijevich/UserLog.git <project>/Logical/Libraries/UserLog
 ```
 
-Prior to Automation Studio 4.11,
+Then add to project as **existing library**.
 
-1. Configuration View
-2. Right-click the CPU object and select Properties
-3. Navigate to the Build tab
-4. Add the following to the **Additional build options** field
+# Unit Tests
 
-```
--W 9232 9233
-```
+See the [UserLogProject](https://github.com/tmatijevich/UserLogProject) for unit tests of all functions.
 
-## Dependencies
+# Documentation
 
-- ArEventLog
-- AsBrStr
-- sys_lib
+Once installed, the help file can be viewed using the `F1` function key.
 
-## Git
+See the [UserLogHelp](https://github.com/tmatijevich/UserLogHelp) for the documentation source code.
 
-- [Install and setup Git](https://tmatijevich.github.io/gfw-tutorial/)
-- [Setup gitignore for your repository](https://gist.github.com/tmatijevich/453436f1e6abc62a3d052d9b03f9db58)
+### Dependencies
 
-## Authors
+- [ArEventLog](https://help.br-automation.com/#/en/4/libraries%2Fareventlog%2Fareventlog.html)
+- [sys_lib](https://help.br-automation.com/#/en/4/libraries%2Fsys_lib%2Fsys_lib.html)
+- [astime](https://help.br-automation.com/#/en/4/libraries%2Fastime%2Fastime.html)
 
-- [tmatijevich](https://github.com/tmatijevich)
+### Authors
+
+- Tyler Matijevich ([@tmatijevich](https://github.com/tmatijevich))
