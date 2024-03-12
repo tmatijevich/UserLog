@@ -8,14 +8,14 @@
     <Object Type="File" Description="Localized texts">UserLog.tmx</Object>
     <Object Type="File" Description="Library information">README.md</Object>
     <Object Type="File" Description="Library license">LICENSE</Object>
-    <Object Type="File" Description="Text table">Text.csv</Object>
-    <Object Type="File" Description="Convert csv to tmx">SetText.py</Object>
-    <Object Type="File" Description="Common header">Main.h</Object>
-    <Object Type="File" Description="Log message">Message.c</Object>
-    <Object Type="File" Description="Custom logbook">Create.c</Object>
-    <Object Type="File" Description="Event ID and severity level">Event.c</Object>
-    <Object Type="File" Description="String format type declaration">format.h</Object>
-    <Object Type="Package" Description="Library submodule">IecString</Object>
+    <Object Type="File" Description="Common header">main.h</Object>
+    <Object Type="File" Description="Log message">custom.c</Object>
+    <Object Type="File" Description="Log message with encoded data">coded.c</Object>
+    <Object Type="File" Description="Set severity level">severity.c</Object>
+    <Object Type="File" Description="Custom logbook">create.c</Object>
+    <Object Type="File" Description="Decode event ID">get.c</Object>
+    <Object Type="File" Description="IecString format type declaration">format.h</Object>
+    <Object Type="Package" Description="IecString library submodule">IecString</Object>
   </Objects>
   <Dependencies>
     <Dependency ObjectName="ArEventLog" FromVersion="4.21.0" />
