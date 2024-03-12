@@ -52,6 +52,12 @@ git submodule add https://github.com/tmatijevich/UserLog.git <project>/Logical/L
 
 Then add to project as **existing library**.
 
+Users must add the following **additional build options** under the UserLog object's compiler properties in the software configuration.
+
+```
+-D IECSTRING_HEADER_EXPLICIT -D IECSTRING_FORMAT_TYPE_EXTERNAL
+```
+
 # Unit Tests
 
 See the [UserLogProject](https://github.com/tmatijevich/UserLogProject) for unit tests of all functions.

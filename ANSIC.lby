@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <?AutomationStudio FileVersion="4.9"?>
-<Library Version="2.00.2" SubType="ANSIC" Description="Write to logbooks" xmlns="http://br-automation.co.at/AS/Library">
+<Library Version="2.00.3" SubType="ANSIC" Description="Write to logbooks" xmlns="http://br-automation.co.at/AS/Library">
   <Objects>
     <Object Type="File" Description="Function declarations">UserLog.fun</Object>
     <Object Type="File" Description="Data types">UserLog.typ</Object>
