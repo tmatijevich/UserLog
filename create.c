@@ -16,7 +16,7 @@
 int32_t UserLogCreate(char *Name, uint32_t Size)
 {
     /* Create */
-    ArEventLogCreate_typ create = {0};
+    ArEventLogCreate_typ create = {{0}};
     IecStringCopy(create.Name, sizeof(create.Name), Name);
     create.Size = Size;
     create.Persistence = arEVENTLOG_PERSISTENCE_PERSIST;
@@ -28,7 +28,7 @@ int32_t UserLogCreate(char *Name, uint32_t Size)
     if (create.StatusID && create.StatusID != arEVENTLOG_ERR_LOGBOOK_EXISTS)
     {
         /* Log error */
-        UserLogFormatType log_values = {0};
+        UserLogFormatType log_values = {{0}};
         log_values.i[0] = create.StatusID;
         IecStringCopy(log_values.s[0], sizeof(log_values.s[0]), Name);
         UserLogCustom(LOGBOOK_USER_NAME, USERLOG_SEVERITY_ERROR, 

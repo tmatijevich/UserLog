@@ -26,20 +26,20 @@ ArEventLogRecordIDType UserLogCustom(char *Logbook, int32_t Severity,
     if (Severity < severity_level) return 0;
 
     /* Get logbook identifier */
-    ArEventLogGetIdent_typ get_ident = {0};
+    ArEventLogGetIdent_typ get_ident = {{0}};
     IecStringCopy(get_ident.Name, sizeof(get_ident.Name), Logbook);
     get_ident.Execute = true;
     ArEventLogGetIdent(&get_ident);
 
     /* Check for error */
     static uint8_t error;
+    UserLogFormatType log_values = {{0}};
     if (get_ident.StatusID) 
     {
         /* Block infinite recursion */
         if (error) return 0;
         
         /* Log error */
-        UserLogFormatType log_values = {0};
         log_values.i[0] = get_ident.StatusID;
         IecStringCopy(log_values.s[0], sizeof(log_values.s[0]), Logbook);
         log_values.i[1] = Code;
@@ -86,7 +86,6 @@ ArEventLogRecordIDType UserLogCustom(char *Logbook, int32_t Severity,
         if (error) return 0;
 
         /* Log error */
-        UserLogFormatType log_values = {0};
         log_values.i[0] = write.StatusID;
         IecStringCopy(log_values.s[0], sizeof(log_values.s[0]), Logbook);
         log_values.i[1] = Code;
