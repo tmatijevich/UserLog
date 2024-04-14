@@ -1,3 +1,0 @@
-[submodule "IecString"]
-	path = IecString
-	url = ssh://git@ssh.github.com:443/tmatijevich/IecString.git
