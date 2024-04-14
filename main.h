@@ -26,6 +26,7 @@ extern "C"
 #include <ArEventLog.h>
 #include <sys_lib.h>
 #include <astime.h>
+#include "../IecString/main.h"
 #endif
 #include <stdint.h>
 #include <stdbool.h>
@@ -50,6 +51,14 @@ extern "C"
 
 /* Types */
 #ifdef USERLOG_HEADER_EXPLICIT
+typedef enum UserLogSeverityEnum {
+    USERLOG_SEVERITY_DEBUG = -1,
+    USERLOG_SEVERITY_SUCCESS,
+    USERLOG_SEVERITY_INFORMATION,
+    USERLOG_SEVERITY_WARNING,
+    USERLOG_SEVERITY_ERROR,
+    USERLOG_SEVERITY_CRITICAL
+} UserLogSeverityEnum;
 #ifndef USERLOG_FORMAT_TYPE_EXTERNAL
 #define USERLOG_FORMAT_INDEX 5U
 typedef struct UserLogFormatType
@@ -72,14 +81,14 @@ extern const uint8_t severity_map[];
 #ifdef USERLOG_HEADER_EXPLICIT
 uint32_t UserLogBasic(int32_t Severity, uint16_t Code, char *Message);
 uint32_t UserLogAdvanced(int32_t Severity, uint16_t Code, char *Message, 
-                         struct UserLogFormatType *Values);
+                         UserLogFormatType *Values);
 uint32_t UserLogCustom(char *Logbook, int32_t Severity, uint16_t Facility, 
                        uint16_t Code, ArEventLogRecordIDType Origin, 
                        char *Object, char *Message, 
-                       struct UserLogFormatType *Values);
+                       UserLogFormatType *Values);
 uint32_t UserLogEventText(char *Logbook, int32_t Event, 
                           ArEventLogRecordIDType Origin, char *Object, 
-                          char *Message, struct UserLogFormatType *Values);
+                          char *Message, UserLogFormatType *Values);
 int32_t UserLogCreate(char *Name, uint32_t Size);
 int32_t UserLogSetSeverityLevel(int32_t Level);
 uint8_t UserLogGetSeverity(int32_t Event);
